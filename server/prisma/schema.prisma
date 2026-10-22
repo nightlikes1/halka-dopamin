@@ -1,0 +1,279 @@
+// Halka / Dopamin Takip veritabanı şeması
+// Kimlikler UUID'dir ve istemci tarafından da üretilebilir (çevrimdışı kuyruk için).
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Enum'lar ----------
+
+enum DopamineCategory {
+  cheap
+  quality
+  neutral
+}
+
+enum LogSource {
+  quick
+  timer
+  manual
+}
+
+enum BaselineScope {
+  total
+  activity
+}
+
+enum HabitKind {
+  quit
+  build
+}
+
+// done/missed: edinilecek alışkanlık · clean/slip: bırakılacak alışkanlık
+enum HabitEntryStatus {
+  done
+  clean
+  slip
+  missed
+}
+
+// ---------- Kullanıcı ----------
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  displayName  String?  @map("display_name")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  settings     UserSettings?
+  activities   Activity[]
+  activityLogs ActivityLog[]
+  runningTimer RunningTimer?
+  baselines    Baseline[]
+  character    Character?
+  habits       Habit[]
+  checkIns     DailyCheckIn[]
+  dayNotes     DayNote[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("users")
+}
+
+// Şifre sıfırlama bağlantıları için tek kullanımlık token tablosu
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+// ---------- Günlük yansıtma ----------
+
+// Akşam check-in: kullanıcı başına günde bir kayıt; alışkanlık cevapları habit_entries'te
+model DailyCheckIn {
+  userId      String   @map("user_id") @db.Uuid
+  date        DateTime @db.Date
+  rating      Int      @db.SmallInt
+  completedAt DateTime @default(now()) @map("completed_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, date])
+  @@map("daily_checkins")
+}
+
+// Güne bırakılan kısa not (en fazla 280 karakter)
+model DayNote {
+  userId    String   @map("user_id") @db.Uuid
+  date      DateTime @db.Date
+  text      String   @db.VarChar(280)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, date])
+  @@map("day_notes")
+}
+
+model UserSettings {
+  userId    String   @id @map("user_id") @db.Uuid
+  // Gün sınırı bu saat dilimine göre hesaplanır (IANA, ör. Europe/Istanbul)
+  timezone  String   @default("Europe/Istanbul")
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+// ---------- Aktiviteler ----------
+
+model Activity {
+  id             String           @id @default(uuid()) @db.Uuid
+  userId         String           @map("user_id") @db.Uuid
+  name           String
+  icon           String
+  category       DopamineCategory
+  defaultMinutes Int              @map("default_minutes")
+  isCustom       Boolean          @default(false) @map("is_custom")
+  isFavorite     Boolean          @default(false) @map("is_favorite")
+  // Silinen aktivite arşivlenir; geçmiş kayıtlar bozulmaz
+  archivedAt     DateTime?        @map("archived_at") @db.Timestamptz
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs      ActivityLog[]
+  timers    RunningTimer[]
+  baselines Baseline[]
+
+  @@index([userId])
+  @@map("activities")
+}
+
+model ActivityLog {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  activityId String    @map("activity_id") @db.Uuid
+  startedAt  DateTime  @map("started_at") @db.Timestamptz
+  endedAt    DateTime  @map("ended_at") @db.Timestamptz
+  source     LogSource
+  moodBefore Int?      @map("mood_before") @db.SmallInt
+  moodAfter  Int?      @map("mood_after") @db.SmallInt
+  note       String    @default("")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Restrict)
+
+  @@index([userId, startedAt])
+  @@map("activity_logs")
+}
+
+// Kullanıcı başına en fazla bir çalışan sayaç; süre başlangıç zamanından hesaplanır
+model RunningTimer {
+  userId     String   @id @map("user_id") @db.Uuid
+  activityId String   @map("activity_id") @db.Uuid
+  startedAt  DateTime @map("started_at") @db.Timestamptz
+  moodBefore Int?     @map("mood_before") @db.SmallInt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@map("running_timers")
+}
+
+// Zaman tasarrufu referansı: toplam ucuz dopamin veya tek aktivite
+model Baseline {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @map("user_id") @db.Uuid
+  scope         BaselineScope
+  activityId    String?       @map("activity_id") @db.Uuid
+  dailyMinutes  Int           @map("daily_minutes")
+  effectiveFrom DateTime      @map("effective_from") @db.Date
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity? @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@index([userId, effectiveFrom])
+  @@map("baselines")
+}
+
+// ---------- Karakter ----------
+// Potansiyel Karakterim: kimlik cümlesi + özellikler; özellikler habit_traits ile alışkanlıklara bağlanır.
+// Yakınlık saklanmaz; her seferinde check-in cevaplarından hesaplanır.
+
+model Character {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @map("user_id") @db.Uuid
+  identity  String   @db.VarChar(60)
+  // Parçacık avatar ayarı; null = karakterden otomatik üretilir
+  avatarShape   String? @map("avatar_shape") @db.VarChar(16)
+  avatarPalette String? @map("avatar_palette") @db.VarChar(16)
+  // Çizgi karakter görünümü (ten, saç, kıyafet…); null = karakterden otomatik üretilir
+  avatarLook    Json?   @map("avatar_look")
+  // DiceBear avatarı (stil + seçenekler); null = kendi çizgi karakterimiz (avatarLook)
+  avatarDicebear Json?  @map("avatar_dicebear")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  traits Trait[]
+
+  @@map("characters")
+}
+
+model Trait {
+  id          String   @id @default(uuid()) @db.Uuid
+  characterId String   @map("character_id") @db.Uuid
+  name        String   @db.VarChar(30)
+  sortOrder   Int      @map("sort_order") @db.SmallInt
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  character Character    @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  habits    HabitTrait[]
+
+  @@index([characterId])
+  @@map("traits")
+}
+
+// ---------- Alışkanlıklar ----------
+
+model Habit {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  kind          HabitKind
+  title         String
+  // { type: 'daily' } | { type: 'weeklyCount', count } | { type: 'dailyAmount', amount, unit }
+  target        Json
+  sourceGuideId String?   @map("source_guide_id")
+  archivedAt    DateTime? @map("archived_at") @db.Timestamptz
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  traits  HabitTrait[]
+  entries HabitEntry[]
+
+  @@index([userId])
+  @@map("habits")
+}
+
+model HabitTrait {
+  habitId String @map("habit_id") @db.Uuid
+  traitId String @map("trait_id") @db.Uuid
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  trait Trait @relation(fields: [traitId], references: [id], onDelete: Cascade)
+
+  @@id([habitId, traitId])
+  @@map("habit_traits")
+}
+
+model HabitEntry {
+  habitId String           @map("habit_id") @db.Uuid
+  date    DateTime         @db.Date
+  status  HabitEntryStatus
+  amount  Float?
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@id([habitId, date])
+  @@map("habit_entries")
+}

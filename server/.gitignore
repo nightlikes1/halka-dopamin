@@ -1,0 +1,6 @@
+node_modules
+dist
+# Ortam değişkenleri (şifre, JWT anahtarı) git'e girmez
+.env
+# Prisma istemcisi her kurulumda yeniden üretilir
+/src/generated

@@ -1,0 +1,1285 @@
+/* Widget Cards & Individual Extension Component Styles */
+
+.widget-card {
+  width: 100%;
+  max-width: 320px;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  height: auto;
+  min-height: fit-content;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.3s ease, 
+              border-color 0.3s ease,
+              opacity 0.25s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.widget-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--widget-accent, var(--ring-accent)), transparent);
+  opacity: 0.8;
+}
+
+.widget-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 20px -5px var(--widget-accent, var(--ring-accent));
+  z-index: 30;
+}
+
+/* Removing animation when deleted */
+.widget-card.removing {
+  transform: scale(0.7) translateY(20px) !important;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* Collapsed state */
+.widget-card.collapsed .widget-body {
+  display: none !important;
+}
+
+.widget-card.collapsed {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.widget-card.collapsed .widget-header {
+  border-bottom: none;
+}
+
+.widget-card.collapsed .widget-btn-collapse svg {
+  transform: rotate(-90deg);
+}
+
+.widget-collapsed-summary {
+  display: none;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--widget-accent, var(--ring-accent));
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1px solid var(--border-glass);
+}
+
+.widget-card.collapsed .widget-collapsed-summary {
+  display: inline-block;
+}
+
+/* Widget Header */
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.widget-title-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.widget-icon {
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.widget-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.widget-category {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.widget-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.widget-btn-collapse, .widget-btn-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.widget-btn-collapse:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.widget-btn-remove:hover {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+}
+
+/* Widget Body */
+.widget-body {
+  padding: 14px;
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+
+/* --- 1. WATER TRACKER --- */
+.water-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.water-display {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.water-gauge {
+  width: 60px;
+  height: 90px;
+  border-radius: 12px;
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.water-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.6) 0%, rgba(2, 132, 199, 0.8) 100%);
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-top: 2px solid #7dd3fc;
+}
+
+.water-gauge-text {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.water-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  display: block;
+}
+
+.water-unit {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.water-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.water-percentage {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #38bdf8;
+}
+
+.water-status {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.water-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-water-reset {
+  background: transparent;
+  border: 1px solid var(--border-glass);
+  color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.btn-water-reset:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* --- 2. POMODORO --- */
+.pomodoro-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pomo-modes {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.pomo-mode-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.pomo-mode-btn.active {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+  font-weight: 600;
+}
+
+.pomo-timer-display {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.pomo-time {
+  font-family: var(--font-mono);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  display: block;
+  text-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+}
+
+.pomo-sessions {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.pomo-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.pomo-toggle {
+  flex: 1;
+}
+
+.btn-pause {
+  background: #f43f5e !important;
+  color: #fff !important;
+}
+
+/* --- 3. DAILY TASKS --- */
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tasks-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tasks-progress-fill {
+  height: 100%;
+  background: #10b981;
+  transition: width 0.3s ease;
+}
+
+.tasks-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.tasks-add-form {
+  display: flex;
+  gap: 6px;
+}
+
+.tasks-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.tasks-input:focus {
+  border-color: #10b981;
+}
+
+.tasks-list {
+  list-style: none;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  transition: var(--transition-smooth);
+}
+
+.task-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.task-item.done .task-text {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.task-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.task-check {
+  display: none;
+}
+
+.task-custom-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1.5px solid #64748b;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.task-check:checked + .task-custom-box {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.task-check:checked + .task-custom-box::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: #070913;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.task-btn-delete {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 4px;
+}
+
+.task-btn-delete:hover {
+  color: #f43f5e;
+}
+
+/* --- 4. HABIT STREAK --- */
+.streak-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.streak-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.streak-flame-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flame-icon {
+  font-size: 22px;
+}
+
+.streak-count {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #f59e0b;
+}
+
+.streak-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.streak-habit-title {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.streak-chain-visual {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.chain-nodes {
+  display: flex;
+  gap: 8px;
+}
+
+.chain-node {
+  font-size: 15px;
+  color: #64748b;
+  transition: transform 0.2s;
+}
+
+.chain-node.completed {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.chain-caption {
+  font-size: 9.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* --- 5. QUICK NOTES --- */
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notes-textarea {
+  width: 100%;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  resize: vertical;
+  outline: none;
+  line-height: 1.4;
+}
+
+.notes-textarea:focus {
+  border-color: #8b5cf6;
+}
+
+.notes-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notes-char-count {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+/* --- 6. BREATHING GUIDE --- */
+.breathing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.breathing-circle-wrapper {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breathing-orb {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #06b6d4, #0891b2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 4s;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.breathing-orb.inhale {
+  transform: scale(1.5);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.8);
+}
+
+.breathing-orb.hold {
+  transform: scale(1.5);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+}
+
+.breathing-orb.exhale {
+  transform: scale(0.9);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.breathing-orb.rest {
+  transform: scale(0.9);
+}
+
+.breathing-instruction {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+.breathing-timer-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* --- 7. MOOD TRACKER --- */
+.mood-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mood-selector {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mood-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  flex: 1;
+  margin: 0 2px;
+}
+
+.mood-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.mood-btn.active {
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.15);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.3);
+}
+
+.mood-icon {
+  font-size: 16px;
+}
+
+.mood-name {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.mood-energy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.energy-slider {
+  width: 100%;
+  accent-color: #ec4899;
+}
+
+/* --- 8. AMBIENT SOUNDS --- */
+.ambient-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ambient-presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ambient-btn.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.ambient-status {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 4px;
+}
+
+.sound-wave-anim {
+  color: #818cf8;
+  animation: pulseDot 1.5s infinite;
+}
+
+/* --- 9. ONE BIG THING --- */
+.bigone-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bigone-badge {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  color: #eab308;
+  letter-spacing: 1px;
+}
+
+.bigone-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.bigone-container.completed .bigone-title {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* --- 10. BUDGET --- */
+.budget-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.budget-amount {
+  font-size: 18px;
+  font-family: var(--font-mono);
+  color: #14b8a6;
+}
+
+.budget-add-form {
+  display: flex;
+  gap: 6px;
+}
+
+.budget-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+/* Empty Orbit State */
+.empty-orbit-banner {
+  text-align: center;
+  padding: 30px;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-glass);
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.empty-orbit-banner p {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin-bottom: 14px;
+}
+
+/* Hover cues for focusing on a widget */
+.widget-title-area {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.widget-title-area:hover .widget-title {
+  color: var(--widget-accent, var(--ring-accent));
+}
+
+.widget-btn-focus {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.widget-btn-focus:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--ring-accent);
+}
+
+/* ========================================= */
+/* --- FOCUSED MODE COMPONENT STYLES --- */
+/* ========================================= */
+
+/* 1. Focused Water */
+.focused-water-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.focused-water-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.focused-water-gauge {
+  width: 78px;
+  height: 105px;
+  border-radius: 14px;
+  border: 2px solid rgba(56, 189, 248, 0.5);
+  background: rgba(15, 23, 42, 0.7);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.focused-water-center-text {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+}
+
+.focused-pct {
+  font-size: 26px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #fff;
+  display: block;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.focused-status-sub {
+  font-size: 9px;
+  color: #e0f2fe;
+}
+
+.focused-water-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-bubble {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble-val {
+  font-size: 17px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #38bdf8;
+}
+
+.bubble-label {
+  font-size: 9.5px;
+  color: var(--text-dim);
+}
+
+.focused-water-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 330px;
+  margin: 0 auto;
+}
+
+/* 2. Focused Pomodoro */
+.focused-pomodoro-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.focused-pomodoro-view .pomo-modes {
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glass);
+}
+
+.focused-pomodoro-view .pomo-mode-btn {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.focused-pomodoro-view .pomo-mode-btn.active {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+  font-weight: 600;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+.focused-timer-dial {
+  text-align: center;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.focused-time-text {
+  font-family: var(--font-mono);
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+  display: block;
+  text-shadow: 0 0 30px rgba(244, 63, 94, 0.5);
+  line-height: 1;
+}
+
+.focused-pomo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+.focused-pomo-sessions {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.focused-pomo-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.focused-pomo-controls .f-pomo-toggle {
+  flex: 2;
+  height: 44px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.focused-pomo-controls .f-pomo-reset {
+  flex: 1;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 3. Focused Tasks */
+.focused-tasks-view {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 310px;
+  margin: 0 auto;
+}
+
+.focused-tasks-add-form {
+  display: flex;
+  gap: 6px;
+}
+
+.focused-tasks-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.focused-tasks-input:focus {
+  border-color: #10b981;
+}
+
+.focused-tasks-list {
+  list-style: none;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* 4. Focused Streak */
+.focused-streak-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.focused-flame-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.focused-flame-icon {
+  font-size: 28px;
+  animation: flamePulse 1.5s infinite alternate;
+}
+
+@keyframes flamePulse {
+  from { transform: scale(1); filter: drop-shadow(0 0 5px #f59e0b); }
+  to { transform: scale(1.15); filter: drop-shadow(0 0 15px #f59e0b); }
+}
+
+.focused-streak-num {
+  font-size: 40px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.focused-streak-sub {
+  font-size: 9.5px;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+
+.focused-habit-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.focused-chain-track {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.chain-track-label {
+  font-size: 9.5px;
+  color: var(--text-dim);
+}
+
+/* 5. Focused Notes */
+.focused-notes-view {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 310px;
+  margin: 0 auto;
+}
+
+.focused-notes-textarea {
+  width: 100%;
+  height: 135px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 12.5px;
+  resize: none;
+  outline: none;
+  line-height: 1.45;
+}
+
+.focused-notes-textarea:focus {
+  border-color: #8b5cf6;
+}
+
+.focused-notes-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.f-notes-count {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.notes-btns {
+  display: flex;
+  gap: 6px;
+}
+
+/* 6. Focused Breathing */
+.focused-breathing-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 290px;
+  margin: 0 auto;
+}
+
+.focused-breathing-wrapper {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.focused-orb {
+  width: 70px;
+  height: 70px;
+}
+
+/* 7. Focused Mood */
+.focused-mood-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 310px;
+  margin: 0 auto;
+}
+
+.focused-reflection-box {
+  margin-top: 4px;
+}
+
+.f-reflection-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  outline: none;
+}
+
+/* 8. Focused Ambient */
+.focused-ambient-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 310px;
+  margin: 0 auto;
+}
+
+.focused-ambient-visual {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.sound-wave-muted {
+  color: var(--text-dim);
+}
+
+/* 9. Focused Big One */
+.focused-bigone-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 8px 0;
+}
+
+.focused-bigone-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.focused-bigone-view.completed .focused-bigone-title {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* 10. Focused Budget */
+.focused-budget-view {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 310px;
+  margin: 0 auto;
+}
+
+.focused-budget-hero {
+  text-align: center;
+  padding: 4px 0;
+}
+
+.f-budget-num {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #14b8a6;
+  line-height: 1;
+}
+
+.f-budget-sub {
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
+.focused-budget-add-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}

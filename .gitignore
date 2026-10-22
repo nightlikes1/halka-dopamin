@@ -1,0 +1,27 @@
+# Bağımlılıklar ve derleme çıktıları
+node_modules/
+dist/
+web-build/
+.expo/
+*.tsbuildinfo
+
+# Gizli bilgiler (veritabanı şifresi, JWT anahtarı) — ASLA eklenmez
+.env
+.env.*
+!.env.example
+
+# Prisma istemcisi her kurulumda yeniden üretilir
+server/src/generated/
+
+# Expo yerel yerel klasörleri (Continuous Native Generation)
+halka-mobile/android/
+halka-mobile/ios/
+
+# Loglar ve sistem dosyaları
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Playwright önizleme görüntüleri ve logları (yerel)
+.playwright-mcp/

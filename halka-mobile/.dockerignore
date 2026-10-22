@@ -1,0 +1,7 @@
+node_modules
+dist
+.expo
+.env
+.git
+.gitignore
+.DS_Store

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="cyber-cyan">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halka - Kişisel Hayat İşletim Sistemi</title>
+  <meta name="description" content="Halka - Kişiselleştirilebilir modüler hayat işletim sistemi. Odaklanma, alışkanlıklar, su tüketimi ve günlük durumunun merkezi.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛓️</text></svg>">
+  
+  <link rel="stylesheet" href="/src/css/main.css">
+  <link rel="stylesheet" href="/src/css/ring.css">
+  <link rel="stylesheet" href="/src/css/widgets.css">
+  <link rel="stylesheet" href="/src/css/modal.css">
+</head>
+<body>
+
+  <!-- Fullscreen SVG Dynamic Tether Canvas -->
+  <svg id="orbital-tethers" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="brand-area">
+      <div class="brand-symbol" title="Halka Core">⛓</div>
+      <h1 class="brand-title">HALKA</h1>
+      <span class="brand-badge">HAYAT OS v1.0</span>
+    </div>
+
+    <div class="header-controls">
+      <!-- Theme Switcher -->
+      <div class="theme-selector" title="Renk Temasını Değiştir">
+        <button class="theme-btn active" data-theme="cyber-cyan" title="Siber Mavi" aria-label="Siber Mavi"></button>
+        <button class="theme-btn" data-theme="neon-violet" title="Neon Menekşe" aria-label="Neon Menekşe"></button>
+        <button class="theme-btn" data-theme="gold-chain" title="Altın Halka" aria-label="Altın Halka"></button>
+        <button class="theme-btn" data-theme="emerald-zen" title="Zümrüt Zen" aria-label="Zümrüt Zen"></button>
+      </div>
+
+      <!-- View Mode Toggle -->
+      <button class="btn-control" id="btn-toggle-view" title="Görünüm Değiştir (Kokpit / Panel)">
+        <span class="icon">⊞</span> Panel Modu
+      </button>
+
+      <!-- Collapse / Expand All Cards Toggle -->
+      <button class="btn-control" id="btn-toggle-collapse" title="Tüm Eklentileri Küçült veya Büyüt">
+        <span class="icon">↕</span> Sadeleştir
+      </button>
+
+      <!-- Audio Toggle -->
+      <button class="btn-icon-square" id="btn-toggle-sound" title="Ses Efektleri & Ortam" aria-label="Ses Aç/Kapat">
+        🔊
+      </button>
+
+      <!-- Add Extension Modal Trigger -->
+      <button class="btn-control btn-primary btn-open-catalog" id="btn-header-add">
+        <span>+</span> Eklenti Ekle
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Canvas (Symmetrical Cockpit Architecture) -->
+  <main class="halka-main-canvas" id="halka-main-canvas">
+
+    <!-- Left Wing Widgets Container (Sol Kanat) -->
+    <aside class="halka-wing wing-left" id="widgets-wing-left" aria-label="Sol Eklentiler"></aside>
+
+    <!-- Central Stage: Chain Ring & Life Core Hub -->
+    <div class="halka-center-stage" id="halka-center-stage">
+      <div id="central-ring-wrapper">
+        <!-- High-Precision Interlocking Chain Loop SVG -->
+        <svg id="chain-ring-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"></svg>
+
+        <!-- Glassmorphic Central Hub Core -->
+        <div id="central-core-hub">
+          <!-- 1. Default Overview View Pane -->
+          <div id="core-overview-view" class="core-view-pane active">
+            <!-- Top Status Indicator -->
+            <div class="core-emblem">
+              <div class="core-pulse-dot"></div>
+              <span id="core-active-count">Yükleniyor...</span>
+            </div>
+
+            <!-- Live Digital Clock -->
+            <div class="core-time-container">
+              <div id="core-time-clock">--:--<span class="time-sec">:--</span></div>
+              <div id="core-date">Tarih alınıyor...</div>
+            </div>
+
+            <!-- Personalized Greeting -->
+            <div id="core-greeting">
+              <span class="greeting-prefix">Hoş geldin</span>
+            </div>
+
+            <!-- Dynamic Daily Life Status Briefing (Ortadaki genel durum) -->
+            <div class="core-status-box">
+              <p id="core-status-text">Halka sistem verileri senkronize ediliyor...</p>
+            </div>
+
+            <!-- Dynamic Metric Pills Highlights -->
+            <div id="core-metrics"></div>
+
+            <!-- Core Quick Add Button -->
+            <div class="core-action-bar">
+              <button class="btn-ring-add btn-open-catalog" title="Halkanın Etrafına Eklenti Ekle">
+                <span>+</span> Eklenti Ekle
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Focused Extension View Pane (Active when widget clicked) -->
+          <div id="core-focused-view" class="core-view-pane">
+            <div class="focused-header-bar">
+              <button class="btn-return-ring" id="btn-return-ring" title="Halka Genel Görünümüne Dön (Esc)">
+                <span class="back-arrow">←</span>
+                <span>Halka'ya Dön</span>
+                <kbd class="esc-kbd">ESC</kbd>
+              </button>
+              <div class="focused-title-badge" id="focused-title-badge">
+                <span id="focused-badge-icon">💧</span>
+                <span id="focused-badge-name">Su Takibi</span>
+              </div>
+            </div>
+            <div id="focused-widget-content" class="focused-widget-content">
+              <!-- Focused widget view rendered here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Wing Widgets Container (Sağ Kanat) -->
+    <aside class="halka-wing wing-right" id="widgets-wing-right" aria-label="Sağ Eklentiler"></aside>
+
+    <!-- Grid / Panel Mode Container -->
+    <div class="halka-grid-container" id="widgets-grid-container"></div>
+
+  </main>
+
+  <!-- Extension Catalog Modal (Eklenti Kütüphanesi) -->
+  <div class="modal-overlay" id="catalog-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-header-icon">⛓️</span>
+          <div>
+            <h2 class="modal-header-title">Halka Eklenti Kütüphanesi</h2>
+            <p class="modal-header-sub">Halkanın etrafına eklemek istediğin modülü seç veya çıkar</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="catalog-modal-close" aria-label="Kapat">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="catalog-grid" id="catalog-items-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>

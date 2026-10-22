@@ -1,0 +1,243 @@
+/* Extension Library Modal (Halka Eklenti Kütüphanesi) Styles */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 12, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 20px;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 780px;
+  max-height: 85vh;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.8),
+    0 0 35px -5px var(--ring-glow-core);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.94) translateY(10px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.open .modal-dialog {
+  transform: scale(1) translateY(0);
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-header-icon {
+  font-size: 24px;
+}
+
+.modal-header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.modal-header-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: var(--transition-smooth);
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Modal Content & Catalog Grid */
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+/* Catalog Card */
+.catalog-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.catalog-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.catalog-card.is-active {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.catalog-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.catalog-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.catalog-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.catalog-card-title-row h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.catalog-category-tag {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.catalog-card-info p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Action button inside catalog card */
+.catalog-card-action-btn {
+  margin-top: auto;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-smooth);
+  text-align: center;
+}
+
+.catalog-card-action-btn.btn-add-badge {
+  background: linear-gradient(135deg, var(--ring-accent), var(--ring-accent-alt));
+  color: #070913;
+}
+
+.catalog-card-action-btn.btn-add-badge:hover {
+  filter: brightness(1.15);
+}
+
+.catalog-card-action-btn.btn-active-badge {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--ring-accent);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.catalog-card-action-btn.btn-active-badge:hover {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.catalog-card-action-btn.btn-active-badge:hover::after {
+  content: ' (Kaldır ✕)';
+}
+
+/* Responsive Modal */
+@media (max-width: 680px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-dialog {
+    max-height: 94vh;
+  }
+
+  .modal-header {
+    padding: 14px 16px;
+  }
+
+  .modal-header-title {
+    font-size: 16px;
+  }
+
+  .modal-body {
+    padding: 14px;
+  }
+
+  .catalog-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
