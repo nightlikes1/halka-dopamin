@@ -18,12 +18,14 @@ export class NodemailerEmailService implements EmailService {
   constructor(private readonly config: AppConfig) {}
 
   async sendPasswordResetEmail({ to, resetUrl }: SendPasswordResetEmailInput): Promise<void> {
-    // eslint-disable-next-line no-console
-    console.log('\n============================================================');
-    // eslint-disable-next-line no-console
-    console.log(`[ŞİFRE SIFIRLAMA BAĞLANTISI]: ${resetUrl}`);
-    // eslint-disable-next-line no-console
-    console.log('============================================================\n');
+    if (!this.config.isProduction) {
+      // eslint-disable-next-line no-console
+      console.log('\n============================================================');
+      // eslint-disable-next-line no-console
+      console.log(`[ŞİFRE SIFIRLAMA BAĞLANTISI]: ${resetUrl}`);
+      // eslint-disable-next-line no-console
+      console.log('============================================================\n');
+    }
 
     // 1. Supabase Auth yapılandırılmışsa e-postayı doğrudan Supabase Auth üzerinden gönder
     if (this.config.supabaseUrl && this.config.supabaseAnonKey) {

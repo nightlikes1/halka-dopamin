@@ -1,0 +1,67 @@
+name: halka-production
+
+# -------------------------------------------------------------
+# Canlı Ortam Yapılandırması (GHCR İmajları + Cloudflare Zero Trust)
+# Bu dosyada DERLEME (build) YAPILMAZ.
+# GitHub Actions'ın derleyip GHCR'a attığı hazır imajlar saniyeler içinde çekilir.
+# Sunucunuzda 0 CPU derleme yükü oluşur.
+# -------------------------------------------------------------
+
+services:
+  # -----------------------------------------------------------
+  # Fastify API Sunucusu
+  # -----------------------------------------------------------
+  server:
+    image: ghcr.io/${GHCR_REPO:-nightlikes1/halka-dopamin}/server:latest
+    container_name: halka-server-prod
+    restart: unless-stopped
+    ports:
+      # Sadece 127.0.0.1'e bağlar. Dış dünyadan doğrudan erişilemez;
+      # yalnızca Cloudflare Zero Trust tüneli erişebilir.
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # -----------------------------------------------------------
+  # Halka Web Arayüzü (Nginx üzerinde derlenmiş Expo SPA)
+  # -----------------------------------------------------------
+  web:
+    image: ghcr.io/${GHCR_REPO:-nightlikes1/halka-dopamin}/web:latest
+    container_name: halka-web-prod
+    restart: unless-stopped
+    ports:
+      # Sadece 127.0.0.1'e bağlar. Dış dünyaya kapalıdır.
+      - "127.0.0.1:8080:80"
+    depends_on:
+      server:
+        condition: service_healthy
+
+  # -----------------------------------------------------------
+  # İsteğe Bağlı: Cloudflare Tunnel (Zero Trust)
+  # Eğer sunucunuzda harici bir cloudflared kurulu değilse,
+  # server/.env içine TUNNEL_TOKEN ekleyip bu servisi aktif edebilirsiniz.
+  # -----------------------------------------------------------
+  # tunnel:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: halka-cloudflare-tunnel
+  #   restart: unless-stopped
+  #   command: tunnel --no-autoupdate run
+  #   environment:
+  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #   depends_on:
+  #     - server
+  #     - web
+
+networks:
+  default:
+    name: halka-prod-network
