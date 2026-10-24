@@ -1,6 +1,7 @@
 // 🎯 Günün Ana Hedefi (hedef metni artık düzenlenebilir)
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { BIG_ONE_GOAL_MAX_LENGTH } from '@domain/entities/BigOne';
@@ -14,13 +15,13 @@ import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBigOne } from '@presentation/hooks/useBigOne';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('bigOne').accent);
+const accent = () => widgetAccentColor(getCatalogItem('bigOne').accent);
 
 export function BigOneWidget({ variant }: WidgetBodyProps) {
   const { bigOne, toggle, updateGoal } = useBigOne();
   const focused = variant === 'focused';
   const [editing, setEditing] = useState(false);
-  const tint = bigOne.isCompleted ? colors.textMain : ACCENT;
+  const tint = bigOne.isCompleted ? colors.textMain : accent();
 
   const buttonLabel = bigOne.isCompleted
     ? focused
@@ -79,9 +80,9 @@ export function BigOneWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: { padding: spacing.md, borderRadius: radius.md, borderWidth: 1 },
   goal: { fontFamily: fonts.bold, fontSize: fontSizes.lg, lineHeight: 24 },
   goalFocused: { fontSize: fontSizes.xl, lineHeight: 32, textAlign: 'center' },
   goalDone: { color: colors.textMuted, textDecorationLine: 'line-through' },
-});
+}));

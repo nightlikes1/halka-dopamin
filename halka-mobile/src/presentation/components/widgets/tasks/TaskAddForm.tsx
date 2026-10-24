@@ -1,12 +1,13 @@
 // Yeni görev formu (react-hook-form + zod)
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import { TASK_TEXT_MAX_LENGTH } from '@domain/entities/Task';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Chip } from '@presentation/components/common/Chip';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { taskFormSchema, type TaskFormValues } from '@presentation/forms/schemas';
 
@@ -62,7 +63,7 @@ export function TaskAddForm({ accent, onAdd }: TaskAddFormProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   wrapper: { gap: spacing.xs },
   input: { flex: 1 },
-});
+}));

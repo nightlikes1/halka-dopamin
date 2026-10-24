@@ -1,10 +1,11 @@
 // Sunucu adresi ve erişilebilirlik göstergesi (kurulum sorunlarını anlamayı kolaylaştırır)
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 import { useDI } from '@presentation/providers/DIProvider';
 
 type Reachability = 'checking' | 'online' | 'offline';
@@ -58,7 +59,7 @@ export function ServerStatus() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -70,4 +71,4 @@ const styles = StyleSheet.create({
   dotOnline: { backgroundColor: colors.textMain },
   dotOffline: { backgroundColor: colors.error },
   text: { fontSize: fontSizes.xs, color: colors.textDim },
-});
+}));

@@ -1,10 +1,11 @@
 // Gün notu girişi: çok satırlı, 280 karakter sayaçlı
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { DAY_NOTE_MAX_LENGTH } from '@features/history/domain/entities';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
+import { themedStyles } from '@core/theme/themed';
 
 interface DayNoteFieldProps {
   readonly value: string;
@@ -38,10 +39,10 @@ export function DayNoteField({ value, onChange, label, autoFocus = false }: DayN
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   field: { gap: spacing.xs },
   label: { color: colors.textMuted },
   input: { minHeight: 96, paddingTop: spacing.md, lineHeight: 20 },
   counter: { alignSelf: 'flex-end', fontSize: fontSizes.xs, color: colors.textDim },
   counterWarn: { color: colors.textMain },
-});
+}));

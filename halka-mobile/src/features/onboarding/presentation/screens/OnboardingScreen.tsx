@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import {
   ScrollView,
-  StyleSheet,
   useWindowDimensions,
   View,
   type NativeScrollEvent,
@@ -20,6 +19,7 @@ import { BlinkDot } from '@presentation/particles/components/BlinkDot';
 import { BottomFade } from '@presentation/particles/components/BottomFade';
 import { ParticleVortex } from '@presentation/particles/components/ParticleVortex';
 import type { ParticlePaletteName } from '@presentation/particles/engine/palette';
+import { themedStyles } from '@core/theme/themed';
 import { useParticlePointer } from '@presentation/particles/renderer/useParticlePointer';
 import type { RootStackScreenProps } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
@@ -150,7 +150,7 @@ export function OnboardingScreen({ navigation }: RootStackScreenProps<'Onboardin
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   root: { flex: 1, backgroundColor: colors.ink },
   safe: { flex: 1 },
   topBar: {
@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
     borderColor: colors.ink,
   },
   secondary: { alignSelf: 'center', minHeight: layout.touchTarget, justifyContent: 'center' },
-});
+}));

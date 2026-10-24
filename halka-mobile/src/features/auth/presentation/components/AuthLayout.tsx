@@ -1,6 +1,6 @@
 // Giriş/kayıt ekranlarının ortak düzeni: marka, başlık, form, sunucu durumu
 import type { ReactNode } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import logoSourceLight from '@assets/logo-light.png';
 import logoSource from '@assets/logo.png';
@@ -10,6 +10,7 @@ import { ServerStatus } from '@features/auth/presentation/components/ServerStatu
 import { AppText } from '@presentation/components/common/AppText';
 import { Card } from '@presentation/components/common/Card';
 import { ChainRing } from '@presentation/components/ring/ChainRing';
+import { themedStyles } from '@core/theme/themed';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 
 interface AuthLayoutProps {
@@ -54,7 +55,7 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: colors.bgPrimary },
   flex: { flex: 1 },
   content: {
@@ -71,4 +72,4 @@ const styles = StyleSheet.create({
   brandTitle: { fontFamily: fonts.bold, fontSize: fontSizes.xl, letterSpacing: 6 },
   card: { gap: spacing.xs, padding: spacing.xl },
   form: { gap: spacing.md, marginTop: spacing.lg },
-});
+}));

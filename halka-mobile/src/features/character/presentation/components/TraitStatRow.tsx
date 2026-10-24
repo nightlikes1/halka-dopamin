@@ -1,11 +1,12 @@
 // Özellik satırı (kompakt): ad · renkli çubuk · yüzde. Dokununca özellik ayrıntısı açılır.
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { fonts, fontSizes, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 const LABEL_WIDTH = 84;
 
@@ -39,7 +40,7 @@ export function TraitStatRow({ name, percent, color, delay, onPress }: TraitStat
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,4 +50,4 @@ const styles = StyleSheet.create({
   label: { width: LABEL_WIDTH, fontFamily: fonts.semibold, fontSize: fontSizes.body },
   bar: { flex: 1 },
   value: { minWidth: 40, textAlign: 'right', fontFamily: fonts.semibold },
-});
+}));

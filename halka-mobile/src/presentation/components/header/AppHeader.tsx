@@ -1,9 +1,10 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, View } from 'react-native';
 import logoBannerLight from '@assets/logo-banner-light.png';
 import logoBanner from '@assets/logo-banner.png';
 import { activeThemeMode, spacing } from '@core/theme/tokens';
 import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
+import { themedStyles } from '@core/theme/themed';
 import { useLayout } from '@presentation/hooks/useLayout';
 import { useProfile } from '@presentation/hooks/useProfile';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
@@ -67,7 +68,7 @@ export function AppHeader({ onAddPress }: AppHeaderProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   header: { gap: spacing.md, paddingBottom: spacing.md },
   brand: { flexDirection: 'row', alignItems: 'center' },
   logoBanner: {
@@ -76,4 +77,4 @@ const styles = StyleSheet.create({
     marginLeft: -8,
   },
   controls: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm },
-});
+}));

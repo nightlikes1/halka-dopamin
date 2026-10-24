@@ -1,8 +1,9 @@
 // Eklentileri sütunlara dağıtan ızgara (farklı kart yükseklikleri için masonry düzeni)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import type { WidgetId } from '@domain/entities/WidgetId';
 import { WidgetCard } from '@presentation/components/widgets/WidgetCard';
+import { themedStyles } from '@core/theme/themed';
 
 interface WidgetGridProps {
   readonly ids: readonly WidgetId[];
@@ -28,7 +29,7 @@ export function WidgetGrid({ ids, columns }: WidgetGridProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.lg },
   column: { flex: 1, gap: spacing.lg },
-});
+}));

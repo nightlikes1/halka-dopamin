@@ -1,6 +1,7 @@
 // ✅ Günlük Görevler
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fontSizes, radius, spacing } from '@core/theme/tokens';
 import type { Task } from '@domain/entities/Task';
@@ -16,7 +17,7 @@ import { useTasks } from '@presentation/hooks/useTasks';
 import { nativeOnly } from '@presentation/utils/nativeOnly';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('tasks').accent);
+const accent = () => widgetAccentColor(getCatalogItem('tasks').accent);
 
 interface TaskRowProps {
   readonly task: Task;
@@ -39,7 +40,9 @@ function TaskRow({ task, onToggle, onDelete }: TaskRowProps) {
         aria-checked={task.done}
         accessibilityLabel={task.text}
       >
-        <View style={[styles.box, task.done && { backgroundColor: ACCENT, borderColor: ACCENT }]}>
+        <View
+          style={[styles.box, task.done && { backgroundColor: accent(), borderColor: accent() }]}
+        >
           {task.done ? <Icon name="check" size={14} color={colors.bgPrimary} /> : null}
         </View>
         <AppText style={[styles.text, task.done && styles.textDone]}>{task.text}</AppText>
@@ -61,7 +64,7 @@ export function TasksWidget({ variant }: WidgetBodyProps) {
 
   return (
     <View style={focused ? widgetStyles.containerFocused : widgetStyles.container}>
-      <ProgressBar pct={progress.pct} color={ACCENT} />
+      <ProgressBar pct={progress.pct} color={accent()} />
       <View style={widgetStyles.statsRow}>
         <AppText style={widgetStyles.statText}>İlerleme: %{progress.pct}</AppText>
         <AppText style={widgetStyles.statText}>
@@ -71,7 +74,7 @@ export function TasksWidget({ variant }: WidgetBodyProps) {
         </AppText>
       </View>
 
-      <TaskAddForm accent={ACCENT} onAdd={add} />
+      <TaskAddForm accent={accent()} onAdd={add} />
 
       <View style={styles.list}>
         {items.length === 0 ? (
@@ -91,7 +94,7 @@ export function TasksWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   list: { gap: spacing.sm },
   item: {
     flexDirection: 'row',
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderGlass,
     backgroundColor: colors.fillSubtle,
   },
-  itemDone: { backgroundColor: withAlpha(ACCENT, '10') },
+  itemDone: { backgroundColor: withAlpha(accent(), '10') },
   checkArea: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   box: {
     width: 22,
@@ -117,4 +120,4 @@ const styles = StyleSheet.create({
   },
   text: { flex: 1, fontSize: fontSizes.sm },
   textDone: { color: colors.textDim, textDecorationLine: 'line-through' },
-});
+}));

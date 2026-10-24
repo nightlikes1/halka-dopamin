@@ -1,9 +1,10 @@
 // Kart/bölüm başlığı: solda başlık (isteğe bağlı ikonla), sağda isteğe bağlı eylem
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
+import { themedStyles } from '@core/theme/themed';
 
 interface SectionTitleProps {
   readonly title: string;
@@ -29,7 +30,7 @@ export function SectionTitle({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 24 },
   title: { flex: 1 },
-});
+}));

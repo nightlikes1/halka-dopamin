@@ -1,8 +1,9 @@
 // Merkezdeki küçük metrik rozeti
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
+import { themedStyles } from '@core/theme/themed';
 
 interface MetricPillProps {
   readonly icon: IconName;
@@ -23,7 +24,7 @@ export function MetricPill({ icon, value, label, hint = false }: MetricPillProps
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -36,4 +37,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.fillSubtle,
   },
   hint: { borderStyle: 'dashed' },
-});
+}));

@@ -1,7 +1,8 @@
 // Tema uyumlu metin girişi (en az 44 px yükseklik)
 import { forwardRef } from 'react';
-import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
+import { TextInput, type TextInputProps } from 'react-native';
 import { layout } from '@core/theme/layout';
+import { themedStyles } from '@core/theme/themed';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { typography } from '@core/theme/typography';
@@ -23,7 +24,7 @@ export const AppTextInput = forwardRef<TextInput, TextInputProps>(function AppTe
   );
 });
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   input: {
     ...typography.body,
     minHeight: layout.touchTarget,
@@ -34,4 +35,4 @@ const styles = StyleSheet.create({
     borderColor: colors.borderGlass,
     backgroundColor: colors.bgInput,
   },
-});
+}));

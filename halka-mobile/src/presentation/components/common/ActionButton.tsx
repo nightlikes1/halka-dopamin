@@ -1,6 +1,7 @@
 // Ana eylem butonu. solid: ekrandaki birincil eylem, soft: ikincil eylem.
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { layout } from '@core/theme/layout';
+import { themedStyles } from '@core/theme/themed';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
@@ -57,7 +58,7 @@ export function ActionButton({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   button: {
     minHeight: layout.touchTarget + 4,
     paddingHorizontal: spacing.xl,
@@ -72,4 +73,4 @@ const styles = StyleSheet.create({
   solid: { backgroundColor: colors.goldMuted },
   pressed: { backgroundColor: colors.goldMuted, opacity: 0.85 },
   disabled: { opacity: 0.45 },
-});
+}));

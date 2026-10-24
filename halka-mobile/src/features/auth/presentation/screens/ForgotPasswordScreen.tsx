@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@features/auth/presentation/authSchemas';
 import { AuthLayout } from '@features/auth/presentation/components/AuthLayout';
 import { FormField } from '@features/auth/presentation/components/FormField';
+import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -95,7 +96,7 @@ export function ForgotPasswordScreen({ navigation }: RootStackScreenProps<'Forgo
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   error: { color: colors.danger, fontSize: fontSizes.sm },
   successBox: {
     alignItems: 'center',
@@ -118,4 +119,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
   },
-});
+}));

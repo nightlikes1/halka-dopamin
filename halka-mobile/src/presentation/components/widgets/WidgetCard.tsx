@@ -1,7 +1,8 @@
 // Eklenti kartı: başlık (odaklan / küçült / sil) + gövde; giriş/çıkış animasyonlu
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeInDown, LinearTransition, ZoomOut } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { getCatalogItem } from '@domain/entities/WidgetCatalog';
@@ -115,7 +116,7 @@ export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardP
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     borderRadius: radius.lg,
     borderWidth: 1,
@@ -149,4 +150,4 @@ const styles = StyleSheet.create({
   },
   actions: { flexDirection: 'row', gap: spacing.xxs },
   body: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg },
-});
+}));

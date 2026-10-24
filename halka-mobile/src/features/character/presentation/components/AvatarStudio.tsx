@@ -3,7 +3,7 @@
 // "Rastgele" yeni bir görünüm üretir, "Otomatik" karakterden türetilen görünüme döner.
 // Üstteki stil şeridinde "Halka" (kendi çizimimiz) ya da 31 DiceBear stilinden biri seçilir.
 import { useState, type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { avatarColors, colors, radius, spacing } from '@core/theme/tokens';
 import type { AvatarSource } from '@features/character/domain/avatar';
@@ -32,6 +32,7 @@ import { Icon } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
 import { SegmentedControl } from '@presentation/components/common/SegmentedControl';
 import { hapticLight } from '@presentation/utils/haptics';
+import { themedStyles } from '@core/theme/themed';
 
 const s = strings.character.studio;
 const PREVIEW_SIZE = 200;
@@ -331,7 +332,7 @@ function HalkaParts({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: { gap: spacing.md },
   preview: { alignSelf: 'center' },
   styleStrip: { gap: spacing.sm, paddingRight: spacing.lg },
@@ -383,4 +384,4 @@ const styles = StyleSheet.create({
   // Kıyafet seçeneklerinde gövde görünsün
   tileAvatarBody: { marginTop: -44 },
   tileLabel: { color: colors.textSecondary },
-});
+}));

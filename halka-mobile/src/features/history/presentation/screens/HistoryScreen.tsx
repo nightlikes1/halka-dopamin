@@ -1,11 +1,12 @@
 // Geçmiş: aylık takvim + seçili günün check-in özeti ve notu
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import { formatMonthYear } from '@core/utils/date';
 import { resolveCheckInDay } from '@features/checkin/domain/rules';
 import { DayDetail } from '@features/history/presentation/components/DayDetail';
 import { MonthCalendar } from '@features/history/presentation/components/MonthCalendar';
+import { themedStyles } from '@core/theme/themed';
 import { useMonthHistory } from '@features/history/presentation/useMonthHistory';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -75,8 +76,8 @@ export function HistoryScreen({ route, navigation }: RootStackScreenProps<'Histo
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   monthBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   errorBox: { gap: spacing.sm, alignItems: 'center' },
   error: { color: colors.danger, textAlign: 'center' },
-});
+}));

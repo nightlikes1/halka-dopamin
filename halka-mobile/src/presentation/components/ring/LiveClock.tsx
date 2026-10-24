@@ -1,8 +1,9 @@
 // Saniye göstergeli dijital saat (kendi zamanlayıcısıyla yalnızca kendini yeniler)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { padTwo } from '@core/utils/date';
 import { colors, fonts } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 import { useNow } from '@presentation/hooks/useNow';
 
 interface LiveClockProps {
@@ -23,8 +24,8 @@ export function LiveClock({ fontSize }: LiveClockProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { flexDirection: 'row', alignItems: 'flex-end' },
   time: { fontFamily: fonts.mono, color: colors.textMain, letterSpacing: 1 },
   seconds: { fontFamily: fonts.mono, color: colors.textMuted, marginBottom: 4 },
-});
+}));

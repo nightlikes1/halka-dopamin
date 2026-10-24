@@ -1,7 +1,8 @@
 // 🌟 Ruh Hali & Enerji (web'deki input[type=range] yerine Slider)
 import Slider from '@react-native-community/slider';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { ENERGY_MAX, ENERGY_MIN, MOOD_OPTIONS, REFLECTION_MAX_LENGTH } from '@domain/entities/Mood';
@@ -13,7 +14,7 @@ import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useMood } from '@presentation/hooks/useMood';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('mood').accent);
+const accent = () => widgetAccentColor(getCatalogItem('mood').accent);
 
 export function MoodWidget({ variant }: WidgetBodyProps) {
   const { mood, setMood, setEnergy, setReflection } = useMood();
@@ -48,12 +49,12 @@ export function MoodWidget({ variant }: WidgetBodyProps) {
               accessibilityLabel={option.label}
               style={({ pressed }) => [
                 styles.moodButton,
-                active && { borderColor: ACCENT, backgroundColor: withAlpha(ACCENT, '22') },
+                active && { borderColor: accent(), backgroundColor: withAlpha(accent(), '22') },
                 pressed && styles.pressed,
               ]}
             >
               <AppText style={styles.moodIcon}>{option.icon}</AppText>
-              <AppText style={[styles.moodName, active && { color: ACCENT }]}>
+              <AppText style={[styles.moodName, active && { color: accent() }]}>
                 {option.label}
               </AppText>
             </Pressable>
@@ -72,9 +73,9 @@ export function MoodWidget({ variant }: WidgetBodyProps) {
           value={mood.energyLevel}
           onValueChange={setDraggingEnergy}
           onSlidingComplete={commitEnergy}
-          minimumTrackTintColor={ACCENT}
+          minimumTrackTintColor={accent()}
           maximumTrackTintColor={colors.borderStrong}
-          thumbTintColor={ACCENT}
+          thumbTintColor={accent()}
           accessibilityLabel="Enerji seviyesi"
         />
       </View>
@@ -94,7 +95,7 @@ export function MoodWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   moods: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   moodButton: {
     flexGrow: 1,
@@ -113,4 +114,4 @@ const styles = StyleSheet.create({
   moodName: { fontSize: fontSizes.xs, color: colors.textMuted },
   energy: { gap: spacing.xs },
   energyValue: { fontFamily: fonts.bold, color: colors.textMain, fontSize: fontSizes.sm },
-});
+}));

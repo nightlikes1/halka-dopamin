@@ -1,12 +1,13 @@
 // 🧘 Kutu Nefesi — küre nefes al/ver fazlarında büyüyüp küçülür
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { themedStyles, themed } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes } from '@core/theme/tokens';
 import {
@@ -23,7 +24,7 @@ import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBreathing } from '@presentation/hooks/useBreathing';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('breathing').accent);
+const accent = () => widgetAccentColor(getCatalogItem('breathing').accent);
 
 // Faz sonunda kürenin ulaşacağı ölçek
 const TARGET_SCALE: Record<BreathingPhaseId, number> = {
@@ -33,12 +34,12 @@ const TARGET_SCALE: Record<BreathingPhaseId, number> = {
   rest: 1,
 };
 
-const PHASE_COLOR: Record<BreathingPhaseId, string> = {
-  inhale: ACCENT,
+const PHASE_COLOR: Readonly<Record<BreathingPhaseId, string>> = themed(() => ({
+  inhale: accent(),
   hold: colors.textMain,
   exhale: colors.textMuted,
   rest: colors.borderStrong,
-};
+}));
 
 export function BreathingWidget({ variant }: WidgetBodyProps) {
   const { isRunning, phase, toggle } = useBreathing();
@@ -55,7 +56,7 @@ export function BreathingWidget({ variant }: WidgetBodyProps) {
   }, [phase, scale]);
 
   const orbStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  const color = phase ? PHASE_COLOR[phase.id] : ACCENT;
+  const color = phase ? PHASE_COLOR[phase.id] : accent();
 
   return (
     <View style={focused ? widgetStyles.containerFocused : widgetStyles.container}>
@@ -81,14 +82,14 @@ export function BreathingWidget({ variant }: WidgetBodyProps) {
       <AppText style={[widgetStyles.statText, styles.center]}>{BREATHING_GUIDE_TEXT}</AppText>
       <ActionButton
         label={isRunning ? 'Durdur' : 'Egzersizi Başlat'}
-        color={ACCENT}
+        color={accent()}
         onPress={toggle}
       />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   stage: { alignItems: 'center', justifyContent: 'center' },
   orb: {
     alignItems: 'center',
@@ -103,4 +104,4 @@ const styles = StyleSheet.create({
   },
   instructionFocused: { fontSize: fontSizes.lg },
   center: { textAlign: 'center' },
-});
+}));

@@ -1,9 +1,10 @@
 // Günün denge skoru göstergesi (0-100)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
+import { themedStyles } from '@core/theme/themed';
 
 interface BalanceBadgeProps {
   readonly score: number;
@@ -28,7 +29,7 @@ export function BalanceBadge({ score }: BalanceBadgeProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   box: {
     gap: spacing.sm,
     padding: spacing.md,
@@ -38,4 +39,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
   score: { fontFamily: fonts.mono, fontSize: fontSizes.xl, color: colors.textMain },
   max: { fontFamily: fonts.mono, fontSize: fontSizes.sm, color: colors.textDim },
-});
+}));

@@ -2,7 +2,7 @@
 // XP/seviye modeli yok: halka ve etiket yakınlığı, çubuk bu haftaki kayıtlı günleri gösterir.
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { staggers } from '@core/theme/motion';
@@ -20,6 +20,7 @@ import { computeBadges } from '@features/character/presentation/badges';
 import { DayBars } from '@features/character/presentation/components/DayBars';
 import { ProfileAvatar } from '@features/character/presentation/components/ProfileAvatar';
 import { TraitStatRow } from '@features/character/presentation/components/TraitStatRow';
+import { themedStyles } from '@core/theme/themed';
 import { useCharacter } from '@features/character/presentation/useCharacter';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { Appear } from '@presentation/components/common/Appear';
@@ -266,7 +267,7 @@ export function CharacterScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   content: { gap: spacing.xl },
   topBar: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   title: { flex: 1, textAlign: 'center' },
@@ -289,4 +290,4 @@ const styles = StyleSheet.create({
   delete: { alignSelf: 'center', minHeight: layout.touchTarget, justifyContent: 'center' },
   create: { alignSelf: 'stretch', marginTop: spacing.sm },
   error: { color: colors.danger },
-});
+}));

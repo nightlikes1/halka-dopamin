@@ -1,7 +1,7 @@
 // Animasyonlu ilerleme çubuğu: açılışta 0'dan (isteğe bağlı gecikmeyle) dolar;
 // shimmer verilirse üzerinden periyodik beyaz bir parlama geçer.
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -12,6 +12,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { durations, easeOut } from '@core/theme/motion';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, radius } from '@core/theme/tokens';
@@ -81,7 +82,7 @@ export function ProgressBar({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   track: {
     width: '100%',
     borderRadius: radius.full,
@@ -96,4 +97,4 @@ const styles = StyleSheet.create({
     width: SHIMMER_WIDTH,
     backgroundColor: withAlpha(colors.textPrimary, '33'),
   },
-});
+}));

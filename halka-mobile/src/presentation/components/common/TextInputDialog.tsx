@@ -2,13 +2,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
 import { colors, radius, spacing, fontSizes } from '@core/theme/tokens';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Chip } from '@presentation/components/common/Chip';
 import { createTextDialogSchema, type TextDialogValues } from '@presentation/forms/schemas';
+import { themedStyles } from '@core/theme/themed';
 
 interface TextInputDialogProps {
   readonly visible: boolean;
@@ -88,7 +89,7 @@ export function TextInputDialog({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   flex: { flex: 1 },
   overlay: {
     flex: 1,
@@ -114,4 +115,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
   },
-});
+}));

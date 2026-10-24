@@ -563,7 +563,6 @@ export const tr = {
     themeDark: 'Koyu',
     themeLight: 'Açık',
     themeHint: 'Bugün ekranındaki güneş/ay butonuyla da geçiş yapabilirsin.',
-    themeRestart: 'Tema kaydedildi. Uygulamayı yeniden açtığında uygulanır.',
     themeFailed: 'Tema kaydedilemedi.',
   },
   errors: {

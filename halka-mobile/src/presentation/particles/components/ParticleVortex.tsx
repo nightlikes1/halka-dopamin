@@ -9,7 +9,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
-import { PARTICLE_BACKGROUND } from '@presentation/particles/config';
+import { particleBackground } from '@presentation/particles/config';
 import { buildLut, type ParticlePaletteName } from '@presentation/particles/engine/palette';
 import { REFERENCE_HEIGHT, REFERENCE_WIDTH } from '@presentation/particles/engine/types';
 import {
@@ -22,6 +22,7 @@ import {
 } from '@presentation/particles/engine/vortexEngine';
 import { ParticleCanvas } from '@presentation/particles/renderer/ParticleCanvas';
 import type { ParticleSim, PointerChannel } from '@presentation/particles/renderer/types';
+import { themedStyles } from '@core/theme/themed';
 
 const HOLE_INNER = VORTEX_HOLE - 10;
 const HOLE_OUTER = VORTEX_HOLE + 12;
@@ -76,13 +77,13 @@ export function ParticleVortex({ palette = 'buzAtes', pointer, style }: Particle
             r={HOLE_OUTER}
             gradientUnits="userSpaceOnUse"
           >
-            <Stop offset={0} stopColor={PARTICLE_BACKGROUND} stopOpacity={1} />
+            <Stop offset={0} stopColor={particleBackground()} stopOpacity={1} />
             <Stop
               offset={HOLE_INNER / HOLE_OUTER}
-              stopColor={PARTICLE_BACKGROUND}
+              stopColor={particleBackground()}
               stopOpacity={1}
             />
-            <Stop offset={1} stopColor={PARTICLE_BACKGROUND} stopOpacity={0} />
+            <Stop offset={1} stopColor={particleBackground()} stopOpacity={0} />
           </RadialGradient>
         </Defs>
         <Circle cx={VORTEX_CX} cy={VORTEX_CY} r={HOLE_OUTER} fill="url(#hole)" />
@@ -91,7 +92,7 @@ export function ParticleVortex({ palette = 'buzAtes', pointer, style }: Particle
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fill: { ...StyleSheet.absoluteFill },
   overlay: { position: 'absolute', top: 0, left: 0 },
-});
+}));

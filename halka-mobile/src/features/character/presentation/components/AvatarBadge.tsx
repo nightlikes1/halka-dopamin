@@ -9,6 +9,7 @@ import { DiceBearImage } from '@features/character/presentation/dicebear/DiceBea
 import { ParticleAvatar } from '@presentation/particles/components/ParticleAvatar';
 import type { AvatarShapeKind } from '@presentation/particles/engine/avatarEngine';
 import type { ParticlePaletteName } from '@presentation/particles/engine/palette';
+import { themedStyles } from '@core/theme/themed';
 
 const CARTOON_SCALE = 1.08;
 const CARTOON_DROP = 0.06;
@@ -76,8 +77,8 @@ export function AvatarBadge({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   circle: { overflow: 'hidden', backgroundColor: colors.ink },
   cartoon: { position: 'absolute', alignSelf: 'center' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-});
+}));

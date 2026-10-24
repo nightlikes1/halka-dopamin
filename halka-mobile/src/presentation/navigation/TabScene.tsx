@@ -2,7 +2,8 @@
 // odağından gizlenir. Web'de alt sekmeler DOM'da kalır; `inert` olmadan Tab tuşu görünmeyen butonlara gider.
 import { useIsFocused } from '@react-navigation/native';
 import { useEffect, useRef, type ReactNode } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { themedStyles } from '@core/theme/themed';
 
 interface InertCapable {
   inert: boolean;
@@ -35,6 +36,6 @@ export function TabScene({ children }: { readonly children: ReactNode }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fill: { flex: 1 },
-});
+}));

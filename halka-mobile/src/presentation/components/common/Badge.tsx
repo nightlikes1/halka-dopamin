@@ -1,10 +1,11 @@
 // Rozet: renkli yuvarlak ikon + kısa etiket. Kilitliyse kesikli kenarlık, gri kilit ikonu.
 // delay verilirse sırayla zıplayarak belirir.
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
+import { themedStyles } from '@core/theme/themed';
 
 interface BadgeProps {
   readonly icon: IconName;
@@ -38,7 +39,7 @@ export function Badge({ icon, label, color, tint, locked = false, delay = 0 }: B
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   cell: { flex: 1 },
   card: {
     flex: 1,
@@ -65,4 +66,4 @@ const styles = StyleSheet.create({
   },
   label: { textAlign: 'center', fontFamily: fonts.semibold },
   labelLocked: { color: colors.textSecondary },
-});
+}));

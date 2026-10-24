@@ -2,7 +2,7 @@
 // "Sıradakiler" listesi, odak seansı ve akşam check-in. Veriler klasik ekranla aynı hook'lardan.
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { staggers } from '@core/theme/motion';
@@ -14,6 +14,7 @@ import { getGreeting } from '@domain/services/briefingGenerator';
 import { GlassHabitRow } from '@features/activities/presentation/components/GlassHabitRow';
 import { SwipeToComplete } from '@presentation/components/common/SwipeToComplete';
 import { isCompleted, summarizeToday } from '@features/activities/presentation/todaySummary';
+import { themedStyles } from '@core/theme/themed';
 import { useTodayHabits } from '@features/activities/presentation/useTodayHabits';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { useCharacter } from '@features/character/presentation/useCharacter';
@@ -251,7 +252,7 @@ export function ParticleTodayScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   content: { gap: spacing.xl, paddingTop: 0 },
   // Halka kutusu tam genişlikte: ekran kenar boşluğu geri alınır
   ringArea: {
@@ -282,4 +283,4 @@ const styles = StyleSheet.create({
   link: { color: colors.textPrimary, textDecorationLine: 'underline' },
   empty: { gap: spacing.sm },
   error: { color: colors.danger },
-});
+}));

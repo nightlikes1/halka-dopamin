@@ -3,7 +3,7 @@
 // Sayaç mantığı mevcut Pomodoro use-case'lerinden (useFocusSession).
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -24,6 +24,7 @@ import { Icon } from '@presentation/components/common/Icon';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
 import { SegmentedControl } from '@presentation/components/common/SegmentedControl';
+import { themedStyles, themed } from '@core/theme/themed';
 import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
 import { BlinkDot } from '@presentation/particles/components/BlinkDot';
 import { ParticleWave } from '@presentation/particles/components/ParticleWave';
@@ -39,11 +40,11 @@ const MODE_PALETTE: Readonly<Record<PomodoroMode, ParticlePaletteName>> = {
   shortBreak: 'buz',
   longBreak: 'mor',
 };
-const MODE_COLOR: Readonly<Record<PomodoroMode, string>> = {
+const MODE_COLOR: Readonly<Record<PomodoroMode, string>> = themed(() => ({
   work: colors.textPrimary,
   shortBreak: colors.sapphire,
   longBreak: colors.amethyst,
-};
+}));
 const MODES: readonly PomodoroMode[] = ['work', 'shortBreak', 'longBreak'];
 
 const LINE_WIDTH = 180;
@@ -210,7 +211,7 @@ export function ParticleFocusScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   root: { flex: 1, backgroundColor: colors.ink },
   safe: { flex: 1 },
   content: {
@@ -266,4 +267,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textPrimary,
   },
   reward: { textAlign: 'center' },
-});
+}));

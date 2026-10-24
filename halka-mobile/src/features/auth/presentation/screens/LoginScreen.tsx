@@ -2,12 +2,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, StyleSheet, type TextInput } from 'react-native';
+import { Pressable, type TextInput } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { loginFormSchema, type LoginFormValues } from '@features/auth/presentation/authSchemas';
 import { AuthLayout } from '@features/auth/presentation/components/AuthLayout';
 import { FormField } from '@features/auth/presentation/components/FormField';
+import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -94,7 +95,7 @@ export function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   forgotPasswordButton: {
     alignSelf: 'flex-end',
     marginTop: -spacing.xs,
@@ -104,4 +105,4 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xs,
   },
   error: { color: colors.danger, fontSize: fontSizes.sm },
-});
+}));

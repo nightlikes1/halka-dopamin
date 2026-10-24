@@ -1,11 +1,12 @@
 // Sade çubuk grafik: her gün için 0-100 değer; kayıt olmayan gün ince taban çizgisi.
 // Ekran okuyucu için her çubuğun metin karşılığı verilir.
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { formatDayMonth, formatShortDayName } from '@core/utils/date';
 import type { DayValue } from '@features/character/domain/proximity';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 
 interface DayBarsProps {
   readonly days: readonly DayValue[];
@@ -48,11 +49,11 @@ export function DayBars({ days, height = 72, showLabels = true }: DayBarsProps) 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   bars: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.xs },
   column: { flex: 1, justifyContent: 'flex-end', alignItems: 'stretch' },
   bar: { borderRadius: radius.sm / 2, backgroundColor: colors.accent },
   empty: { height: 2, borderRadius: 1, backgroundColor: colors.track },
   labels: { flexDirection: 'row', gap: spacing.xs, marginTop: spacing.xs },
   label: { flex: 1, textAlign: 'center', fontSize: fontSizes.xs, color: colors.textDim },
-});
+}));

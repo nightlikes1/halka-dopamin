@@ -1,8 +1,9 @@
 // Odak ekranı: seçilen eklentinin geniş görünümü (web'de halkanın içinde açılan odak paneli)
 import { useEffect } from 'react';
-import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { getCatalogItem } from '@domain/entities/WidgetCatalog';
@@ -85,7 +86,7 @@ export function WidgetFocusScreen({ route, navigation }: RootStackScreenProps<'W
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: colors.bgPrimary },
   headerBar: {
     flexDirection: 'row',
@@ -127,4 +128,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: colors.scrim,
   },
-});
+}));

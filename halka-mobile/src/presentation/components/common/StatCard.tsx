@@ -1,7 +1,8 @@
 // Küçük istatistik kartı: üstte sayı (isteğe bağlı renkli), altta etiket
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 
 interface StatCardProps {
   readonly value: string;
@@ -22,7 +23,7 @@ export function StatCard({ value, label, color = colors.textPrimary }: StatCardP
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     flex: 1,
     alignItems: 'center',
@@ -32,4 +33,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   label: { color: colors.textSecondary, textAlign: 'center', fontFamily: fonts.medium },
-});
+}));

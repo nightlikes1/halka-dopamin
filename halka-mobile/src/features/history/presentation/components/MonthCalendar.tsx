@@ -1,11 +1,12 @@
 // Aylık takvim: her günde denge skoru, zor gün işareti ve not simgesi
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { WEEKDAY_SHORT_MONDAY_FIRST, formatDayMonth, parseIsoDate } from '@core/utils/date';
 import type { DaySummary } from '@features/history/domain/entities';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon } from '@presentation/components/common/Icon';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.history;
 
@@ -103,7 +104,7 @@ export function MonthCalendar({ days, selectedDate, onSelect }: MonthCalendarPro
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   calendar: { gap: spacing.xs },
   week: { flexDirection: 'row', gap: spacing.xs },
   weekday: { flex: 1, textAlign: 'center', fontSize: fontSizes.xs, color: colors.textDim },
@@ -134,4 +135,4 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-});
+}));

@@ -1,7 +1,8 @@
 // Kart yüzeyi: ekranlardaki gruplanmış içerik için tek tip kutu
 import type { ReactNode } from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { colors, radius, spacing } from '@core/theme/tokens';
+import { themedStyles } from '@core/theme/themed';
 
 // surface: ana kart · raised: kart içindeki alt yüzey · outline: zeminsiz çerçeve · dashed: boş durum
 export type CardVariant = 'surface' | 'raised' | 'outline' | 'dashed';
@@ -18,16 +19,16 @@ export function Card({ children, variant = 'surface', padding = 'lg', style }: C
   return <View style={[styles.base, styles[variant], paddings[padding], style]}>{children}</View>;
 }
 
-const paddings = StyleSheet.create({
+const paddings = themedStyles(() => ({
   none: { padding: 0 },
   md: { padding: spacing.md },
   lg: { padding: spacing.lg },
-});
+}));
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   base: { gap: spacing.md, borderRadius: radius.lg },
   surface: { borderWidth: 1, borderColor: colors.borderGlass, backgroundColor: colors.bgCard },
   raised: { borderRadius: radius.md, backgroundColor: colors.bgCardPressed },
   outline: { borderWidth: 1, borderColor: colors.borderGlass },
   dashed: { borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong },
-});
+}));

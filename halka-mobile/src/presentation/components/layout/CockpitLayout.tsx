@@ -1,11 +1,12 @@
 // Geniş ekran (tablet) kokpit düzeni: sol kanat | halka | sağ kanat + bağlantı çizgileri
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
+import { View, type LayoutChangeEvent } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import type { WidgetId } from '@domain/entities/WidgetId';
 import { TetherOverlay, type Point } from '@presentation/components/layout/TetherOverlay';
 import { RingSection } from '@presentation/components/ring/RingSection';
 import { WidgetCard } from '@presentation/components/widgets/WidgetCard';
+import { themedStyles } from '@core/theme/themed';
 
 interface Frame {
   readonly x: number;
@@ -97,8 +98,8 @@ export function CockpitLayout({ ids, ringSize, onAddPress }: CockpitLayoutProps)
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.xxl },
   wing: { flex: 1, gap: spacing.lg },
   center: { alignItems: 'center' },
-});
+}));

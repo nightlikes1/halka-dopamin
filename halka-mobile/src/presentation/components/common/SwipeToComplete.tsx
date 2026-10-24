@@ -10,6 +10,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
@@ -117,7 +118,7 @@ export function SwipeToComplete({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   back: {
     ...StyleSheet.absoluteFill,
     flexDirection: 'row',
@@ -127,4 +128,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassBorder,
   },
-});
+}));

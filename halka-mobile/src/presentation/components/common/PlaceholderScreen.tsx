@@ -1,6 +1,6 @@
 // Henüz geliştirilmemiş sekmeler için ortak "Yakında" ekranı
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
@@ -8,6 +8,7 @@ import { Card } from '@presentation/components/common/Card';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { Screen } from '@presentation/components/common/Screen';
 import { ScreenHeader } from '@presentation/components/common/ScreenHeader';
+import { themedStyles } from '@core/theme/themed';
 
 interface PlaceholderScreenProps {
   readonly icon: IconName;
@@ -35,7 +36,7 @@ export function PlaceholderScreen({ icon, title, subtitle, headerRight }: Placeh
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.xxl },
   iconCircle: {
     width: 64,
@@ -47,4 +48,4 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   center: { textAlign: 'center' },
-});
+}));

@@ -1,8 +1,9 @@
 // Pill içinde seçici (Pomodoro modu gibi): seçili seçenek kendi renginde dolu ve koyu yazılı
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 export interface SegmentOption<T extends string> {
   readonly value: T;
@@ -59,7 +60,7 @@ export function SegmentedControl<T extends string>({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     flexDirection: 'row',
     alignSelf: 'center',
@@ -78,4 +79,4 @@ const styles = StyleSheet.create({
   },
   label: { color: colors.textSecondary },
   labelActive: { color: colors.textOnAccent, fontFamily: fonts.bold },
-});
+}));

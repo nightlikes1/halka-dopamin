@@ -1,5 +1,5 @@
 // ⏱️ Pomodoro Odak
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, fonts, fontSizes, spacing } from '@core/theme/tokens';
 import { formatMinutesSeconds } from '@core/utils/format';
 import {
@@ -13,12 +13,12 @@ import { AppText } from '@presentation/components/common/AppText';
 import { Chip } from '@presentation/components/common/Chip';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { usePomodoro } from '@presentation/hooks/usePomodoro';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('pomodoro').accent);
-const PAUSE_COLOR = colors.textMuted;
+const accent = () => widgetAccentColor(getCatalogItem('pomodoro').accent);
 
 const MODE_LABELS: Record<PomodoroMode, string> = {
   work: 'Odak',
@@ -54,7 +54,7 @@ export function PomodoroWidget({ variant }: WidgetBodyProps) {
             key={mode}
             label={modeLabel(mode)}
             variant={pomodoro.mode === mode ? 'active' : 'default'}
-            accent={ACCENT}
+            accent={accent()}
             onPress={() => void changeMode(mode)}
           />
         ))}
@@ -68,7 +68,7 @@ export function PomodoroWidget({ variant }: WidgetBodyProps) {
           {formatMinutesSeconds(remainingSeconds)}
         </AppText>
         {focused ? (
-          <AppText style={[styles.badge, { color: ACCENT }]}>
+          <AppText style={[styles.badge, { color: accent() }]}>
             {pomodoro.mode === 'work' ? 'Derin Odak Zamanı' : 'Zihinsel Dinlenme'}
           </AppText>
         ) : null}
@@ -79,12 +79,12 @@ export function PomodoroWidget({ variant }: WidgetBodyProps) {
         </AppText>
       </View>
 
-      {focused ? <ProgressBar pct={elapsedPct} color={ACCENT} /> : null}
+      {focused ? <ProgressBar pct={elapsedPct} color={accent()} /> : null}
 
       <View style={styles.controls}>
         <ActionButton
           label={toggleLabel}
-          color={isRunning ? PAUSE_COLOR : ACCENT}
+          color={isRunning ? colors.textMuted : accent()}
           onPress={() => void toggle()}
           style={styles.toggle}
         />
@@ -98,7 +98,7 @@ export function PomodoroWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   time: {
     fontFamily: fonts.mono,
     fontSize: fontSizes.display,
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   strong: { fontFamily: fonts.bold, color: colors.textMain, fontSize: fontSizes.sm },
   controls: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   toggle: { flex: 1 },
-});
+}));

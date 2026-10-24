@@ -1,13 +1,14 @@
 // Yüzen cam sekme çubuğu (parçacık stili): kenarlardan 12 px içeride, alttan 16 px yukarıda.
 // İçerik çubuğun altından akar; ekranlar useTabBarClearance kadar alt boşluk bırakır.
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { layout } from '@core/theme/layout';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 export const GLASS_BAR_HEIGHT = 64;
 export const GLASS_BAR_INSET = 12;
@@ -64,7 +65,7 @@ export function useTabBarClearance(): number {
   return GLASS_BAR_HEIGHT + GLASS_BAR_BOTTOM + insets.bottom + spacing.lg;
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   bar: {
     position: 'absolute',
     left: GLASS_BAR_INSET,
@@ -87,4 +88,4 @@ const styles = StyleSheet.create({
   },
   label: { fontFamily: fonts.medium },
   active: { fontFamily: fonts.bold },
-});
+}));

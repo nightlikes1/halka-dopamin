@@ -1,5 +1,6 @@
 // Zincir halka paleti: düz koyu halkalar + şampanya vurgusu (gradient ve parlama yok)
 
+import { themed } from '@core/theme/themed';
 import { colors } from '@core/theme/tokens';
 
 export interface RingPalette {
@@ -13,8 +14,8 @@ export interface RingPalette {
   readonly tether: string;
 }
 
-// Modül yüklenirken aktif temadan okunur (tema açılışta, ekranlardan önce uygulanır)
-export const RING_PALETTE: RingPalette = {
+// Aktif temadan okunur (themed)
+export const RING_PALETTE: RingPalette = themed(() => ({
   accent: colors.gold,
   accentAlt: colors.sapphire,
   glow: withAlpha(colors.textPrimary, '0f'),
@@ -23,7 +24,7 @@ export const RING_PALETTE: RingPalette = {
   metalDeep: colors.surfaceAlt,
   orbitTrack: withAlpha(colors.textPrimary, '12'),
   tether: withAlpha(colors.textPrimary, '2e'),
-};
+}));
 
 // "#rrggbb" + saydamlık (00-ff) -> "#rrggbbaa"
 export function withAlpha(hex: string, alphaHex: string): string {

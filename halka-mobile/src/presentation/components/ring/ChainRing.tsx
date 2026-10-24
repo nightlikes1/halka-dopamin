@@ -13,6 +13,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle, G, Line, Rect } from 'react-native-svg';
+import { themedStyles } from '@core/theme/themed';
 import { useTheme } from '@core/theme/ThemeProvider';
 
 const VIEWBOX = 500;
@@ -185,7 +186,7 @@ export const ChainRing = memo(function ChainRing({
   );
 });
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -203,4 +204,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderWidth: 1,
   },
-});
+}));

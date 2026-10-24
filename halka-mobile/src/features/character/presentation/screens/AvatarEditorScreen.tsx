@@ -1,6 +1,6 @@
 // Avatarım: kayıtlı karakterin çizgi görünümünü ve aurasını düzenler (kimlik/özellikler değişmez).
 import { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { resolveAvatar, resolveLook } from '@features/character/domain/avatar';
@@ -10,6 +10,7 @@ import { moodFor, type AvatarLook } from '@features/character/domain/look';
 import { figureFor } from '@features/character/presentation/avatarFigure';
 import { AuraPicker } from '@features/character/presentation/components/AuraPicker';
 import { AvatarStudio } from '@features/character/presentation/components/AvatarStudio';
+import { themedStyles } from '@core/theme/themed';
 import { toDraft, useCharacter } from '@features/character/presentation/useCharacter';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -98,7 +99,7 @@ function Editor({ character, proximity, save, onDone }: EditorProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   footer: { alignItems: 'flex-end', marginTop: spacing.md },
   error: { color: colors.danger, fontSize: fontSizes.sm },
-});
+}));

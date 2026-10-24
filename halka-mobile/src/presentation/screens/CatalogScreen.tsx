@@ -1,7 +1,8 @@
 // Eklenti kütüphanesi (web'deki katalog modalı) — modal ekran olarak açılır
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
@@ -112,7 +113,7 @@ export function CatalogScreen({ navigation }: RootStackScreenProps<'Catalog'>) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: colors.bgSecondary },
   list: { padding: spacing.lg, gap: spacing.md },
   card: {
@@ -143,4 +144,4 @@ const styles = StyleSheet.create({
   },
   tagText: { fontSize: fontSizes.xs, color: colors.textMuted },
   action: { fontFamily: fonts.semibold, fontSize: fontSizes.sm, marginTop: spacing.xs },
-});
+}));

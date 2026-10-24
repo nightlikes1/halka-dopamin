@@ -1,7 +1,8 @@
 // Cam kart (parçacık ekranları): saydam zemin, ince açık kenarlık, 16 px köşe
 import type { ReactNode } from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { colors, radius, spacing } from '@core/theme/tokens';
+import { themedStyles } from '@core/theme/themed';
 
 interface GlassCardProps {
   readonly children: ReactNode;
@@ -12,7 +13,7 @@ export function GlassCard({ children, style }: GlassCardProps) {
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     borderRadius: radius.glass,
     borderWidth: 1,
@@ -20,4 +21,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.glass,
     padding: spacing.mdl,
   },
-});
+}));

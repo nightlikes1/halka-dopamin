@@ -28,10 +28,16 @@ input:-webkit-autofill:focus {
 }
 `;
 
+// Tema değişince yeniden çağrılır: mevcut etiket güncellenir
 export function injectWebGlobalStyles(): void {
   if (Platform.OS !== 'web') return;
   const doc = (globalThis as { document?: StyleDocument }).document;
-  if (!doc || doc.getElementById(STYLE_ID)) return;
+  if (!doc) return;
+  const existing = doc.getElementById(STYLE_ID) as { textContent: string | null } | null;
+  if (existing) {
+    existing.textContent = buildCss();
+    return;
+  }
   const style = doc.createElement('style');
   style.id = STYLE_ID;
   style.textContent = buildCss();

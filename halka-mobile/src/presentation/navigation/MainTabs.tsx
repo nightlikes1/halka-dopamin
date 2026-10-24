@@ -2,7 +2,7 @@
 // (Rehberler Faz 3'te Bugün/Karakter içinden açılacak).
 // Parçacık stilinde yüzen cam çubuk ve parçacık Bugün/Odak ekranları kullanılır.
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet } from 'react-native';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
@@ -18,6 +18,7 @@ import { GlassTabBar } from '@presentation/navigation/GlassTabBar';
 import { TabScene } from '@presentation/navigation/TabScene';
 import type { MainTabParamList } from '@presentation/navigation/types';
 import { HomeScreen } from '@presentation/screens/HomeScreen';
+import { themedStyles } from '@core/theme/themed';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -73,7 +74,7 @@ export function MainTabs() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   tabBar: {
     backgroundColor: colors.navBackground,
     borderTopWidth: 1,
@@ -82,4 +83,4 @@ const styles = StyleSheet.create({
   },
   item: { minHeight: layout.touchTarget },
   label: { fontFamily: fonts.semibold, fontSize: fontSizes.tag },
-});
+}));

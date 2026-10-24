@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, type TextInput } from 'react-native';
+import { type TextInput } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes } from '@core/theme/tokens';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@features/auth/presentation/authSchemas';
 import { AuthLayout } from '@features/auth/presentation/components/AuthLayout';
 import { FormField } from '@features/auth/presentation/components/FormField';
+import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -108,6 +109,6 @@ export function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>)
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   error: { color: colors.danger, fontSize: fontSizes.sm },
-});
+}));

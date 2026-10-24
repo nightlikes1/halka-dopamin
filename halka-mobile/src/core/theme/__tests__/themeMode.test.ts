@@ -7,6 +7,7 @@ import {
   ivory,
   obsidian,
 } from '@core/theme/tokens';
+import { themed } from '@core/theme/themed';
 import { buildLut, NEUTRAL_INDEX } from '@presentation/particles/engine/palette';
 
 describe('applyThemeMode', () => {
@@ -43,5 +44,23 @@ describe('buildLut açık ton', () => {
     const light = buildLut('buzAtes', true);
     expect(light[0]).toBeLessThan(dark[0] ?? 0);
     expect(light[NEUTRAL_INDEX * 3]).toBeGreaterThan(dark[NEUTRAL_INDEX * 3] ?? 0);
+  });
+});
+
+describe('themed', () => {
+  afterEach(() => applyThemeMode('dark'));
+
+  it('aktif temanın değerini verir, tema başına bir kez üretir', () => {
+    const factory = jest.fn(() => ({ bg: colors.background }));
+    const value = themed(factory);
+    expect(value.bg).toBe(obsidian.base);
+    expect(value.bg).toBe(obsidian.base);
+    applyThemeMode('light');
+    expect(value.bg).toBe(ivory.base);
+    applyThemeMode('dark');
+    expect(value.bg).toBe(obsidian.base);
+    expect(factory).toHaveBeenCalledTimes(2);
+    expect(Object.keys(value)).toEqual(['bg']);
+    expect({ ...value }).toEqual({ bg: obsidian.base });
   });
 });

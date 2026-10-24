@@ -1,6 +1,7 @@
 // Hap buton: seçim, filtre ve ikincil eylemler için. Varsayılan boyut 44 px dokunma alanı sağlar.
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { hitSlopFor } from '@core/theme/layout';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
@@ -69,7 +70,7 @@ export function Chip({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   chip: {
     borderRadius: radius.full,
     borderWidth: 1,
@@ -83,4 +84,4 @@ const styles = StyleSheet.create({
   content: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   pressed: { backgroundColor: colors.fillStrong },
   disabled: { opacity: 0.45 },
-});
+}));

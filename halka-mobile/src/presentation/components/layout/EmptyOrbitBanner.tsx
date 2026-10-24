@@ -1,6 +1,6 @@
 // Hiç eklenti yokken gösterilen davet kutusu
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -10,6 +10,7 @@ import Animated, {
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 
 interface EmptyOrbitBannerProps {
   readonly onAddPress: () => void;
@@ -34,7 +35,7 @@ export function EmptyOrbitBanner({ onAddPress }: EmptyOrbitBannerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   banner: {
     alignItems: 'center',
     gap: spacing.md,
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
   },
   text: { textAlign: 'center' },
-});
+}));

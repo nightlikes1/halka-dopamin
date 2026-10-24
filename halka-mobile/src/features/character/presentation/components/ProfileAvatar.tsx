@@ -1,6 +1,6 @@
 // Profil avatarı: dışta yakınlık halkası (turuncu), içte çizgi karakter + arkasında parçacık aura,
 // altta halkadan taşan yakınlık etiketi (gecikmeli zıplayarak çıkar), sağ altta düzenle butonu.
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { durations, staggers } from '@core/theme/motion';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import type { DiceBearAvatar } from '@features/character/domain/dicebear';
@@ -13,6 +13,7 @@ import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { ProgressRing } from '@presentation/components/common/ProgressRing';
+import { themedStyles } from '@core/theme/themed';
 
 const SIZE = 210;
 // viewBox 200 içinde: ekranda yarıçap 101, kalınlık 5
@@ -97,7 +98,7 @@ export function ProfileAvatar({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   wrapper: { alignItems: 'center', marginBottom: spacing.md },
   pill: {
     position: 'absolute',
@@ -117,4 +118,4 @@ const styles = StyleSheet.create({
     marginLeft: SIZE / 2 - EDIT_SIZE + spacing.xs,
     bottom: spacing.lg,
   },
-});
+}));

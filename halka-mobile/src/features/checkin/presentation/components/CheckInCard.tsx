@@ -1,5 +1,5 @@
 // Bugün sekmesindeki akşam check-in kartı (yapılmadıysa davet, yapıldıysa skor + düzenle)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import { addDays } from '@core/utils/date';
@@ -13,6 +13,7 @@ import { Card } from '@presentation/components/common/Card';
 import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { SectionTitle } from '@presentation/components/common/SectionTitle';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.checkIn;
 
@@ -71,7 +72,7 @@ export function CheckInCard({ overview, onOpen, onHistory }: CheckInCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   yesterday: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -81,4 +82,4 @@ const styles = StyleSheet.create({
     borderTopColor: colors.borderGlass,
   },
   flex: { flex: 1 },
-});
+}));

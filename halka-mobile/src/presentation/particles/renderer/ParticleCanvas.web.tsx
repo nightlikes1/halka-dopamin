@@ -2,7 +2,7 @@
 // Skia'nın web modülü (CanvasKit ~3 MB) yüklenmez. Renkli yumuşak noktalar bir kez sprite
 // sayfasına çizilir; her karede yalnızca drawImage çağrılır, nesne yaratılmaz.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import {
   FPS_SAMPLE_FRAMES,
@@ -11,7 +11,7 @@ import {
   MAX_PIXEL_RATIO,
   MIN_TARGET_FPS,
   PARTICLE_INTENSITY,
-  PARTICLE_ON_LIGHT,
+  particleOnLight,
   SPRITE_SIZE,
   SPRITE_SPREAD,
 } from '@presentation/particles/config';
@@ -33,6 +33,7 @@ import {
 } from '@presentation/particles/engine/interaction';
 import { createPace, paceFrame } from '@presentation/particles/renderer/pacing';
 import type { ParticleCanvasProps } from '@presentation/particles/renderer/types';
+import { themedStyles } from '@core/theme/themed';
 import { useLoopActive } from '@presentation/particles/renderer/useLoopActive';
 
 declare global {
@@ -105,7 +106,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
-      ctx.globalCompositeOperation = PARTICLE_ON_LIGHT ? 'source-over' : 'lighter';
+      ctx.globalCompositeOperation = particleOnLight() ? 'source-over' : 'lighter';
       const out = state.out;
       for (let i = 0; i < state.count; i++) {
         const o = i * OUT_STRIDE;
@@ -209,6 +210,6 @@ export function ParticleCanvas<S extends ParticleOutput>({
 
 const canvasStyle = { width: '100%', height: '100%', display: 'block' } as const;
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fill: { flex: 1 },
-});
+}));

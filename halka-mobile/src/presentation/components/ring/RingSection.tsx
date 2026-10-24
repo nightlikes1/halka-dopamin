@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { layout } from '@core/theme/layout';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { PROFILE_NAME_MAX_LENGTH, resolveGreetingName } from '@domain/entities/Profile';
+import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -98,7 +99,7 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: { alignItems: 'center', gap: spacing.md },
   hubWrapper: {
     position: 'absolute',
@@ -126,4 +127,4 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     maxWidth: layout.contentMaxWidth,
   },
-});
+}));

@@ -1,7 +1,8 @@
 // Ekranın alt kısmında şeffaftan zemine yumuşak geçiş (parçacıkların üstünde metin okunabilsin)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
-import { PARTICLE_BACKGROUND } from '@presentation/particles/config';
+import { particleBackground } from '@presentation/particles/config';
+import { themedStyles } from '@core/theme/themed';
 
 interface BottomFadeProps {
   // Ekran yüksekliğine oran (0-1)
@@ -9,7 +10,7 @@ interface BottomFadeProps {
   readonly color?: string;
 }
 
-export function BottomFade({ fraction, color = PARTICLE_BACKGROUND }: BottomFadeProps) {
+export function BottomFade({ fraction, color = particleBackground() }: BottomFadeProps) {
   return (
     <View style={[styles.fade, { height: `${fraction * 100}%` }]} pointerEvents="none">
       <Svg width="100%" height="100%" preserveAspectRatio="none">
@@ -26,6 +27,6 @@ export function BottomFade({ fraction, color = PARTICLE_BACKGROUND }: BottomFade
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fade: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-});
+}));

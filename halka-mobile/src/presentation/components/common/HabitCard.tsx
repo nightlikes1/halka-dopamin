@@ -1,7 +1,7 @@
 // Alışkanlık kartı: ikon kutusu · başlık + alt satır (ya da ilerleme çubuğu) · yuvarlak aksiyon.
 // Tamamlandı durumuna geçince buton yaylı zıplar ve üstünden kısa bir yazı süzülüp kaybolur.
 import { useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -16,6 +16,7 @@ import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 const FLOAT_DISTANCE = 26;
 
@@ -133,7 +134,7 @@ export function HabitCard({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -167,4 +168,4 @@ const styles = StyleSheet.create({
     minWidth: 80,
     alignItems: 'flex-end',
   },
-});
+}));

@@ -1,10 +1,11 @@
 // Özellik satırı: ad, 7 günlük ilerleme, bağlı alışkanlık sayısı, bugünkü durum
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, radius, spacing } from '@core/theme/tokens';
 import type { TraitSummary } from '@features/character/domain/usecases/CharacterUseCases';
 import { AppText } from '@presentation/components/common/AppText';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.character;
 
@@ -39,7 +40,7 @@ export function TraitRow({ summary, onPress }: TraitRowProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     gap: spacing.sm,
     minHeight: 44,
@@ -52,4 +53,4 @@ const styles = StyleSheet.create({
   name: { flex: 1 },
   percent: { fontSize: fontSizes.sm, color: colors.textMuted },
   chevron: { fontSize: fontSizes.lg, color: colors.textDim },
-});
+}));

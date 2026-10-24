@@ -13,6 +13,7 @@ import Animated, {
 import Svg, { Circle } from 'react-native-svg';
 import { durations, easeOut } from '@core/theme/motion';
 import { colors } from '@core/theme/tokens';
+import { themedStyles } from '@core/theme/themed';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const VIEWBOX = 200;
@@ -136,6 +137,6 @@ export function ProgressRing({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   center: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
-});
+}));

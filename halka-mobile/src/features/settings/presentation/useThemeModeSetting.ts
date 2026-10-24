@@ -1,26 +1,26 @@
-// Renk teması ayarı (koyu / açık). Seçim kaydedilip uygulama yeniden yüklenir (reloadToApply).
-import { useState } from 'react';
+// Renk teması ayarı (koyu / açık). Seçim kaydedilir ve uygulama yeniden yüklenmeden uygulanır:
+// renkler güncellenir, ekran ağacı yeni temayla yeniden kurulur (AppShell). Veri ve oturum korunur.
 import { strings } from '@core/i18n/tr';
+import { applyThemeMode } from '@core/theme/tokens';
 import { saveThemeMode, type ThemeModePreference } from '@data/preferences/devicePreferences';
-import { reloadToApply } from '@features/settings/presentation/reloadToApply';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { showMessage } from '@presentation/utils/dialogs';
+import { injectWebGlobalStyles } from '@presentation/utils/webGlobalStyles';
 
 const t = strings.settings;
 
 export function useThemeModeSetting() {
-  const active = usePreferencesStore((s) => s.themeMode);
-  const [selected, setSelected] = useState<ThemeModePreference>(active);
+  const selected = usePreferencesStore((s) => s.themeMode);
 
   const choose = async (mode: ThemeModePreference) => {
     if (mode === selected) return;
-    setSelected(mode);
     if (!(await saveThemeMode(mode))) {
-      setSelected(active);
       showMessage(t.theme, t.themeFailed);
       return;
     }
-    reloadToApply(t.theme, t.themeRestart);
+    applyThemeMode(mode);
+    injectWebGlobalStyles();
+    usePreferencesStore.getState().setThemeMode(mode);
   };
 
   const toggle = () => choose(selected === 'dark' ? 'light' : 'dark');

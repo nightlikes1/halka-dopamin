@@ -1,5 +1,5 @@
-// Açılışta yüklenen cihaz tercihleri: görsel stil ve renk teması (oturum boyunca sabit),
-// karşılama ekranı durumu
+// Açılışta yüklenen cihaz tercihleri: görsel stil (oturum boyunca sabit), renk teması (anında
+// değişir) ve karşılama ekranı durumu
 import { create } from 'zustand';
 import type { ColorScheme, ThemeMode } from '@core/theme/tokens';
 import {
@@ -13,6 +13,7 @@ interface PreferencesState {
   readonly themeMode: ThemeMode;
   readonly onboardingSeen: boolean;
   init(visualStyle: ColorScheme, themeMode: ThemeMode, onboardingSeen: boolean): void;
+  setThemeMode(themeMode: ThemeMode): void;
   completeOnboarding(): void;
 }
 
@@ -21,6 +22,7 @@ export const usePreferencesStore = create<PreferencesState>((set) => ({
   themeMode: DEFAULT_THEME_MODE,
   onboardingSeen: false,
   init: (visualStyle, themeMode, onboardingSeen) => set({ visualStyle, themeMode, onboardingSeen }),
+  setThemeMode: (themeMode) => set({ themeMode }),
   completeOnboarding: () => {
     set({ onboardingSeen: true });
     void markOnboardingSeen();

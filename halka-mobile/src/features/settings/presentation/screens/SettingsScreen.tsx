@@ -1,8 +1,9 @@
 // Ayarlar: hesap bilgisi, tema, görsel stil, sunucu adresi, çıkış (bildirim/dışa aktarma sonraki fazlarda)
-import { StyleSheet } from 'react-native';
+
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import type { ThemeModePreference, VisualStyle } from '@data/preferences/devicePreferences';
+import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { useThemeModeSetting } from '@features/settings/presentation/useThemeModeSetting';
 import { useVisualStyleSetting } from '@features/settings/presentation/useVisualStyleSetting';
@@ -85,7 +86,7 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: { gap: spacing.xs },
   mono: { fontSize: fontSizes.sm },
-});
+}));

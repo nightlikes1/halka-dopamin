@@ -1,9 +1,10 @@
 // Günün genel puanı (1-5): emoji + etiket; renk tek başına anlam taşımaz
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, radius, spacing, fontSizes } from '@core/theme/tokens';
 import { DAY_RATINGS, type DayRating } from '@features/checkin/domain/entities';
 import { AppText } from '@presentation/components/common/AppText';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.checkIn;
 
@@ -42,7 +43,7 @@ export function RatingPicker({ value, onChange }: RatingPickerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { flexDirection: 'row', gap: spacing.xs },
   option: {
     flex: 1,
@@ -59,4 +60,4 @@ const styles = StyleSheet.create({
   emoji: { fontSize: fontSizes.xl },
   label: { fontSize: fontSizes.xs, color: colors.textMuted },
   labelSelected: { color: colors.textMain },
-});
+}));

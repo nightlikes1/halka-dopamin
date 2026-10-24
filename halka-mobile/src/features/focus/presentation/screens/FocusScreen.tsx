@@ -1,7 +1,7 @@
 // Odak sekmesi (Pomodoro): mod seçici, nefes alan sayaç halkası, görev etiketi, kontroller ve günlük istatistik
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -13,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { strings } from '@core/i18n/tr';
 import { durations } from '@core/theme/motion';
+import { themedStyles, themed } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import type { PomodoroMode } from '@domain/entities/Pomodoro';
@@ -30,11 +31,11 @@ import { hapticSuccess } from '@presentation/utils/haptics';
 
 const t = strings.focus;
 
-const MODE_COLORS: Readonly<Record<PomodoroMode, string>> = {
+const MODE_COLORS: Readonly<Record<PomodoroMode, string>> = themed(() => ({
   work: colors.textPrimary,
   shortBreak: colors.sapphire,
   longBreak: colors.amethyst,
-};
+}));
 
 const RING_SIZE = 290;
 // viewBox 200 içinde: ekranda yarıçap 124, kalınlık 18
@@ -245,7 +246,7 @@ export function FocusScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   content: { flexGrow: 1, gap: spacing.lgx },
   topBar: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   title: { flex: 1, textAlign: 'center' },
@@ -290,4 +291,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   stats: { flexDirection: 'row', gap: spacing.smd },
-});
+}));

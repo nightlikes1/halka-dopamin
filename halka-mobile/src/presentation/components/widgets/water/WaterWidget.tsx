@@ -1,12 +1,13 @@
 // 💧 Su Takibi
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { WATER_FOCUSED_AMOUNTS, WATER_QUICK_AMOUNTS } from '@domain/entities/Water';
@@ -19,7 +20,7 @@ import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useWater } from '@presentation/hooks/useWater';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('water').accent);
+const accent = () => widgetAccentColor(getCatalogItem('water').accent);
 
 export function WaterWidget({ variant }: WidgetBodyProps) {
   const { water, progress, add, reset } = useWater();
@@ -87,7 +88,7 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
         <View style={widgetStyles.row}>
           {gauge}
           <View style={styles.stats}>
-            <AppText style={[styles.pct, { color: ACCENT }]}>%{progress.pct}</AppText>
+            <AppText style={[styles.pct, { color: accent() }]}>%{progress.pct}</AppText>
             <AppText variant="muted">{statusText}</AppText>
           </View>
         </View>
@@ -99,7 +100,7 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
             key={amount}
             label={`+${amount} ml`}
             variant={amount === 250 ? 'primary' : 'default'}
-            accent={ACCENT}
+            accent={accent()}
             onPress={() => void add(amount)}
           />
         ))}
@@ -118,11 +119,11 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   gauge: {
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: withAlpha(ACCENT, '55'),
+    borderColor: withAlpha(accent(), '55'),
     backgroundColor: colors.fillSubtle,
     overflow: 'hidden',
     justifyContent: 'flex-end',
@@ -132,9 +133,9 @@ const styles = StyleSheet.create({
   // Koyu yarı saydam dolgu: üstteki beyaz metin her doluluk oranında okunur
   fill: {
     width: '100%',
-    backgroundColor: withAlpha(ACCENT, '40'),
+    backgroundColor: withAlpha(accent(), '40'),
     borderTopWidth: 2,
-    borderTopColor: ACCENT,
+    borderTopColor: accent(),
   },
   gaugeText: {
     position: 'absolute',
@@ -153,4 +154,4 @@ const styles = StyleSheet.create({
   pct: { fontFamily: fonts.bold, fontSize: fontSizes.xxl },
   hero: { gap: spacing.lg },
   bubbles: { flexDirection: 'row', gap: spacing.md },
-});
+}));

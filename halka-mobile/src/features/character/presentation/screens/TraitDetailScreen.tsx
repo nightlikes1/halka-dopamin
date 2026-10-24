@@ -1,11 +1,12 @@
 // Özellik detayı: bağlı alışkanlıklar ve bugünkü durumları, 7/30 günlük trend, bağlantıları düzenleme
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { averageOf } from '@features/character/domain/proximity';
 import { DayBars } from '@features/character/presentation/components/DayBars';
+import { themedStyles } from '@core/theme/themed';
 import { toDraft, useCharacter } from '@features/character/presentation/useCharacter';
 import type { HabitEntryStatus } from '@features/habits/domain/entities';
 import { ActionButton } from '@presentation/components/common/ActionButton';
@@ -158,7 +159,7 @@ export function TraitDetailScreen({ route, navigation }: RootStackScreenProps<'T
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   flex: { flex: 1 },
   row: { flexDirection: 'row', gap: spacing.sm },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
@@ -174,4 +175,4 @@ const styles = StyleSheet.create({
   actions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm },
   error: { color: colors.danger },
   missing: { textAlign: 'center' },
-});
+}));

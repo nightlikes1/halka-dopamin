@@ -1,10 +1,10 @@
 // Parçacık tasarım dili ayar sabitleri (her iki çizim katmanı da kullanır)
 import { activeThemeMode, colors } from '@core/theme/tokens';
 
-// Parçacık ekranlarının zemini: aktif temanın zemini (modül tema uygulandıktan sonra yüklenir)
-export const PARTICLE_BACKGROUND = colors.background;
+// Parçacık ekranlarının zemini: aktif temanın zemini
+export const particleBackground = (): string => colors.background;
 // Açık temada toplamsal karışım krem zeminde kaybolur: normal karışım + koyulaştırılmış palet
-export const PARTICLE_ON_LIGHT = activeThemeMode() === 'light';
+export const particleOnLight = (): boolean => activeThemeMode() === 'light';
 // Ekran yoğunluğu sınırı (web canvas çözünürlüğü)
 export const MAX_PIXEL_RATIO = 2;
 // Ölçülen kare hızı bu değerin altındaysa parçacık sayısı düşürülür

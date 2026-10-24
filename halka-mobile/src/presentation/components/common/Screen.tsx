@@ -6,7 +6,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
   View,
   type StyleProp,
   type ViewStyle,
@@ -14,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { layout } from '@core/theme/layout';
 import { colors, spacing } from '@core/theme/tokens';
+import { themedStyles } from '@core/theme/themed';
 import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
 
@@ -75,7 +75,7 @@ export function Screen({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: colors.bgPrimary },
   fill: { flex: 1 },
   content: {
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
     padding: layout.screenPadding,
     paddingBottom: layout.screenBottomPadding,
   },
-});
+}));

@@ -26,9 +26,11 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 - **Açık tema "Fildişi"** (2026-10-24): zemin `#D3CCC1` → kart `#DDD7CD` → `#C8C0B3`, metin `#1D1B18`/`#4F493F`,
   altın koyulaştırılmış `#5F471C` (metin olarak ≥ 4,7:1), mücevher tonları aynı. Varsayılan koyu. Geçiş: Bugün üst
   barındaki güneş/ay butonu (`ThemeToggleButton`) ve Ayarlar → Tema. Seçim cihazda (`halka.themeMode`); renkler
-  açılışta bir kez uygulanır (`applyThemeMode`, `colors`/`accentTints`/`dopamineColors` yerinde güncellenir), geçişte
-  uygulama yeniden yüklenir (`reloadToApply`). Açık temada parçacıklar normal karışım + koyulaştırılmış palet
-  (`PARTICLE_ON_LIGHT`). Eklenti vurgusu domain'de anlam (`reward | neutral`), renk `widgetAccentColor`.
+  **yeniden yükleme olmadan** anında değişir: `applyThemeMode` (`colors`/`accentTints`/`dopamineColors` yerinde
+  güncellenir) → `AppShell` ekran ağacını `key={themeMode}` ile yeniden kurar (veri, oturum, fontlar korunur; navigasyon
+  durumu `RootNavigator`'da saklanır). Bu yüzden modül düzeyindeki renkli değerler `themedStyles`/`themed`
+  (`core/theme/themed.ts`, tema başına önbellekli Proxy) ile yazılır. Açık temada parçacıklar normal karışım +
+  koyulaştırılmış palet (`particleOnLight()`). Eklenti vurgusu domain'de anlam (`reward | neutral`), renk `widgetAccentColor`.
 - Görsel stil (2026-10-17): **"particles" varsayılan** (cam yüzeyler, parçacık
   karşılama/Bugün/Odak ekranları, yüzen cam sekme çubuğu) ve **"classic"** (opak kartlar); ikisi aynı paleti kullanır.
   Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
@@ -150,9 +152,11 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
 Tema dosyaları `halka-mobile/src/core/theme/` (tek kaynak; `src/presentation/theme` yok):
 `tokens.ts` (renk, boşluk, yarıçap, font), `typography.ts` (metin varyantları), `motion.ts` (eğri, süre, gecikme),
 `elevation.ts` (gölge/parlama), `layout.ts` (kenar boşluğu, genişlik, dokunma alanı), `palettes.ts` (`withAlpha`,
-Halka zincir paleti). Ekran ve bileşenlerde sabit değer yazılmaz; hep bu dosyalardan okunur.
+Halka zincir paleti), `themed.ts` (temaya bağlı modül sabitleri). Ekran ve bileşenlerde sabit değer yazılmaz; hep bu
+dosyalardan okunur. Stil dosyaları `StyleSheet.create` yerine **`themedStyles(() => ({ ... }))`** kullanır; modül
+düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)` ile sarılır ya da render içinde okunur.
 
-- **Genel his:** koyu (varsayılan) ya da açık Fildişi, sade, premium. Modül düzeyinde renk okuyan kod tema uygulandıktan sonra yüklenir; sabit hex yazma. Sıcak obsidyen yüzeyler, krem metin; altın az görünür (yalnızca ödül).
+- **Genel his:** koyu (varsayılan) ya da açık Fildişi, sade, premium. Sabit hex yazma. Sıcak obsidyen yüzeyler, krem metin; altın az görünür (yalnızca ödül).
 - **Renk:** yalnızca `colors.*` (`obsidian` token'larından türetilir), `accentColors`/`accentTints`
   (`amber | sapphire | amethyst | ruby | emerald`; ikon kutusu = koyu mücevher zemini + **krem ikon**), `dopamineColors.*`.
   Hex/rgba yazma; saydamlık için `withAlpha`. Zemin `background` · kart `surface` · pill/input/bar `surfaceAlt` ·
@@ -245,7 +249,7 @@ config.ts   zemin #0B0B0D, DPR ≤ 2, 50 fps eşiği, düşük güç oranı 0,6,
   Jest bu hatayı yakalamaz; web önizlemesiyle kontrol et. JS→UI için `scheduleOnUI`, UI→JS için `scheduleOnRN`
   (`react-native-worklets`); `runOnJS`/`runOnUI` kullanılmaz. Reanimated web'de `filter` dizi biçiminde verilir.
 - **Tema:** `tokens.ts` koyu + açık palet içerir (`applyColorScheme`, `applyThemeMode`); `App.tsx` tercihleri okuyup paleti uygular, sonra
-  `AppShell`'i tembel yükler (StyleSheet'ler renkleri modül yüklenirken okur). Cam yüzeyler: `colors.glass*`,
+  `AppShell`'i tembel yükler; tema sonradan `useThemeModeSetting` ile anında değişir. Cam yüzeyler: `colors.glass*`,
   vurgular `particleBlue`/`particlePink`. Parçacık stilinde sekme ekranları `useTabBarClearance` kadar alt boşluk bırakır.
 - **Expo Go yeterli** (Skia 2.6.2 Expo Go'da var). Yerel iOS/Android derlemesinde Skia'nın kurulum betiği
   (`install-libs.js`) çalışmalı; npm "install-scripts" onayı gerekirse `npm install-scripts approve @shopify/react-native-skia`.

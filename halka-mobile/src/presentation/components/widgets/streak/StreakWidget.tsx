@@ -1,12 +1,13 @@
 // Zinciri Kırma
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { formatShortDayName } from '@core/utils/date';
@@ -19,7 +20,7 @@ import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useStreak } from '@presentation/hooks/useStreak';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('streak').accent);
+const accent = () => widgetAccentColor(getCatalogItem('streak').accent);
 
 function Flame({ size }: { readonly size: number }) {
   const scale = useSharedValue(1);
@@ -29,7 +30,7 @@ function Flame({ size }: { readonly size: number }) {
   const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
     <Animated.View style={style}>
-      <Icon name="zap" size={size} color={ACCENT} />
+      <Icon name="zap" size={size} color={accent()} />
     </Animated.View>
   );
 }
@@ -49,16 +50,16 @@ export function StreakWidget({ variant }: WidgetBodyProps) {
       {focused ? (
         <View style={widgetStyles.centered}>
           <Flame size={48} />
-          <AppText style={[styles.bigNumber, { color: ACCENT }]}>{currentStreak}</AppText>
+          <AppText style={[styles.bigNumber, { color: accent() }]}>{currentStreak}</AppText>
           <AppText variant="caption">GÜN KESİNTİSİZ ZİNCİR</AppText>
           <AppText style={styles.habitFocused}>{streak.habitName}</AppText>
           <AppText variant="muted">En iyi seri: {streak.bestStreak} gün</AppText>
         </View>
       ) : (
         <View style={widgetStyles.row}>
-          <View style={[styles.flameBadge, { borderColor: withAlpha(ACCENT, '66') }]}>
+          <View style={[styles.flameBadge, { borderColor: withAlpha(accent(), '66') }]}>
             <Flame size={20} />
-            <AppText style={[styles.count, { color: ACCENT }]}>{currentStreak}</AppText>
+            <AppText style={[styles.count, { color: accent() }]}>{currentStreak}</AppText>
             <AppText style={styles.countLabel}>Gün Seri</AppText>
           </View>
           <AppText style={styles.habit} numberOfLines={2}>
@@ -76,7 +77,7 @@ export function StreakWidget({ variant }: WidgetBodyProps) {
                 style={[
                   styles.node,
                   day.done
-                    ? { borderColor: ACCENT, backgroundColor: withAlpha(ACCENT, '26') }
+                    ? { borderColor: accent(), backgroundColor: withAlpha(accent(), '26') }
                     : styles.nodeMissed,
                 ]}
                 accessibilityLabel={`${index + 1}. gün: ${day.done ? 'Yapıldı' : 'Boş'}`}
@@ -84,7 +85,7 @@ export function StreakWidget({ variant }: WidgetBodyProps) {
                 <Icon
                   name={day.done ? 'link' : 'circle'}
                   size={14}
-                  color={day.done ? ACCENT : colors.textDim}
+                  color={day.done ? accent() : colors.textDim}
                 />
               </View>
               <AppText style={styles.dayLabel}>{formatShortDayName(day.date)}</AppText>
@@ -97,7 +98,7 @@ export function StreakWidget({ variant }: WidgetBodyProps) {
       <ActionButton
         label={buttonLabel}
         icon={checkedInToday ? 'check' : 'plus'}
-        color={ACCENT}
+        color={accent()}
         disabled={checkedInToday}
         onPress={() => void checkIn()}
       />
@@ -105,7 +106,7 @@ export function StreakWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   flameBadge: {
     alignItems: 'center',
     paddingHorizontal: spacing.md,
@@ -132,4 +133,4 @@ const styles = StyleSheet.create({
   nodeMissed: { borderColor: colors.borderStrong, borderStyle: 'dashed' },
   dayLabel: { fontSize: fontSizes.xs, color: colors.textDim },
   caption: { fontSize: fontSizes.xs, color: colors.textDim },
-});
+}));

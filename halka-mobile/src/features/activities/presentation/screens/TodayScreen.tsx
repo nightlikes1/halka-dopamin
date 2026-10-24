@@ -1,6 +1,6 @@
 // Bugün sekmesi: selam + seri, günlük özet halkaları, alışkanlık kartları, odak seansı ve akşam check-in
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { staggers } from '@core/theme/motion';
 import { accentColors, accentTints, colors, fontSizes, radius, spacing } from '@core/theme/tokens';
@@ -10,6 +10,7 @@ import { SESSIONS_BEFORE_LONG_BREAK } from '@domain/entities/Pomodoro';
 import { getGreeting } from '@domain/services/briefingGenerator';
 import { StreakPill } from '@features/activities/presentation/components/StreakPill';
 import { isCompleted, summarizeToday } from '@features/activities/presentation/todaySummary';
+import { themedStyles } from '@core/theme/themed';
 import { useTodayHabits } from '@features/activities/presentation/useTodayHabits';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { CheckInCard } from '@features/checkin/presentation/components/CheckInCard';
@@ -243,7 +244,7 @@ export function TodayScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   content: { gap: spacing.xl },
   topRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },
   greeting: { flex: 1, gap: spacing.xs },
@@ -274,4 +275,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   error: { color: colors.danger },
-});
+}));

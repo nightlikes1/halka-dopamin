@@ -1,7 +1,8 @@
 // Bir alışkanlık için iki seçenekli cevap: iyi → Yaptım/Yapmadım, kötü → Uzak durdum/Yaptım
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, dopamineColors, radius, spacing } from '@core/theme/tokens';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
@@ -71,7 +72,7 @@ export function HabitAnswerRow({ habit, value, onChange }: HabitAnswerRowProps) 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: { gap: spacing.sm, paddingVertical: spacing.sm },
   options: { flexDirection: 'row', gap: spacing.sm },
   option: {
@@ -87,4 +88,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.fillSubtle,
   },
   pressed: { backgroundColor: colors.fillStrong },
-});
+}));

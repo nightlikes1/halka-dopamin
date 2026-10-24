@@ -2,11 +2,12 @@
 // outline: kenarlıklı kare · ghost: yalnızca ikon · surface: yuvarlak kart zeminli (üst bar)
 // ring: boş daire (2 px kenarlık) · solid: renkli dolu daire
 // glass: cam yuvarlak (parçacık üst barı) · glassDark: koyu yarı saydam yuvarlak (dalga üstü kontroller)
-import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { type StyleProp, type ViewStyle } from 'react-native';
 import { hitSlopFor } from '@core/theme/layout';
 import { colors, radius } from '@core/theme/tokens';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 export type IconButtonVariant =
   'outline' | 'ghost' | 'surface' | 'ring' | 'solid' | 'glass' | 'glassDark';
@@ -68,7 +69,7 @@ export function IconButton({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   button: { borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
   outline: { borderWidth: 1, borderColor: colors.borderGlass, backgroundColor: colors.fillSubtle },
   ghost: { backgroundColor: 'transparent' },
@@ -82,4 +83,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.glassControl,
   },
   disabled: { opacity: 0.45 },
-});
+}));

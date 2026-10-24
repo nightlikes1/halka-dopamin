@@ -1,5 +1,5 @@
 // Ana ekran: başlık, halka ve eklentiler (kokpit veya panel modu)
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { breakpoints, colors, spacing } from '@core/theme/tokens';
 import { AppHeader } from '@presentation/components/header/AppHeader';
@@ -7,6 +7,7 @@ import { CockpitLayout } from '@presentation/components/layout/CockpitLayout';
 import { EmptyOrbitBanner } from '@presentation/components/layout/EmptyOrbitBanner';
 import { WidgetGrid } from '@presentation/components/layout/WidgetGrid';
 import { RingSection } from '@presentation/components/ring/RingSection';
+import { themedStyles } from '@core/theme/themed';
 import { useLayout } from '@presentation/hooks/useLayout';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
 import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
@@ -73,8 +74,8 @@ export function HomeScreen({ navigation }: MainTabScreenProps<'Halka'>) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: colors.bgPrimary },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl * 2 },
   stack: { gap: spacing.xl },
-});
+}));

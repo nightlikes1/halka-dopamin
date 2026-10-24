@@ -12,6 +12,7 @@ import {
 } from '@presentation/particles/engine/waveEngine';
 import { ParticleCanvas } from '@presentation/particles/renderer/ParticleCanvas';
 import type { ParticleSim, PointerChannel } from '@presentation/particles/renderer/types';
+import { themedStyles } from '@core/theme/themed';
 
 const waveSim: ParticleSim<WaveState> = {
   create: () => createWave(),
@@ -51,6 +52,6 @@ export function ParticleWave({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fill: { ...StyleSheet.absoluteFill },
-});
+}));

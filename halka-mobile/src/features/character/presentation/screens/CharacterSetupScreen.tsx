@@ -2,7 +2,7 @@
 // Atlanabilir; atlanırsa Karakter sekmesinde davet kartı kalır.
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { resolveAvatar, resolveLook } from '@features/character/domain/avatar';
@@ -19,6 +19,7 @@ import { moodFor, type AvatarLook } from '@features/character/domain/look';
 import { figureFor } from '@features/character/presentation/avatarFigure';
 import { AuraPicker } from '@features/character/presentation/components/AuraPicker';
 import { AvatarStudio } from '@features/character/presentation/components/AvatarStudio';
+import { themedStyles } from '@core/theme/themed';
 import { toDraft, useCharacter } from '@features/character/presentation/useCharacter';
 import { useHabits } from '@features/habits/presentation/useHabits';
 import { ActionButton } from '@presentation/components/common/ActionButton';
@@ -301,7 +302,7 @@ export function CharacterSetupScreen({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   flex: { flex: 1 },
   section: { gap: spacing.md },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
@@ -326,4 +327,4 @@ const styles = StyleSheet.create({
   },
   footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   error: { color: colors.danger, fontSize: fontSizes.sm },
-});
+}));

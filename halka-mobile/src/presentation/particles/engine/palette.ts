@@ -1,7 +1,7 @@
 // Parçacık renk paletleri: duraklar arası doğrusal geçişle 64 adımlık renk tablosu (LUT).
 // Tablonun 65. girdisi (NEUTRAL_INDEX) halkanın boş kısmı için sıcak nötr gridir.
 // Saf TypeScript; worklet fonksiyonları mobilde UI thread'de de çalışır.
-import { PARTICLE_ON_LIGHT } from '@presentation/particles/config';
+import { particleOnLight } from '@presentation/particles/config';
 
 export type ParticlePaletteName = 'buzAtes' | 'ates' | 'buz' | 'mor';
 
@@ -47,7 +47,7 @@ const NEUTRAL_LIGHT: Rgb = [0x9e, 0x95, 0x86];
 const LIGHT_SHADE = 0.68;
 
 // (LUT_SIZE + 1) × 3 değer, 0-255 aralığında RGB
-export function buildLut(name: ParticlePaletteName, light = PARTICLE_ON_LIGHT): Float32Array {
+export function buildLut(name: ParticlePaletteName, light = particleOnLight()): Float32Array {
   const stops = STOPS[name];
   const shade = light ? LIGHT_SHADE : 1;
   const lut = new Float32Array((LUT_SIZE + 1) * 3);

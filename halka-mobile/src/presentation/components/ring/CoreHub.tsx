@@ -1,12 +1,13 @@
 // Halkanın ortasındaki cam çekirdek: aktif eklenti sayısı, saat, tarih, selamlama
 import { useEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, fonts, fontSizes, spacing } from '@core/theme/tokens';
@@ -85,7 +86,7 @@ export function CoreHub({ diameter, briefing, onEditName }: CoreHubProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   hub: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -114,4 +115,4 @@ const styles = StyleSheet.create({
   name: { textDecorationLine: 'underline', textDecorationStyle: 'dotted' },
   nameButton: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   pressed: { opacity: 0.6 },
-});
+}));

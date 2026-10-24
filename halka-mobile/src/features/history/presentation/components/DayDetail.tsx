@@ -1,7 +1,7 @@
 // Seçili günün özeti: check-in sonucu ve not (ekle / düzenle / sil).
 // Gün ya da not değişince üst bileşen key ile yeniden oluşturur; yerel taslak sıfırlanır.
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { formatDayMonth } from '@core/utils/date';
@@ -14,6 +14,7 @@ import { AppText } from '@presentation/components/common/AppText';
 import { Card } from '@presentation/components/common/Card';
 import { Chip } from '@presentation/components/common/Chip';
 import { confirmAction } from '@presentation/utils/dialogs';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.history;
 
@@ -121,7 +122,7 @@ export function DayDetail({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   noteBlock: { gap: spacing.sm },
   noteLabel: { color: colors.textMuted },
@@ -132,4 +133,4 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   error: { color: colors.danger, fontSize: fontSizes.sm },
-});
+}));

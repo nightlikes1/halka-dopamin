@@ -1,10 +1,11 @@
 // "Sıradakiler" satırı (parçacık stili): 58 px cam kart, solda renkli nokta, sağda 44 px yuvarlak buton.
 // Dolu buton = tamamlandı + tik, boş buton = ince kenarlık (ya da verilen ikon).
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 const ROW_HEIGHT = 58;
 const DOT = 8;
@@ -59,7 +60,7 @@ export function GlassHabitRow({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     height: ROW_HEIGHT,
     flexDirection: 'row',
@@ -82,4 +83,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   actionEmpty: { borderWidth: 1, borderColor: colors.glassStrong },
-});
+}));

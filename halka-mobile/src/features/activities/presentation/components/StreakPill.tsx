@@ -1,6 +1,6 @@
 // Seri rozeti: sürekli hafifçe büyüyüp sallanan turuncu alev + gün sayısı
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -13,6 +13,7 @@ import { strings } from '@core/i18n/tr';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon } from '@presentation/components/common/Icon';
+import { themedStyles } from '@core/theme/themed';
 
 const FLAME_CYCLE = 1600;
 
@@ -49,7 +50,7 @@ export function StreakPill({ days }: { readonly days: number }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -60,4 +61,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceAlt,
   },
   text: { fontFamily: fonts.bold, fontSize: fontSizes.body, color: colors.accent },
-});
+}));

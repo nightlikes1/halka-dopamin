@@ -1,13 +1,14 @@
 // Akşam check-in: alışkanlık cevapları + günün puanı + (isteğe bağlı) gün notu.
 // Gün için kayıt varsa düzenleme modunda açılır.
 import { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import { formatDayMonth } from '@core/utils/date';
 import { BalanceBadge } from '@features/checkin/presentation/components/BalanceBadge';
 import { HabitAnswerRow } from '@features/checkin/presentation/components/HabitAnswerRow';
 import { RatingPicker } from '@features/checkin/presentation/components/RatingPicker';
+import { themedStyles } from '@core/theme/themed';
 import { useCheckInSession } from '@features/checkin/presentation/useCheckInSession';
 import { DayNoteField } from '@features/history/presentation/components/DayNoteField';
 import { ActionButton } from '@presentation/components/common/ActionButton';
@@ -142,7 +143,7 @@ export function EveningCheckInScreen({ route, navigation }: RootStackScreenProps
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   center: { alignItems: 'center', gap: spacing.md },
   error: { color: colors.danger, textAlign: 'center' },
-});
+}));

@@ -13,7 +13,7 @@ import {
   vec,
 } from '@shopify/react-native-skia';
 import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useFrameCallback, useReducedMotion, useSharedValue } from 'react-native-reanimated';
 import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 import { colors, fonts } from '@core/theme/tokens';
@@ -23,7 +23,7 @@ import {
   MAX_FRAME_DT,
   MIN_TARGET_FPS,
   PARTICLE_INTENSITY,
-  PARTICLE_ON_LIGHT,
+  particleOnLight,
   SPRITE_SIZE,
   SPRITE_SPREAD,
 } from '@presentation/particles/config';
@@ -44,6 +44,7 @@ import {
 } from '@presentation/particles/engine/interaction';
 import { createPace, paceFrame } from '@presentation/particles/renderer/pacing';
 import type { ParticleCanvasProps } from '@presentation/particles/renderer/types';
+import { themedStyles } from '@core/theme/themed';
 import { useLoopActive } from '@presentation/particles/renderer/useLoopActive';
 
 const HALF = SPRITE_SIZE / 2;
@@ -203,7 +204,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
           transforms={transforms}
           colors={tints}
           colorBlendMode="modulate"
-          blendMode={PARTICLE_ON_LIGHT ? 'srcOver' : 'plus'}
+          blendMode={particleOnLight() ? 'srcOver' : 'plus'}
         />
       </Canvas>
       {SHOW_FPS && fps !== null ? (
@@ -215,7 +216,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   fill: { flex: 1 },
   fps: {
     position: 'absolute',
@@ -225,4 +226,4 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.textDim,
   },
-});
+}));

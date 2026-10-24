@@ -1,5 +1,5 @@
 // Aura (parçacık avatar) seçimi: biçim, palet ve "Otomatik". Seçim yoksa karakterden türetilen gösterilir.
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import {
@@ -12,6 +12,7 @@ import { AppText } from '@presentation/components/common/AppText';
 import { Chip } from '@presentation/components/common/Chip';
 import { SegmentedControl } from '@presentation/components/common/SegmentedControl';
 import { buildLut, LUT_SIZE, lutHex } from '@presentation/particles/engine/palette';
+import { themedStyles } from '@core/theme/themed';
 
 const t = strings.character.setup;
 const s = strings.character.studio;
@@ -68,7 +69,7 @@ export function AuraPicker({ shown, chosen, onChange }: AuraPickerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: { gap: spacing.md },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-});
+}));

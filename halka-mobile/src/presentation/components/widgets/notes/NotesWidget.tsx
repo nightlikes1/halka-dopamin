@@ -1,6 +1,6 @@
 // 📝 Hızlı Not Defteri
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import { NOTE_MAX_LENGTH } from '@domain/entities/Note';
 import { getCatalogItem } from '@domain/entities/WidgetCatalog';
@@ -8,11 +8,12 @@ import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Chip } from '@presentation/components/common/Chip';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useNotes } from '@presentation/hooks/useNotes';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('notes').accent);
+const accent = () => widgetAccentColor(getCatalogItem('notes').accent);
 const COPIED_FEEDBACK_MS = 1500;
 
 export function NotesWidget({ variant }: WidgetBodyProps) {
@@ -59,7 +60,7 @@ export function NotesWidget({ variant }: WidgetBodyProps) {
           <Chip
             label={copyLabel}
             variant={copied ? 'active' : 'default'}
-            accent={ACCENT}
+            accent={accent()}
             onPress={() => void onCopy()}
           />
           {focused ? <Chip label="Temizle" onPress={clear} /> : null}
@@ -69,8 +70,8 @@ export function NotesWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   input: { paddingTop: spacing.md, lineHeight: 21 },
   inputCompact: { height: 130 },
   inputFocused: { minHeight: 280 },
-});
+}));

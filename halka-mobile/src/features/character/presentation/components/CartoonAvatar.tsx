@@ -2,7 +2,7 @@
 // viewBox 200×200; baş merkezi (100, HEAD_Y). Ruh hali ifadeyi (ağız eğrisi, göz kapağı, kaş, yanak)
 // ve duruşu (nefes alır gibi hafif salınım) değiştirir. Göz kırpma ve salınım "hareketi azalt"ta kapalı.
 import { useEffect, useState } from 'react';
-import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -16,6 +16,7 @@ import Svg, { Circle, Ellipse, G, Line, Path, Rect } from 'react-native-svg';
 import { mixHex, withAlpha } from '@core/theme/palettes';
 import { avatarColors } from '@core/theme/tokens';
 import type { AvatarLook, Mood } from '@features/character/domain/look';
+import { themedStyles } from '@core/theme/themed';
 
 const HEAD_Y = 84;
 const EYE_DX = 15;
@@ -694,7 +695,7 @@ export function CartoonAvatar({ look, mood, size, animated = true, style }: Cart
   );
 }
 
-export const cartoonStyles = StyleSheet.create({
+export const cartoonStyles = themedStyles(() => ({
   // Daire içinde büst: alt kenar dairenin dibine otursun
   inCircle: { position: 'absolute', bottom: 0, alignSelf: 'center' },
-});
+}));

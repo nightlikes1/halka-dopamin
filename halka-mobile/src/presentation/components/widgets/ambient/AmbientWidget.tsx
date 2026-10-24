@@ -1,6 +1,6 @@
 // 🎧 Ortam Sesleri
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -16,11 +16,12 @@ import { AppText } from '@presentation/components/common/AppText';
 import { Chip } from '@presentation/components/common/Chip';
 import { AMBIENT_ICONS } from '@presentation/components/common/iconMaps';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useAmbient } from '@presentation/hooks/useAmbient';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('ambient').accent);
+const accent = () => widgetAccentColor(getCatalogItem('ambient').accent);
 
 export function AmbientWidget({ variant }: WidgetBodyProps) {
   const { current, isPlaying, toggle, stop } = useAmbient();
@@ -47,7 +48,7 @@ export function AmbientWidget({ variant }: WidgetBodyProps) {
             label={focused ? option.longLabel : option.label}
             icon={AMBIENT_ICONS[option.id]}
             variant={current === option.id ? 'active' : 'default'}
-            accent={ACCENT}
+            accent={accent()}
             onPress={() => void toggle(option.id)}
           />
         ))}
@@ -56,7 +57,7 @@ export function AmbientWidget({ variant }: WidgetBodyProps) {
       <View style={[styles.status, focused && styles.statusFocused]}>
         {isPlaying ? (
           <Animated.View style={waveStyle}>
-            <AppText style={[styles.playing, { color: ACCENT }]}>
+            <AppText style={[styles.playing, { color: accent() }]}>
               {focused ? 'Sentezlenmiş Ses Dalgaları Çalıyor...' : 'Sentezlenmiş Ortam Çalıyor...'}
             </AppText>
           </Animated.View>
@@ -70,7 +71,7 @@ export function AmbientWidget({ variant }: WidgetBodyProps) {
           <ActionButton
             label="Sesi Durdur"
             icon="square"
-            color={ACCENT}
+            color={accent()}
             onPress={() => void stop()}
           />
         ) : (
@@ -81,9 +82,9 @@ export function AmbientWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   status: { alignItems: 'center', paddingVertical: spacing.sm },
   statusFocused: { paddingVertical: spacing.xl },
   playing: { fontFamily: fonts.semibold, fontSize: fontSizes.sm, color: colors.textMain },
   stopChip: { alignSelf: 'flex-start' },
-});
+}));

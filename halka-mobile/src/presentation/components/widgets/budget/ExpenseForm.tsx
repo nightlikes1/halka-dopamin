@@ -1,13 +1,14 @@
 // Harcama ekleme formu (react-hook-form + zod)
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import { EXPENSE_LABEL_MAX_LENGTH } from '@domain/entities/Budget';
 import type { AddExpenseInput } from '@domain/usecases/budget/AddExpenseUseCase';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Chip } from '@presentation/components/common/Chip';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import {
   expenseFormSchema,
@@ -85,7 +86,7 @@ export function ExpenseForm({ accent, withLabel, onAdd }: ExpenseFormProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   wrapper: { gap: spacing.sm },
   amount: { flex: 1 },
-});
+}));

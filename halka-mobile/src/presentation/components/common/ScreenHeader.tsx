@@ -1,12 +1,13 @@
 // Ekran başlığı: başlık + isteğe bağlı alt başlık, sağda eylemler ya da kapat butonu.
 // Modal ekranlarda alt çizgili, sekme ekranlarında çizgisiz kullanılır.
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { colors, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { IconButton } from '@presentation/components/common/IconButton';
+import { themedStyles } from '@core/theme/themed';
 
 interface ScreenHeaderProps {
   readonly title: string;
@@ -46,7 +47,7 @@ export function ScreenHeader({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -56,4 +57,4 @@ const styles = StyleSheet.create({
   },
   bordered: { borderBottomWidth: 1, borderBottomColor: colors.borderGlass },
   text: { flex: 1, gap: spacing.xxs },
-});
+}));

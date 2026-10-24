@@ -1,7 +1,7 @@
 // "Alışkanlıklarım": yapmak ve azaltmak istediklerini ekle/kaldır
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, dopamineColors, radius, spacing } from '@core/theme/tokens';
 import {
@@ -10,6 +10,7 @@ import {
   type Habit,
   type HabitKind,
 } from '@features/habits/domain/entities';
+import { themedStyles } from '@core/theme/themed';
 import { useHabits } from '@features/habits/presentation/useHabits';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -153,7 +154,7 @@ export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -168,4 +169,4 @@ const styles = StyleSheet.create({
   input: { flex: 1 },
   error: { color: colors.danger },
   errorBox: { gap: spacing.sm },
-});
+}));

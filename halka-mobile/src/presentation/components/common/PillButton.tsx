@@ -1,11 +1,12 @@
 // Ana buton (56 px, çizgi stil: şeffaf zemin, 1 px kenar, renkli yazı): "Odak seansı başlat" gibi
 // birincil eylemler.
 // shape 'pill' tam yuvarlak, 'rounded' 18 px köşe.
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { colors, fonts, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
+import { themedStyles } from '@core/theme/themed';
 
 interface PillButtonProps {
   readonly label: string;
@@ -49,7 +50,7 @@ export function PillButton({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   button: {
     height: 56,
     alignItems: 'center',
@@ -61,4 +62,4 @@ const styles = StyleSheet.create({
   content: { flexDirection: 'row', alignItems: 'center', gap: spacing.smd },
   label: { fontFamily: fonts.semibold },
   disabled: { opacity: 0.45 },
-});
+}));

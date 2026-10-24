@@ -3,6 +3,7 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
+  type InitialState,
   type LinkingOptions,
   type Theme,
 } from '@react-navigation/native';
@@ -26,21 +27,24 @@ import type { RootStackParamList } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { CatalogScreen } from '@presentation/screens/CatalogScreen';
 import { WidgetFocusScreen } from '@presentation/screens/WidgetFocusScreen';
+import { themed } from '@core/theme/themed';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const baseTheme = activeThemeMode() === 'light' ? DefaultTheme : DarkTheme;
-const navigationTheme: Theme = {
-  ...baseTheme,
-  colors: {
-    ...baseTheme.colors,
-    primary: colors.textMain,
-    background: colors.bgPrimary,
-    card: colors.bgSecondary,
-    text: colors.textMain,
-    border: colors.borderGlass,
-  },
-};
+const navigationTheme: Theme = themed(() => {
+  const base = activeThemeMode() === 'light' ? DefaultTheme : DarkTheme;
+  return {
+    ...base,
+    colors: {
+      ...base.colors,
+      primary: colors.textMain,
+      background: colors.bgPrimary,
+      card: colors.bgSecondary,
+      text: colors.textMain,
+      border: colors.borderGlass,
+    },
+  };
+});
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['halka://', 'http://localhost:8080', 'http://localhost:8081', '/'],
@@ -54,6 +58,9 @@ const linking: LinkingOptions<RootStackParamList> = {
   },
 };
 
+// Tema değişince navigatör yeniden kurulur; kullanıcı bulunduğu ekranda kalsın diye son durum saklanır
+let lastNavigationState: InitialState | undefined;
+
 export function RootNavigator() {
   const signedIn = useAuthStore((s) => s.status === 'signedIn');
   // Karşılama ekranı yalnızca parçacık stilinde ve ilk açılışta (başlangıç rotası bir kez okunur)
@@ -62,7 +69,14 @@ export function RootNavigator() {
   );
 
   return (
-    <NavigationContainer theme={navigationTheme} linking={linking}>
+    <NavigationContainer
+      theme={navigationTheme}
+      linking={linking}
+      initialState={lastNavigationState}
+      onStateChange={(state) => {
+        lastNavigationState = state;
+      }}
+    >
       <Stack.Navigator
         initialRouteName={signedIn ? 'Main' : showOnboarding ? 'Onboarding' : 'Login'}
         screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bgPrimary } }}

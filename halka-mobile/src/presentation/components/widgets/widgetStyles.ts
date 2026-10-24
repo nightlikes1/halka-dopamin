@@ -1,8 +1,9 @@
 // Eklenti gövdelerinde ortak kullanılan stiller
-import { StyleSheet } from 'react-native';
-import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 
-export const widgetStyles = StyleSheet.create({
+import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
+import { themedStyles } from '@core/theme/themed';
+
+export const widgetStyles = themedStyles(() => ({
   container: { gap: spacing.md },
   containerFocused: { gap: spacing.lg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
@@ -31,4 +32,4 @@ export const widgetStyles = StyleSheet.create({
   },
   bubbleValue: { fontFamily: fonts.mono, fontSize: fontSizes.xl, color: colors.textMain },
   bubbleLabel: { color: colors.textMuted, fontSize: fontSizes.xs },
-});
+}));

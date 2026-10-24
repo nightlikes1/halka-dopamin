@@ -1,7 +1,7 @@
 // Parçacık halka: üstten saat yönünde ilerleme. burstKey her değiştiğinde halkanın ucundan
 // kıvılcım patlaması olur. Ortaya içerik (yüzde, etiket) konabilir.
 import { useMemo, type ReactNode } from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { buildLut, type ParticlePaletteName } from '@presentation/particles/engine/palette';
 import {
   consumeBurst,
@@ -16,6 +16,7 @@ import {
 import { REFERENCE_WIDTH } from '@presentation/particles/engine/types';
 import { ParticleCanvas } from '@presentation/particles/renderer/ParticleCanvas';
 import type { ParticleSim } from '@presentation/particles/renderer/types';
+import { themedStyles } from '@core/theme/themed';
 import { useParticlePointer } from '@presentation/particles/renderer/useParticlePointer';
 import { hapticLight } from '@presentation/utils/haptics';
 
@@ -91,7 +92,7 @@ export function ParticleRing({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   box: { alignSelf: 'center' },
   center: { position: 'absolute', alignItems: 'center', justifyContent: 'center' },
-});
+}));

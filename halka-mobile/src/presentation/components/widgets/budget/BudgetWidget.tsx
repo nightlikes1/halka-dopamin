@@ -1,5 +1,5 @@
 // 💰 Günlük Harcama (harcamalar artık tek tek kaydediliyor)
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import { formatCurrency } from '@core/utils/format';
 import { getCatalogItem } from '@domain/entities/WidgetCatalog';
@@ -8,11 +8,12 @@ import { IconButton } from '@presentation/components/common/IconButton';
 import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import { ExpenseForm } from '@presentation/components/widgets/budget/ExpenseForm';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
+import { themedStyles } from '@core/theme/themed';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBudget } from '@presentation/hooks/useBudget';
 import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = widgetAccentColor(getCatalogItem('budget').accent);
+const accent = () => widgetAccentColor(getCatalogItem('budget').accent);
 
 export function BudgetWidget({ variant }: WidgetBodyProps) {
   const { budget, summary, addExpense, deleteExpense } = useBudget();
@@ -23,7 +24,7 @@ export function BudgetWidget({ variant }: WidgetBodyProps) {
     <View style={focused ? widgetStyles.containerFocused : widgetStyles.container}>
       {focused ? (
         <View style={widgetStyles.centered}>
-          <AppText style={[styles.hero, { color: ACCENT }]}>
+          <AppText style={[styles.hero, { color: accent() }]}>
             {formatCurrency(summary.remaining)}
           </AppText>
           <AppText variant="muted">Kalan Günlük Bütçe</AppText>
@@ -31,7 +32,7 @@ export function BudgetWidget({ variant }: WidgetBodyProps) {
       ) : (
         <View style={widgetStyles.statsRow}>
           <AppText variant="muted">Kalan Limit</AppText>
-          <AppText style={[styles.amount, { color: ACCENT }]}>
+          <AppText style={[styles.amount, { color: accent() }]}>
             {formatCurrency(summary.remaining)}
           </AppText>
         </View>
@@ -45,7 +46,7 @@ export function BudgetWidget({ variant }: WidgetBodyProps) {
         </AppText>
       </View>
 
-      <ExpenseForm accent={ACCENT} withLabel={focused} onAdd={addExpense} />
+      <ExpenseForm accent={accent()} withLabel={focused} onAdd={addExpense} />
 
       {focused ? (
         <View style={styles.list}>
@@ -74,7 +75,7 @@ export function BudgetWidget({ variant }: WidgetBodyProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   hero: { fontFamily: fonts.bold, fontSize: fontSizes.display },
   amount: { fontFamily: fonts.bold, fontSize: fontSizes.xl },
   list: { gap: spacing.sm },
@@ -90,4 +91,4 @@ const styles = StyleSheet.create({
   },
   itemLabel: { flex: 1, fontSize: fontSizes.sm },
   itemAmount: { fontFamily: fonts.mono, fontSize: fontSizes.sm, color: colors.textMuted },
-});
+}));

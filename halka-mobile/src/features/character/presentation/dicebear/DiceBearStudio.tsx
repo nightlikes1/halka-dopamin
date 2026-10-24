@@ -1,7 +1,7 @@
 // DiceBear düzenleyicisi: stilin şemasından üretilen parça sekmeleri, her seçeneği avatarın o hâliyle
 // gösteren kutucuklar, renk daireleri ve "yok" seçeneği. Uzun listeler sayfa sayfa açılır.
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, obsidian, radius, spacing } from '@core/theme/tokens';
 import {
@@ -25,6 +25,7 @@ import { Chip } from '@presentation/components/common/Chip';
 import { Icon } from '@presentation/components/common/Icon';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
 import { hapticLight } from '@presentation/utils/haptics';
+import { themedStyles } from '@core/theme/themed';
 
 const s = strings.character.studio;
 const PAGE = 24;
@@ -232,7 +233,7 @@ function PartOptions({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: { gap: spacing.md },
   credit: { textAlign: 'center' },
   actions: { flexDirection: 'row', gap: spacing.sm },
@@ -264,4 +265,4 @@ const styles = StyleSheet.create({
   tileArt: { width: TILE_ART, height: TILE_ART, borderRadius: radius.md, overflow: 'hidden' },
   tileLabel: { color: colors.textSecondary },
   more: { alignSelf: 'center' },
-});
+}));
