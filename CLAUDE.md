@@ -75,7 +75,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 5. Çalışan kodu bozma, ilgisiz dosyalara dokunma.
 6. Kod isimleri İngilizce, yorumlar Türkçe ve kısa. `any` yok.
 7. Kullanıcıyla Türkçe konuş.
-8. İş/faz bitip 2. maddedeki doğrulama geçince sormadan commit et ve `origin main`'e (sterkk/halka-dopamin) push et.
+8. İş/faz bitip 2. maddedeki doğrulama geçince sormadan commit et ve `origin main`'e (https://github.com/nightlikes1/halka-dopamin) push et.
    `server/.env`, kökteki `.mcp.json`/`package.json`/`package-lock.json` commit'e girmez; push öncesi secret taraması yap.
 
 ## Mobil mimari (`halka-mobile/src`)
