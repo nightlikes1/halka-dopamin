@@ -10,8 +10,9 @@ import { Chip } from '@presentation/components/common/Chip';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useNotes } from '@presentation/hooks/useNotes';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('notes').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('notes').accent);
 const COPIED_FEEDBACK_MS = 1500;
 
 export function NotesWidget({ variant }: WidgetBodyProps) {

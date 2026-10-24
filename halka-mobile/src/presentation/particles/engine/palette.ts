@@ -1,6 +1,7 @@
 // Parçacık renk paletleri: duraklar arası doğrusal geçişle 64 adımlık renk tablosu (LUT).
 // Tablonun 65. girdisi (NEUTRAL_INDEX) halkanın boş kısmı için sıcak nötr gridir.
 // Saf TypeScript; worklet fonksiyonları mobilde UI thread'de de çalışır.
+import { PARTICLE_ON_LIGHT } from '@presentation/particles/config';
 
 export type ParticlePaletteName = 'buzAtes' | 'ates' | 'buz' | 'mor';
 
@@ -41,10 +42,14 @@ const STOPS: Readonly<Record<ParticlePaletteName, readonly Rgb[]>> = {
 
 // Boş kısım: sıcak gri (text.secondary ailesi)
 const NEUTRAL: Rgb = [0x6e, 0x6a, 0x62];
+// Açık tema: boş kısım krem zeminde seçilen açık gri, renkler bu oranla koyulaşır
+const NEUTRAL_LIGHT: Rgb = [0xc4, 0xbd, 0xb2];
+const LIGHT_SHADE = 0.68;
 
 // (LUT_SIZE + 1) × 3 değer, 0-255 aralığında RGB
-export function buildLut(name: ParticlePaletteName): Float32Array {
+export function buildLut(name: ParticlePaletteName, light = PARTICLE_ON_LIGHT): Float32Array {
   const stops = STOPS[name];
+  const shade = light ? LIGHT_SHADE : 1;
   const lut = new Float32Array((LUT_SIZE + 1) * 3);
   for (let i = 0; i < LUT_SIZE; i++) {
     const t = i / (LUT_SIZE - 1);
@@ -54,12 +59,13 @@ export function buildLut(name: ParticlePaletteName): Float32Array {
     const a = stops[from] ?? NEUTRAL;
     const b = stops[from + 1] ?? NEUTRAL;
     for (let c = 0; c < 3; c++) {
-      lut[i * 3 + c] = (a[c] ?? 0) + ((b[c] ?? 0) - (a[c] ?? 0)) * local;
+      lut[i * 3 + c] = ((a[c] ?? 0) + ((b[c] ?? 0) - (a[c] ?? 0)) * local) * shade;
     }
   }
-  lut[NEUTRAL_INDEX * 3] = NEUTRAL[0];
-  lut[NEUTRAL_INDEX * 3 + 1] = NEUTRAL[1];
-  lut[NEUTRAL_INDEX * 3 + 2] = NEUTRAL[2];
+  const neutral = light ? NEUTRAL_LIGHT : NEUTRAL;
+  lut[NEUTRAL_INDEX * 3] = neutral[0];
+  lut[NEUTRAL_INDEX * 3 + 1] = neutral[1];
+  lut[NEUTRAL_INDEX * 3 + 2] = neutral[2];
   return lut;
 }
 

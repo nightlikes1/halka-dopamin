@@ -15,8 +15,9 @@ import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { usePomodoro } from '@presentation/hooks/usePomodoro';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('pomodoro').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('pomodoro').accent);
 const PAUSE_COLOR = colors.textMuted;
 
 const MODE_LABELS: Record<PomodoroMode, string> = {

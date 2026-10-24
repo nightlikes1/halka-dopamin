@@ -21,8 +21,9 @@ import { AppText } from '@presentation/components/common/AppText';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBreathing } from '@presentation/hooks/useBreathing';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('breathing').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('breathing').accent);
 
 // Faz sonunda kürenin ulaşacağı ölçek
 const TARGET_SCALE: Record<BreathingPhaseId, number> = {

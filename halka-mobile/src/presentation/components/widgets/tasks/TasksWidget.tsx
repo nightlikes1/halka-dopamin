@@ -14,8 +14,9 @@ import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useTasks } from '@presentation/hooks/useTasks';
 import { nativeOnly } from '@presentation/utils/nativeOnly';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('tasks').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('tasks').accent);
 
 interface TaskRowProps {
   readonly task: Task;

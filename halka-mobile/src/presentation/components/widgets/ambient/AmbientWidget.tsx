@@ -18,8 +18,9 @@ import { AMBIENT_ICONS } from '@presentation/components/common/iconMaps';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useAmbient } from '@presentation/hooks/useAmbient';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('ambient').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('ambient').accent);
 
 export function AmbientWidget({ variant }: WidgetBodyProps) {
   const { current, isPlaying, toggle, stop } = useAmbient();

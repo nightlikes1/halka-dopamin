@@ -1,12 +1,13 @@
 // Kök navigatör: oturum durumuna göre giriş ekranları veya ana uygulama
 import {
   DarkTheme,
+  DefaultTheme,
   NavigationContainer,
   type LinkingOptions,
   type Theme,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { colors } from '@core/theme/tokens';
+import { activeThemeMode, colors } from '@core/theme/tokens';
 import { ForgotPasswordScreen } from '@features/auth/presentation/screens/ForgotPasswordScreen';
 import { LoginScreen } from '@features/auth/presentation/screens/LoginScreen';
 import { RegisterScreen } from '@features/auth/presentation/screens/RegisterScreen';
@@ -28,10 +29,11 @@ import { WidgetFocusScreen } from '@presentation/screens/WidgetFocusScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const baseTheme = activeThemeMode() === 'light' ? DefaultTheme : DarkTheme;
 const navigationTheme: Theme = {
-  ...DarkTheme,
+  ...baseTheme,
   colors: {
-    ...DarkTheme.colors,
+    ...baseTheme.colors,
     primary: colors.textMain,
     background: colors.bgPrimary,
     card: colors.bgSecondary,

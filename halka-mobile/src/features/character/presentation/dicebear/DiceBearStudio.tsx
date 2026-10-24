@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
-import { colors, radius, spacing } from '@core/theme/tokens';
+import { colors, obsidian, radius, spacing } from '@core/theme/tokens';
 import {
   chooseDiceBearPart,
   isDiceBearPartRemoved,
@@ -37,7 +37,7 @@ const partLabel = (key: string) => s.dicebearParts[key] ?? s.partFallback;
 function checkColorOn(hex: string): string {
   const channel = (i: number) => parseInt(hex.slice(i * 2, i * 2 + 2), 16) / 255;
   const luminance = 0.2126 * channel(0) + 0.7152 * channel(1) + 0.0722 * channel(2);
-  return luminance > 0.5 ? colors.textOnAccent : colors.textPrimary;
+  return luminance > 0.5 ? obsidian.base : obsidian.textPrimary;
 }
 
 interface DiceBearStudioProps {

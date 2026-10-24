@@ -1,9 +1,13 @@
 // Eklenti kataloğu (statik tanımlar)
 import { WIDGET_IDS, type WidgetId } from '@domain/entities/WidgetId';
 
-// Eklenti vurguları (core/theme/tokens.ts obsidian ile aynı; domain tema katmanına bağlanamaz).
-// Vurgu metin olarak da kullanılır: yalnızca okunur tonlar. Seri ödül (şampanya), diğerleri krem.
-const ACCENT = { reward: '#C9A96E', neutral: '#EDE8DF' } as const;
+// Eklenti vurgusu anlam olarak tutulur; rengi sunum katmanı aktif temadan seçer (widgetAccentColor,
+// domain tema katmanına bağlanamaz). Seri ödül (altın), diğerleri metin rengi.
+export type WidgetAccent = 'reward' | 'neutral';
+const ACCENT = { reward: 'reward', neutral: 'neutral' } as const satisfies Record<
+  WidgetAccent,
+  WidgetAccent
+>;
 
 export interface WidgetCatalogItem {
   readonly id: WidgetId;
@@ -11,7 +15,7 @@ export interface WidgetCatalogItem {
   readonly category: string;
   readonly icon: string;
   readonly description: string;
-  readonly accent: string;
+  readonly accent: WidgetAccent;
 }
 
 export const WIDGET_CATALOG_MAP: Readonly<Record<WidgetId, WidgetCatalogItem>> = {

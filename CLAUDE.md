@@ -21,8 +21,14 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   `#8A857C`. **Şampanya altını `#C9A96E` yalnızca ödül anlarında** (seri, yakınlık halkası/etiketi, rozet, tamamlanma
   tiki, haftalık çubuk, seans tamamlandı) ve ana butonların çizgi stilinde. Sekme/link/seçili durum altın değil: krem
   metin ya da `goldMuted` zemin. Mücevher tonları (yakut, safir, zümrüt, ametist, kehribar) yalnızca dolgu/çubuk/nokta;
-  yazı rengi olarak kullanılmaz (kontrast < 3). Gradient, gölge, ışıma yok. Açık tema yok.
+  yazı rengi olarak kullanılmaz (kontrast < 3). Gradient, gölge, ışıma yok.
   Dopamin: ucuz = yakut, kaliteli = zümrüt. Kaçırılan gün/bozulan seri kırmızı değil `textSecondary`.
+- **Açık tema "Fildişi"** (2026-10-24): zemin `#F3EFE8` → kart `#FBF8F3` → `#EAE5DC`, metin `#1D1B18`/`#625C52`,
+  altın koyulaştırılmış `#7D5F28` (metin olarak ≥ 4,7:1), mücevher tonları aynı. Varsayılan koyu. Geçiş: Bugün üst
+  barındaki güneş/ay butonu (`ThemeToggleButton`) ve Ayarlar → Tema. Seçim cihazda (`halka.themeMode`); renkler
+  açılışta bir kez uygulanır (`applyThemeMode`, `colors`/`accentTints`/`dopamineColors` yerinde güncellenir), geçişte
+  uygulama yeniden yüklenir (`reloadToApply`). Açık temada parçacıklar normal karışım + koyulaştırılmış palet
+  (`PARTICLE_ON_LIGHT`). Eklenti vurgusu domain'de anlam (`reward | neutral`), renk `widgetAccentColor`.
 - Görsel stil (2026-10-17): **"particles" varsayılan** (cam yüzeyler, parçacık
   karşılama/Bugün/Odak ekranları, yüzen cam sekme çubuğu) ve **"classic"** (opak kartlar); ikisi aynı paleti kullanır.
   Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
@@ -146,7 +152,7 @@ Tema dosyaları `halka-mobile/src/core/theme/` (tek kaynak; `src/presentation/th
 `elevation.ts` (gölge/parlama), `layout.ts` (kenar boşluğu, genişlik, dokunma alanı), `palettes.ts` (`withAlpha`,
 Halka zincir paleti). Ekran ve bileşenlerde sabit değer yazılmaz; hep bu dosyalardan okunur.
 
-- **Genel his:** koyu, sade, premium. Sıcak obsidyen yüzeyler, krem metin; altın az görünür (yalnızca ödül).
+- **Genel his:** koyu (varsayılan) ya da açık Fildişi, sade, premium. Modül düzeyinde renk okuyan kod tema uygulandıktan sonra yüklenir; sabit hex yazma. Sıcak obsidyen yüzeyler, krem metin; altın az görünür (yalnızca ödül).
 - **Renk:** yalnızca `colors.*` (`obsidian` token'larından türetilir), `accentColors`/`accentTints`
   (`amber | sapphire | amethyst | ruby | emerald`; ikon kutusu = koyu mücevher zemini + **krem ikon**), `dopamineColors.*`.
   Hex/rgba yazma; saydamlık için `withAlpha`. Zemin `background` · kart `surface` · pill/input/bar `surfaceAlt` ·
@@ -238,7 +244,7 @@ config.ts   zemin #0B0B0D, DPR ≤ 2, 50 fps eşiği, düşük güç oranı 0,6,
   çevirir, bu yüzden bir worklet'in çağırdığı worklet dosyada **önce** tanımlanmalı (yoksa modül yüklenirken hata).
   Jest bu hatayı yakalamaz; web önizlemesiyle kontrol et. JS→UI için `scheduleOnUI`, UI→JS için `scheduleOnRN`
   (`react-native-worklets`); `runOnJS`/`runOnUI` kullanılmaz. Reanimated web'de `filter` dizi biçiminde verilir.
-- **Tema:** `tokens.ts` iki palet içerir (`applyColorScheme`); `App.tsx` tercihleri okuyup paleti uygular, sonra
+- **Tema:** `tokens.ts` koyu + açık palet içerir (`applyColorScheme`, `applyThemeMode`); `App.tsx` tercihleri okuyup paleti uygular, sonra
   `AppShell`'i tembel yükler (StyleSheet'ler renkleri modül yüklenirken okur). Cam yüzeyler: `colors.glass*`,
   vurgular `particleBlue`/`particlePink`. Parçacık stilinde sekme ekranları `useTabBarClearance` kadar alt boşluk bırakır.
 - **Expo Go yeterli** (Skia 2.6.2 Expo Go'da var). Yerel iOS/Android derlemesinde Skia'nın kurulum betiği

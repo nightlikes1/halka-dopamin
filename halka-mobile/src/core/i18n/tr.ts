@@ -50,6 +50,8 @@ export const tr = {
     startFocus: 'Odak seansı başlat',
     eveningCheckIn: 'Akşam check-in',
     settings: 'Ayarlar',
+    toLightTheme: 'Açık temaya geç',
+    toDarkTheme: 'Koyu temaya geç',
   },
   onboarding: {
     brand: 'HALKA',
@@ -557,6 +559,12 @@ export const tr = {
     visualStyleHint: 'Değişiklik uygulama yeniden yüklenince uygulanır.',
     visualStyleRestart: 'Görsel stil kaydedildi. Uygulamayı yeniden açtığında uygulanır.',
     visualStyleFailed: 'Görsel stil kaydedilemedi.',
+    theme: 'Tema',
+    themeDark: 'Koyu',
+    themeLight: 'Açık',
+    themeHint: 'Bugün ekranındaki güneş/ay butonuyla da geçiş yapabilirsin.',
+    themeRestart: 'Tema kaydedildi. Uygulamayı yeniden açtığında uygulanır.',
+    themeFailed: 'Tema kaydedilemedi.',
   },
   errors: {
     network:

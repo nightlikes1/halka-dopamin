@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import logoSource from '@assets/logo.png';
 import { strings } from '@core/i18n/tr';
-import { colors, spacing } from '@core/theme/tokens';
+import { activeThemeMode, colors, spacing } from '@core/theme/tokens';
 import { useSessionRestore } from '@features/auth/presentation/useAuth';
 import { useAuthStore } from '@features/auth/presentation/useAuthStore';
 import { ActionButton } from '@presentation/components/common/ActionButton';
@@ -67,7 +67,7 @@ export function AppShell({ fontsReady }: AppShellProps) {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style={activeThemeMode() === 'light' ? 'dark' : 'light'} />
       <View style={styles.root}>{content}</View>
     </>
   );

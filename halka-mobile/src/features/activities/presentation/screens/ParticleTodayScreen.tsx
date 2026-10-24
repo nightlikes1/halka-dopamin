@@ -19,6 +19,7 @@ import { useAuth } from '@features/auth/presentation/useAuth';
 import { useCharacter } from '@features/character/presentation/useCharacter';
 import { CheckInCard } from '@features/checkin/presentation/components/CheckInCard';
 import { useCheckInOverview } from '@features/checkin/presentation/useCheckInOverview';
+import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
@@ -121,13 +122,16 @@ export function ParticleTodayScreen() {
               {name ? t.greeting(greeting, name) : greeting}
             </AppText>
           </View>
-          <IconButton
-            icon="settings"
-            variant="glass"
-            size={44}
-            accessibilityLabel={t.settings}
-            onPress={() => navigation.navigate('Settings')}
-          />
+          <View style={styles.headerActions}>
+            <ThemeToggleButton variant="glass" />
+            <IconButton
+              icon="settings"
+              variant="glass"
+              size={44}
+              accessibilityLabel={t.settings}
+              onPress={() => navigation.navigate('Settings')}
+            />
+          </View>
         </Appear>
       </View>
 
@@ -265,6 +269,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   headerText: { flex: 1, gap: spacing.xxs },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   ringSub: { marginTop: spacing.xs },
   stats: { flexDirection: 'row', gap: spacing.smd, marginTop: -spacing.xxl },
   stat: { flex: 1, alignItems: 'center', gap: spacing.xxs },

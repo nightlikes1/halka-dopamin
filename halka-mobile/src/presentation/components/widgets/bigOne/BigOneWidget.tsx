@@ -12,8 +12,9 @@ import { TextInputDialog } from '@presentation/components/common/TextInputDialog
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBigOne } from '@presentation/hooks/useBigOne';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('bigOne').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('bigOne').accent);
 
 export function BigOneWidget({ variant }: WidgetBodyProps) {
   const { bigOne, toggle, updateGoal } = useBigOne();

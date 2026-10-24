@@ -10,8 +10,9 @@ import { ExpenseForm } from '@presentation/components/widgets/budget/ExpenseForm
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useBudget } from '@presentation/hooks/useBudget';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('budget').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('budget').accent);
 
 export function BudgetWidget({ variant }: WidgetBodyProps) {
   const { budget, summary, addExpense, deleteExpense } = useBudget();

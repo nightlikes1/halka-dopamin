@@ -11,8 +11,9 @@ import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useMood } from '@presentation/hooks/useMood';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('mood').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('mood').accent);
 
 export function MoodWidget({ variant }: WidgetBodyProps) {
   const { mood, setMood, setEnergy, setReflection } = useMood();

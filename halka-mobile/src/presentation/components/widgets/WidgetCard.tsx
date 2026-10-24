@@ -18,6 +18,7 @@ import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
 import { useHalkaStore } from '@presentation/store/useHalkaStore';
 import { useUiStore } from '@presentation/store/useUiStore';
 import { nativeOnly } from '@presentation/utils/nativeOnly';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
 // Küçültülmüş kartın özeti; yalnızca görünürken store'a abone olur
 function CollapsedSummary({ id }: { readonly id: WidgetId }) {
@@ -41,6 +42,7 @@ interface WidgetCardProps {
 
 export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardProps) {
   const item = getCatalogItem(id);
+  const accent = widgetAccentColor(item.accent);
   const navigation = useNavigation();
   const { removeWidget } = useLayout();
   const collapsed = useUiStore((s) => s.collapsed[id] ?? false);
@@ -65,9 +67,9 @@ export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardP
           height: event.nativeEvent.layout.height,
         })
       }
-      style={[styles.card, { borderColor: withAlpha(item.accent, '33') }, style]}
+      style={[styles.card, { borderColor: withAlpha(accent, '33') }, style]}
     >
-      <View style={[styles.accentLine, { backgroundColor: item.accent }]} />
+      <View style={[styles.accentLine, { backgroundColor: accent }]} />
 
       <View style={styles.header}>
         <Pressable
@@ -76,14 +78,14 @@ export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardP
           accessibilityRole="button"
           accessibilityLabel={`${item.name} eklentisine odaklan`}
         >
-          <View style={[styles.iconBox, { backgroundColor: withAlpha(item.accent, '22') }]}>
-            <Icon name={WIDGET_ICONS[id]} size={18} color={item.accent} />
+          <View style={[styles.iconBox, { backgroundColor: withAlpha(accent, '22') }]}>
+            <Icon name={WIDGET_ICONS[id]} size={18} color={accent} />
           </View>
           <View style={styles.titleText}>
             <AppText style={styles.title} numberOfLines={1}>
               {item.name}
             </AppText>
-            <AppText style={[styles.category, { color: item.accent }]}>{item.category}</AppText>
+            <AppText style={[styles.category, { color: accent }]}>{item.category}</AppText>
           </View>
           {collapsed ? <CollapsedSummary id={id} /> : null}
         </Pressable>

@@ -17,8 +17,9 @@ import { IconButton } from '@presentation/components/common/IconButton';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useWater } from '@presentation/hooks/useWater';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('water').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('water').accent);
 
 export function WaterWidget({ variant }: WidgetBodyProps) {
   const { water, progress, add, reset } = useWater();

@@ -14,6 +14,7 @@ import { useLayout } from '@presentation/hooks/useLayout';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
 import type { RootStackScreenProps } from '@presentation/navigation/types';
 import { confirmAction } from '@presentation/utils/dialogs';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
 export function CatalogScreen({ navigation }: RootStackScreenProps<'Catalog'>) {
   const { palette } = useTheme();
@@ -73,8 +74,17 @@ export function CatalogScreen({ navigation }: RootStackScreenProps<'Catalog'>) {
                   pressed && styles.pressed,
                 ]}
               >
-                <View style={[styles.iconTile, { backgroundColor: withAlpha(item.accent, '20') }]}>
-                  <Icon name={WIDGET_ICONS[item.id]} size={24} color={item.accent} />
+                <View
+                  style={[
+                    styles.iconTile,
+                    { backgroundColor: withAlpha(widgetAccentColor(item.accent), '20') },
+                  ]}
+                >
+                  <Icon
+                    name={WIDGET_ICONS[item.id]}
+                    size={24}
+                    color={widgetAccentColor(item.accent)}
+                  />
                 </View>
                 <View style={styles.info}>
                   <View style={styles.titleRow}>

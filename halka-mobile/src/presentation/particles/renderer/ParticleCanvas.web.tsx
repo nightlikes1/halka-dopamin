@@ -1,4 +1,4 @@
-// Web çizici: düz HTML <canvas> 2D + requestAnimationFrame, toplamsal karışım ("lighter").
+// Web çizici: düz HTML <canvas> 2D + requestAnimationFrame, toplamsal karışım ("lighter"; açık temada normal).
 // Skia'nın web modülü (CanvasKit ~3 MB) yüklenmez. Renkli yumuşak noktalar bir kez sprite
 // sayfasına çizilir; her karede yalnızca drawImage çağrılır, nesne yaratılmaz.
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import {
   MAX_PIXEL_RATIO,
   MIN_TARGET_FPS,
   PARTICLE_INTENSITY,
+  PARTICLE_ON_LIGHT,
   SPRITE_SIZE,
   SPRITE_SPREAD,
 } from '@presentation/particles/config';
@@ -104,7 +105,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
-      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalCompositeOperation = PARTICLE_ON_LIGHT ? 'source-over' : 'lighter';
       const out = state.out;
       for (let i = 0; i < state.count; i++) {
         const o = i * OUT_STRIDE;

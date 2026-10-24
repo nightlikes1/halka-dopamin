@@ -1,4 +1,4 @@
-// Uygulama girişi: cihaz tercihleri → renk paleti → fontlar, DI container ve uygulama kabuğu.
+// Uygulama girişi: cihaz tercihleri → renk paleti (koyu/açık) → fontlar, DI container ve uygulama kabuğu.
 // Ekran modülleri (StyleSheet'ler renkleri yüklenirken okur) seçilen palet uygulandıktan sonra
 // yüklenir; bu yüzden AppShell tembel (lazy) import edilir.
 // Yalnızca kullanılan ağırlıklar alt yoldan import edilir (paket kökü tüm fontları pakete ekler)
@@ -14,7 +14,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createContainer } from '@core/di/container';
-import { applyColorScheme, colors } from '@core/theme/tokens';
+import { applyColorScheme, applyThemeMode, colors } from '@core/theme/tokens';
 import { loadDevicePreferences } from '@data/preferences/devicePreferences';
 import { DIProvider } from '@presentation/providers/DIProvider';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
@@ -40,9 +40,10 @@ export default function App() {
   useEffect(() => {
     void loadDevicePreferences().then((prefs) => {
       applyColorScheme(prefs.visualStyle);
+      applyThemeMode(prefs.themeMode);
       // Web'de otomatik doldurma ve sayfa zemini için global CSS (mobilde etkisiz)
       injectWebGlobalStyles();
-      usePreferencesStore.getState().init(prefs.visualStyle, prefs.onboardingSeen);
+      usePreferencesStore.getState().init(prefs.visualStyle, prefs.themeMode, prefs.onboardingSeen);
       setThemeReady(true);
     });
   }, []);

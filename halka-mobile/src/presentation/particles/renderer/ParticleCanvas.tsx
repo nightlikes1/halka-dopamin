@@ -23,6 +23,7 @@ import {
   MAX_FRAME_DT,
   MIN_TARGET_FPS,
   PARTICLE_INTENSITY,
+  PARTICLE_ON_LIGHT,
   SPRITE_SIZE,
   SPRITE_SPREAD,
 } from '@presentation/particles/config';
@@ -202,7 +203,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
           transforms={transforms}
           colors={tints}
           colorBlendMode="modulate"
-          blendMode="plus"
+          blendMode={PARTICLE_ON_LIGHT ? 'srcOver' : 'plus'}
         />
       </Canvas>
       {SHOW_FPS && fps !== null ? (

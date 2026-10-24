@@ -1,6 +1,6 @@
 // Zincir halka paleti: düz koyu halkalar + şampanya vurgusu (gradient ve parlama yok)
 
-import { obsidian } from '@core/theme/tokens';
+import { colors } from '@core/theme/tokens';
 
 export interface RingPalette {
   readonly accent: string;
@@ -13,15 +13,16 @@ export interface RingPalette {
   readonly tether: string;
 }
 
+// Modül yüklenirken aktif temadan okunur (tema açılışta, ekranlardan önce uygulanır)
 export const RING_PALETTE: RingPalette = {
-  accent: obsidian.gold,
-  accentAlt: obsidian.sapphire,
-  glow: 'rgba(237, 232, 223, 0.06)',
-  metalLight: obsidian.textSecondary,
-  metalDark: obsidian.borderStrong,
-  metalDeep: obsidian.raised,
-  orbitTrack: 'rgba(237, 232, 223, 0.07)',
-  tether: 'rgba(237, 232, 223, 0.18)',
+  accent: colors.gold,
+  accentAlt: colors.sapphire,
+  glow: withAlpha(colors.textPrimary, '0f'),
+  metalLight: colors.textSecondary,
+  metalDark: colors.border,
+  metalDeep: colors.surfaceAlt,
+  orbitTrack: withAlpha(colors.textPrimary, '12'),
+  tether: withAlpha(colors.textPrimary, '2e'),
 };
 
 // "#rrggbb" + saydamlık (00-ff) -> "#rrggbbaa"

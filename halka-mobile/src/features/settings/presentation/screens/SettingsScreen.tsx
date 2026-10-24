@@ -1,9 +1,10 @@
-// Ayarlar: hesap bilgisi, görsel stil, sunucu adresi, çıkış (bildirim/dışa aktarma sonraki fazlarda)
+// Ayarlar: hesap bilgisi, tema, görsel stil, sunucu adresi, çıkış (bildirim/dışa aktarma sonraki fazlarda)
 import { StyleSheet } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
-import type { VisualStyle } from '@data/preferences/devicePreferences';
+import type { ThemeModePreference, VisualStyle } from '@data/preferences/devicePreferences';
 import { useAuth } from '@features/auth/presentation/useAuth';
+import { useThemeModeSetting } from '@features/settings/presentation/useThemeModeSetting';
 import { useVisualStyleSetting } from '@features/settings/presentation/useVisualStyleSetting';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -22,6 +23,7 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
   const { user, logout } = useAuth();
   const { apiBaseUrl } = useDI();
   const visual = useVisualStyleSetting();
+  const theme = useThemeModeSetting();
 
   const confirmLogout = () => {
     confirmAction({
@@ -45,6 +47,19 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
         <AppText variant="muted">
           {user?.displayName ? `${t.signedInAs} · ${user.email}` : t.signedInAs}
         </AppText>
+      </Card>
+      <Card style={styles.card}>
+        <SectionTitle title={t.theme} icon={theme.selected === 'dark' ? 'moon' : 'sun'} />
+        <SegmentedControl<ThemeModePreference>
+          selected={theme.selected}
+          onChange={(mode) => void theme.choose(mode)}
+          accessibilityLabel={t.theme}
+          options={[
+            { value: 'dark', label: t.themeDark, color: colors.textPrimary },
+            { value: 'light', label: t.themeLight, color: colors.textPrimary },
+          ]}
+        />
+        <AppText variant="dim">{t.themeHint}</AppText>
       </Card>
       <Card style={styles.card}>
         <SectionTitle title={t.visualStyle} icon="aperture" />

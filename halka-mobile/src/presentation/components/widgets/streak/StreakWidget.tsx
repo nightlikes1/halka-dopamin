@@ -17,8 +17,9 @@ import { Icon } from '@presentation/components/common/Icon';
 import type { WidgetBodyProps } from '@presentation/components/widgets/types';
 import { widgetStyles } from '@presentation/components/widgets/widgetStyles';
 import { useStreak } from '@presentation/hooks/useStreak';
+import { widgetAccentColor } from '@presentation/components/widgets/widgetAccent';
 
-const ACCENT = getCatalogItem('streak').accent;
+const ACCENT = widgetAccentColor(getCatalogItem('streak').accent);
 
 function Flame({ size }: { readonly size: number }) {
   const scale = useSharedValue(1);

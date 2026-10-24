@@ -15,6 +15,7 @@ import { useAuth } from '@features/auth/presentation/useAuth';
 import { CheckInCard } from '@features/checkin/presentation/components/CheckInCard';
 import { useCheckInOverview } from '@features/checkin/presentation/useCheckInOverview';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
+import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
 import { SwipeToComplete } from '@presentation/components/common/SwipeToComplete';
@@ -88,6 +89,7 @@ export function TodayScreen() {
         </View>
         <View style={styles.topActions}>
           <StreakPill days={currentStreak} />
+          <ThemeToggleButton variant="surface" />
           <IconButton
             icon="settings"
             variant="surface"

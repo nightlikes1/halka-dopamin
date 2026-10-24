@@ -1,10 +1,8 @@
-// Görsel stil ayarı (parçacık / klasik). Renkler açılışta bir kez uygulandığı için seçim kaydedilip
-// uygulama yeniden yüklenir: web'de sayfa, geliştirme modunda DevSettings; mağaza sürümünde
-// kullanıcıya yeniden açınca uygulanacağı söylenir.
+// Görsel stil ayarı (parçacık / klasik). Seçim kaydedilip uygulama yeniden yüklenir (reloadToApply).
 import { useState } from 'react';
-import { DevSettings, Platform } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { saveVisualStyle, type VisualStyle } from '@data/preferences/devicePreferences';
+import { reloadToApply } from '@features/settings/presentation/reloadToApply';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { showMessage } from '@presentation/utils/dialogs';
 
@@ -22,15 +20,7 @@ export function useVisualStyleSetting() {
       showMessage(t.visualStyle, t.visualStyleFailed);
       return;
     }
-    if (Platform.OS === 'web') {
-      globalThis.location?.reload();
-      return;
-    }
-    if (__DEV__) {
-      DevSettings.reload();
-      return;
-    }
-    showMessage(t.visualStyle, t.visualStyleRestart);
+    reloadToApply(t.visualStyle, t.visualStyleRestart);
   };
 
   return { selected, choose };
