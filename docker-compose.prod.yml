@@ -47,20 +47,22 @@ services:
         condition: service_healthy
 
   # -----------------------------------------------------------
-  # İsteğe Bağlı: Cloudflare Tunnel (Zero Trust)
-  # Eğer sunucunuzda harici bir cloudflared kurulu değilse,
-  # server/.env içine TUNNEL_TOKEN ekleyip bu servisi aktif edebilirsiniz.
+  # Otomatik Canlıya Alma (Continuous Deployment - Watchtower)
+  # GitHub Actions yeni bir imaj yüklediğinde sunucuyu otomatik günceller.
+  # Sunucunuzda derleme YAPMAZ, sadece hazır imajı çekip 3 saniyede yeniler.
   # -----------------------------------------------------------
-  # tunnel:
-  #   image: cloudflare/cloudflared:latest
-  #   container_name: halka-cloudflare-tunnel
-  #   restart: unless-stopped
-  #   command: tunnel --no-autoupdate run
-  #   environment:
-  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-  #   depends_on:
-  #     - server
-  #     - web
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: halka-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # GHCR yetkilendirmesi için (private depolar için):
+      - ~/.docker/config.json:/config.json:ro
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=60 # Her 60 saniyede bir yeni sürüm kontrol edilir
+      - WATCHTOWER_INCLUDE_RESTARTING=true
 
 networks:
   default:
