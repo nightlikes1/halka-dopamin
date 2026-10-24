@@ -1,11 +1,13 @@
 import { Image, StyleSheet, View } from 'react-native';
+import logoBannerLight from '@assets/logo-banner-light.png';
 import logoBanner from '@assets/logo-banner.png';
-import { spacing } from '@core/theme/tokens';
+import { activeThemeMode, spacing } from '@core/theme/tokens';
 import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { useLayout } from '@presentation/hooks/useLayout';
 import { useProfile } from '@presentation/hooks/useProfile';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
+import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { useUiStore } from '@presentation/store/useUiStore';
 
 interface AppHeaderProps {
@@ -15,6 +17,8 @@ interface AppHeaderProps {
 export function AppHeader({ onAddPress }: AppHeaderProps) {
   const { profile, toggleViewMode, toggleSound } = useProfile();
   const { activeIds } = useLayout();
+  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const isLight = themeMode === 'light' || activeThemeMode() === 'light';
   const allCollapsed = useUiStore((s) => s.allCollapsed);
   const setAllCollapsed = useUiStore((s) => s.setAllCollapsed);
   const play = useSoundEffect();
@@ -30,7 +34,7 @@ export function AppHeader({ onAddPress }: AppHeaderProps) {
     <View style={styles.header}>
       <View style={styles.brand}>
         <Image
-          source={logoBanner}
+          source={isLight ? logoBannerLight : logoBanner}
           style={styles.logoBanner}
           resizeMode="contain"
           accessibilityLabel="Halka"
