@@ -1,6 +1,14 @@
 // Parçacık dalga (Odak ekranı): perspektifli nokta arazisi; sayaç çalışırken dalgalanır,
 // duraklayınca sakinleşir. Sütun/satır ızgarası sabittir, her karede yalnızca yükseklik hesaplanır.
-import { pointerField } from '@presentation/particles/engine/interaction';
+// Arazi ekranın tabanına sabitlenir: çizici genişliğe göre ölçekler, geniş/yatay ekranda (masaüstü web)
+// arazi yüksekliğe göre küçültülür ve yana genişletilir; uzun telefonda tabana kaydırılır.
+import {
+  P_PULSE_X,
+  P_PULSE_Y,
+  P_X,
+  P_Y,
+  pointerField,
+} from '@presentation/particles/engine/interaction';
 import { lutIndex } from '@presentation/particles/engine/palette';
 import {
   OUT_ALPHA,
@@ -9,6 +17,7 @@ import {
   OUT_STRIDE,
   OUT_X,
   OUT_Y,
+  REFERENCE_HEIGHT,
   REFERENCE_WIDTH,
 } from '@presentation/particles/engine/types';
 
@@ -75,14 +84,42 @@ export function projectY(y: number, z: number): number {
   return WAVE_HORIZON + ((1 - y) / z) * WAVE_FOCAL * VERTICAL - (1 / FAR_Z) * WAVE_FOCAL * VERTICAL;
 }
 
+// Görünen alanın yüksekliği (çizici referansında, genişlik 390) → arazi ölçeği (≤ 1).
+// Alan 390×844'ten basıksa (geniş ekran) arazi yüksekliğe sığacak kadar küçülür.
+export function waveFrameScale(viewHeight: number): number {
+  'worklet';
+  const height = viewHeight > 0 ? viewHeight : REFERENCE_HEIGHT;
+  return Math.min(1, height / REFERENCE_HEIGHT);
+}
+
+// viewHeight: görünen alanın yüksekliği, çizici referans biriminde (ekran yüksekliği × 390 / genişlik)
 export function stepWave(
   state: WaveState,
   dt: number,
   targetAmp: number,
   activeFraction: number,
   pointer?: Float32Array,
+  viewHeight: number = REFERENCE_HEIGHT,
 ): void {
   'worklet';
+  // Arazi koordinatı × k = çizici koordinatı
+  const k = waveFrameScale(viewHeight);
+  const frameWidth = REFERENCE_WIDTH / k;
+  const frameHeight = (viewHeight > 0 ? viewHeight : REFERENCE_HEIGHT) / k;
+  // Ufuk tabana göre konumlanır; geniş alanda arazi yana yayılır
+  const shiftY = frameHeight - REFERENCE_HEIGHT;
+  const widen = frameWidth / REFERENCE_WIDTH;
+  // İşaretçi arazi koordinatına çevrilir, karenin sonunda aynen geri yazılır
+  const px = pointer ? (pointer[P_X] ?? 0) : 0;
+  const py = pointer ? (pointer[P_Y] ?? 0) : 0;
+  const ppx = pointer ? (pointer[P_PULSE_X] ?? 0) : 0;
+  const ppy = pointer ? (pointer[P_PULSE_Y] ?? 0) : 0;
+  if (pointer) {
+    pointer[P_X] = px / k;
+    pointer[P_Y] = py / k;
+    pointer[P_PULSE_X] = ppx / k;
+    pointer[P_PULSE_Y] = ppy / k;
+  }
   const amp0 = state.clock[AMP] ?? WAVE_IDLE_AMP;
   const amp = amp0 + (targetAmp - amp0) * Math.min(1, dt * AMP_RATE);
   state.clock[AMP] = amp;
@@ -100,10 +137,10 @@ export function stepWave(
         out[o + OUT_ALPHA] = 0;
         continue;
       }
-      const x = (i / (cols - 1) - 0.5) * WIDTH_SPAN;
+      const x = (i / (cols - 1) - 0.5) * WIDTH_SPAN * widen;
       const y = waveHeight(x, z, t, amp);
-      let sx = REFERENCE_WIDTH / 2 + (x / z) * WAVE_FOCAL;
-      let sy = projectY(y, z);
+      let sx = frameWidth / 2 + (x / z) * WAVE_FOCAL;
+      let sy = projectY(y, z) + shiftY;
       const crest = Math.max(0.35, Math.min(1.4, 0.8 + 2.2 * y));
       let glow = (0.16 + 0.85 * Math.pow(1 - dT, 1.6)) * crest;
       let lift = 0;
@@ -115,13 +152,19 @@ export function stepWave(
         lift = state.field[2] ?? 0;
         glow += lift * 0.8;
       }
-      const visible = sx > -8 && sx < REFERENCE_WIDTH + 8;
-      out[o + OUT_X] = sx;
-      out[o + OUT_Y] = sy;
-      out[o + OUT_SIZE] = (0.8 + 1.7 * dT) * (1 + 0.5 * lift);
+      const visible = sx > -8 && sx < frameWidth + 8;
+      out[o + OUT_X] = sx * k;
+      out[o + OUT_Y] = sy * k;
+      out[o + OUT_SIZE] = (0.8 + 1.7 * dT) * (1 + 0.5 * lift) * k;
       out[o + OUT_ALPHA] = visible ? Math.min(1, glow) : 0;
-      out[o + OUT_COLOR] = lutIndex(sx / REFERENCE_WIDTH);
+      out[o + OUT_COLOR] = lutIndex(sx / frameWidth);
     }
+  }
+  if (pointer) {
+    pointer[P_X] = px;
+    pointer[P_Y] = py;
+    pointer[P_PULSE_X] = ppx;
+    pointer[P_PULSE_Y] = ppy;
   }
 }
 
