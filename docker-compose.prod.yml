@@ -56,9 +56,10 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      # GHCR yetkilendirmesi için (private depolar için):
-      - ~/.docker/config.json:/config.json:ro
+      # GHCR yetkilendirmesi için:
+      - /root/.docker/config.json:/config.json:ro
     environment:
+      - DOCKER_API_VERSION=1.41
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_POLL_INTERVAL=60 # Her 60 saniyede bir yeni sürüm kontrol edilir
       - WATCHTOWER_INCLUDE_RESTARTING=true
