@@ -15,7 +15,7 @@ import { OUT_ALPHA, OUT_STRIDE, OUT_X, OUT_Y } from '@presentation/particles/eng
 export const HALO_EXTENT = 180;
 export const HALO_REFERENCE_WIDTH = HALO_EXTENT * 2;
 // Bu yarıçaptan sonra alfa HALO_EXTENT'te sıfıra iner
-export const HALO_FADE_START = 140;
+export const HALO_FADE_START = 120;
 // Hale tozu Bugün'dekinden seyrek (zincirin arkasında sakin bir aura)
 export const HALO_DUST = 360;
 

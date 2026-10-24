@@ -14,6 +14,7 @@ import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
 import type { MainTabScreenProps } from '@presentation/navigation/types';
 import { useSnapshotSlice } from '@presentation/store/useHalkaStore';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
+import { ParticleDust } from '@presentation/particles/components/ParticleDust';
 
 const MAX_RING_SIZE = 440;
 
@@ -49,33 +50,38 @@ export function HomeScreen({ navigation }: MainTabScreenProps<'Halka'>) {
         : 1;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
-      <ScrollView
-        contentContainerStyle={[styles.content, bottom]}
-        keyboardShouldPersistTaps="handled"
-        automaticallyAdjustKeyboardInsets
-      >
-        <AppHeader onAddPress={openCatalog} />
+    <View style={styles.root}>
+      {/* Ortam tozu: tüm ekranın arkasında, dokunuş almaz */}
+      <ParticleDust />
+      <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+        <ScrollView
+          contentContainerStyle={[styles.content, bottom]}
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+        >
+          <AppHeader onAddPress={openCatalog} />
 
-        {isCockpitWide ? (
-          <CockpitLayout ids={activeIds} ringSize={ringSize} onAddPress={openCatalog} />
-        ) : (
-          <View style={styles.stack}>
-            <RingSection size={ringSize} onAddPress={openCatalog} />
-            {activeIds.length === 0 ? (
-              <EmptyOrbitBanner onAddPress={openCatalog} />
-            ) : (
-              <WidgetGrid ids={activeIds} columns={columns} />
-            )}
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          {isCockpitWide ? (
+            <CockpitLayout ids={activeIds} ringSize={ringSize} onAddPress={openCatalog} />
+          ) : (
+            <View style={styles.stack}>
+              <RingSection size={ringSize} onAddPress={openCatalog} />
+              {activeIds.length === 0 ? (
+                <EmptyOrbitBanner onAddPress={openCatalog} />
+              ) : (
+                <WidgetGrid ids={activeIds} columns={columns} />
+              )}
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = themedStyles(() => ({
-  safe: { flex: 1, backgroundColor: colors.bgPrimary },
+  root: { flex: 1, backgroundColor: colors.bgPrimary },
+  safe: { flex: 1 },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl * 2 },
   stack: { gap: spacing.xl },
 }));
