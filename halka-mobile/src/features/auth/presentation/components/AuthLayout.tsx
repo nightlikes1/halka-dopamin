@@ -2,13 +2,15 @@
 import type { ReactNode } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import logoSourceLight from '@assets/logo-light.png';
 import logoSource from '@assets/logo.png';
 import { layout } from '@core/theme/layout';
-import { colors, fonts, spacing, fontSizes } from '@core/theme/tokens';
+import { activeThemeMode, colors, fonts, spacing, fontSizes } from '@core/theme/tokens';
 import { ServerStatus } from '@features/auth/presentation/components/ServerStatus';
 import { AppText } from '@presentation/components/common/AppText';
 import { Card } from '@presentation/components/common/Card';
 import { ChainRing } from '@presentation/components/ring/ChainRing';
+import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 
 interface AuthLayoutProps {
   readonly title: string;
@@ -17,6 +19,9 @@ interface AuthLayoutProps {
 }
 
 export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
+  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const isLight = themeMode === 'light' || activeThemeMode() === 'light';
+
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
@@ -27,7 +32,7 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
           <View style={styles.brand}>
             <ChainRing size={120}>
               <Image
-                source={logoSource}
+                source={isLight ? logoSourceLight : logoSource}
                 style={styles.logo}
                 resizeMode="contain"
                 accessibilityLabel="Halka Logo"

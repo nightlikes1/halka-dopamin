@@ -1,6 +1,7 @@
 // Uygulama kabuğu: veri yükleme, oturum geri yükleme, pomodoro izleyici ve navigasyon
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import logoSourceLight from '@assets/logo-light.png';
 import logoSource from '@assets/logo.png';
 import { strings } from '@core/i18n/tr';
 import { activeThemeMode, colors, spacing } from '@core/theme/tokens';
@@ -13,6 +14,7 @@ import { useBootstrap } from '@presentation/hooks/useBootstrap';
 import { usePomodoroCompletionWatcher } from '@presentation/hooks/usePomodoro';
 import { RootNavigator } from '@presentation/navigation/RootNavigator';
 import { useHalkaStore } from '@presentation/store/useHalkaStore';
+import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 
 interface AppShellProps {
   readonly fontsReady: boolean;
@@ -20,11 +22,14 @@ interface AppShellProps {
 
 // Yükleme ekranı (fontlar henüz hazır olmayabilir; sistem fontu kullanılır)
 function SplashView() {
+  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const isLight = themeMode === 'light' || activeThemeMode() === 'light';
+
   return (
     <View style={styles.center}>
       <ChainRing size={180}>
         <Image
-          source={logoSource}
+          source={isLight ? logoSourceLight : logoSource}
           style={styles.splashLogo}
           resizeMode="contain"
           accessibilityLabel="Halka Logo"
