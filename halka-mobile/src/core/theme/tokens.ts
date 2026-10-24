@@ -40,20 +40,20 @@ export const obsidian = {
 } as const;
 
 // Fildişi (açık tema): sıcak krem zemin, koyu mürekkep metin. Altın koyulaştırıldı (metin olarak
-// ≥ 4,7:1); mücevher tonları aynı (yalnızca dolgu).
+// ≥ 4,8:1); mücevher tonları aynı (yalnızca dolgu). Zemin saf krem değil, hafif gri-bej (göz yormasın).
 export const ivory = {
-  base: '#F3EFE8',
-  elevated: '#FBF8F3',
-  raised: '#EAE5DC',
-  borderSubtle: '#DFD9CE',
-  borderStrong: '#C9C1B3',
+  base: '#E9E4DB',
+  elevated: '#F2EEE7',
+  raised: '#DFD9CE',
+  borderSubtle: '#D3CCBF',
+  borderStrong: '#BDB4A5',
   textPrimary: '#1D1B18',
   textSecondary: '#625C52',
-  textDisabled: '#B0A99D',
-  gold: '#7D5F28',
-  goldLight: '#9C7A3C',
-  goldDark: '#5F4719',
-  goldMuted: 'rgba(125, 95, 40, 0.12)',
+  textDisabled: '#A69F93',
+  gold: '#735624',
+  goldLight: '#927036',
+  goldDark: '#574116',
+  goldMuted: 'rgba(115, 86, 36, 0.12)',
   error: '#B4544F',
   danger: '#9A3F3A',
 } as const;
@@ -149,8 +149,8 @@ const LIGHT_PALETTE: BasePalette = {
   textOnAccent: ivory.elevated,
   accent: ivory.gold,
   hairline: ivory.borderSubtle,
-  overlay: 'rgba(243, 239, 232, 0.86)',
-  scrim: 'rgba(243, 239, 232, 0.92)',
+  overlay: 'rgba(233, 228, 219, 0.86)',
+  scrim: 'rgba(233, 228, 219, 0.92)',
 };
 
 const LIGHT_EXTRAS: ThemeExtras = {
@@ -165,10 +165,10 @@ const LIGHT_EXTRAS: ThemeExtras = {
   glass: 'rgba(29, 27, 24, 0.03)',
   glassBorder: 'rgba(29, 27, 24, 0.09)',
   glassStrong: 'rgba(29, 27, 24, 0.12)',
-  glassBar: 'rgba(251, 248, 243, 0.9)',
-  glassControl: 'rgba(243, 239, 232, 0.7)',
+  glassBar: 'rgba(242, 238, 231, 0.9)',
+  glassControl: 'rgba(233, 228, 219, 0.7)',
   textDisabled: ivory.textDisabled,
-  // danger açık zeminlerde ≥ 5,3:1
+  // danger açık zeminlerde ≥ 4,7:1
   error: ivory.error,
   danger: ivory.danger,
   dangerSoft: 'rgba(180, 84, 79, 0.14)',
@@ -272,11 +272,11 @@ const DARK_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
 
 // Açık: elevated üzerine %20 mücevher tonu (koyu ikon bu zeminde ≥ 10:1)
 const LIGHT_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
-  amber: '#EADECE',
-  sapphire: '#D2D5DB',
-  amethyst: '#DBD3DB',
-  ruby: '#E8CFCE',
-  emerald: '#CFD9D1',
+  amber: '#E3D6C4',
+  sapphire: '#CBCDD1',
+  amethyst: '#D4CBD1',
+  ruby: '#E1C7C4',
+  emerald: '#C8D1C8',
 };
 
 // Aktif temanın ikon kutusu zeminleri (applyThemeMode günceller)
