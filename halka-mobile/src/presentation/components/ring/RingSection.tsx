@@ -14,6 +14,9 @@ import { TextInputDialog } from '@presentation/components/common/TextInputDialog
 import { ChainRing } from '@presentation/components/ring/ChainRing';
 import { CoreHub } from '@presentation/components/ring/CoreHub';
 import { MetricPill } from '@presentation/components/ring/MetricPill';
+import { ParticleHalo } from '@presentation/particles/components/ParticleHalo';
+import { HALO_REFERENCE_WIDTH } from '@presentation/particles/engine/haloEngine';
+import { useParticlePointer } from '@presentation/particles/renderer/useParticlePointer';
 import { useBriefing } from '@presentation/hooks/useBriefing';
 import { useProfile } from '@presentation/hooks/useProfile';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
@@ -32,6 +35,8 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
   const pulseRing = useUiStore((s) => s.pulseRing);
   const play = useSoundEffect();
   const [editingName, setEditingName] = useState(false);
+  // Halka alanındaki dokunuş/sürükleme hale parçacıklarını iter (olaylar yalnızca izlenir)
+  const { channel, targetRef, handlers } = useParticlePointer(HALO_REFERENCE_WIDTH);
 
   const onRingPress = () => {
     play('chainPulse');
@@ -41,7 +46,9 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
   return (
     <View style={styles.container}>
       {/* Halka butonu ile isim butonu kardeş: iç içe buton olmaz; çekirdeğin boş alanı dokunuşu halkaya geçirir */}
-      <View style={{ width: size, height: size }}>
+      <View style={{ width: size, height: size }} {...handlers}>
+        {/* Zincirin arkasında parçacık hale; zincire dokununca (pulseKey) kıvılcım */}
+        <ParticleHalo size={size} burstKey={pulseKey} pointer={channel} targetRef={targetRef} />
         <Pressable
           onPress={onRingPress}
           style={StyleSheet.absoluteFill}
