@@ -43,7 +43,7 @@ const STOPS: Readonly<Record<ParticlePaletteName, readonly Rgb[]>> = {
 // Boş kısım: sıcak gri (text.secondary ailesi)
 const NEUTRAL: Rgb = [0x6e, 0x6a, 0x62];
 // Açık tema: boş kısım krem zeminde seçilen açık gri, renkler bu oranla koyulaşır
-const NEUTRAL_LIGHT: Rgb = [0xab, 0xa2, 0x94];
+const NEUTRAL_LIGHT: Rgb = [0x9e, 0x95, 0x86];
 const LIGHT_SHADE = 0.68;
 
 // (LUT_SIZE + 1) × 3 değer, 0-255 aralığında RGB

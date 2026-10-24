@@ -23,8 +23,8 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   metin ya da `goldMuted` zemin. Mücevher tonları (yakut, safir, zümrüt, ametist, kehribar) yalnızca dolgu/çubuk/nokta;
   yazı rengi olarak kullanılmaz (kontrast < 3). Gradient, gölge, ışıma yok.
   Dopamin: ucuz = yakut, kaliteli = zümrüt. Kaçırılan gün/bozulan seri kırmızı değil `textSecondary`.
-- **Açık tema "Fildişi"** (2026-10-24): zemin `#DED8CE` → kart `#E8E3DA` → `#D3CCC0`, metin `#1D1B18`/`#5A544A`,
-  altın koyulaştırılmış `#6B5021` (metin olarak ≥ 4,7:1), mücevher tonları aynı. Varsayılan koyu. Geçiş: Bugün üst
+- **Açık tema "Fildişi"** (2026-10-24): zemin `#D3CCC1` → kart `#DDD7CD` → `#C8C0B3`, metin `#1D1B18`/`#4F493F`,
+  altın koyulaştırılmış `#5F471C` (metin olarak ≥ 4,7:1), mücevher tonları aynı. Varsayılan koyu. Geçiş: Bugün üst
   barındaki güneş/ay butonu (`ThemeToggleButton`) ve Ayarlar → Tema. Seçim cihazda (`halka.themeMode`); renkler
   açılışta bir kez uygulanır (`applyThemeMode`, `colors`/`accentTints`/`dopamineColors` yerinde güncellenir), geçişte
   uygulama yeniden yüklenir (`reloadToApply`). Açık temada parçacıklar normal karışım + koyulaştırılmış palet
