@@ -40,8 +40,8 @@ services:
     container_name: halka-web-prod
     restart: unless-stopped
     ports:
-      # Sadece 127.0.0.1'e bağlar. Dış dünyaya kapalıdır.
-      - "127.0.0.1:8080:80"
+      # Sunucudaki Nginx: halka.aegis.net.tr → 127.0.0.1:3100
+      - "127.0.0.1:3100:80"
     depends_on:
       server:
         condition: service_healthy
