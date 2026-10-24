@@ -9,9 +9,13 @@ import { activeThemeMode, colors, fonts, spacing, fontSizes } from '@core/theme/
 import { ServerStatus } from '@features/auth/presentation/components/ServerStatus';
 import { AppText } from '@presentation/components/common/AppText';
 import { Card } from '@presentation/components/common/Card';
-import { ChainRing } from '@presentation/components/ring/ChainRing';
 import { themedStyles } from '@core/theme/themed';
+import { ParticleDust } from '@presentation/particles/components/ParticleDust';
+import { ParticleHalo } from '@presentation/particles/components/ParticleHalo';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
+
+// Logo çevresindeki parçacık halkanın kutusu (px)
+const HALO_SIZE = 120;
 
 interface AuthLayoutProps {
   readonly title: string;
@@ -24,39 +28,46 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
   const isLight = themeMode === 'light' || activeThemeMode() === 'light';
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          <View style={styles.brand}>
-            <ChainRing size={120}>
-              <Image
-                source={isLight ? logoSourceLight : logoSource}
-                style={styles.logo}
-                resizeMode="contain"
-                accessibilityLabel="Halka Logo"
-              />
-            </ChainRing>
-            <AppText style={styles.brandTitle}>HALKA</AppText>
-          </View>
-          <Card style={styles.card}>
-            <AppText variant="screenTitle" accessibilityRole="header">
-              {title}
-            </AppText>
-            <AppText variant="muted">{subtitle}</AppText>
-            <View style={styles.form}>{children}</View>
-          </Card>
-          <ServerStatus />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <View style={styles.root}>
+      {/* Ortam tozu: tüm ekranın arkasında, dokunuş almaz */}
+      <ParticleDust />
+      <SafeAreaView style={styles.safe}>
+        <KeyboardAvoidingView
+          style={styles.flex}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+            <View style={styles.brand}>
+              {/* Logo, altın parçacık halkanın tam ortasında */}
+              <View style={styles.halo}>
+                <ParticleHalo size={HALO_SIZE} />
+                <Image
+                  source={isLight ? logoSourceLight : logoSource}
+                  style={styles.logo}
+                  resizeMode="contain"
+                  accessibilityLabel="Halka Logo"
+                />
+              </View>
+              <AppText style={styles.brandTitle}>HALKA</AppText>
+            </View>
+            <Card style={styles.card}>
+              <AppText variant="screenTitle" accessibilityRole="header">
+                {title}
+              </AppText>
+              <AppText variant="muted">{subtitle}</AppText>
+              <View style={styles.form}>{children}</View>
+            </Card>
+            <ServerStatus />
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = themedStyles(() => ({
-  safe: { flex: 1, backgroundColor: colors.bgPrimary },
+  root: { flex: 1, backgroundColor: colors.bgPrimary },
+  safe: { flex: 1 },
   flex: { flex: 1 },
   content: {
     flexGrow: 1,
@@ -68,6 +79,12 @@ const styles = themedStyles(() => ({
     alignSelf: 'center',
   },
   brand: { alignItems: 'center', gap: spacing.sm },
+  halo: {
+    width: HALO_SIZE,
+    height: HALO_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   logo: { width: 104, height: 104 },
   brandTitle: { fontFamily: fonts.bold, fontSize: fontSizes.xl, letterSpacing: 6 },
   card: { gap: spacing.xs, padding: spacing.xl },
