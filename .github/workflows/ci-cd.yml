@@ -19,6 +19,9 @@ jobs:
   validate:
     name: Test & Validate
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      JWT_SECRET: "test-jwt-secret-en-az-32-karakter-uzunlugunda-bir-anahtar"
     steps:
       - name: Kodları Çek
         uses: actions/checkout@v4
