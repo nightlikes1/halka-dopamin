@@ -1,6 +1,7 @@
 // Uygulama kabuğu: veri yükleme, oturum geri yükleme, pomodoro izleyici ve navigasyon
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import logoSource from '@assets/logo.png';
 import { strings } from '@core/i18n/tr';
 import { colors, spacing } from '@core/theme/tokens';
 import { useSessionRestore } from '@features/auth/presentation/useAuth';
@@ -21,7 +22,14 @@ interface AppShellProps {
 function SplashView() {
   return (
     <View style={styles.center}>
-      <ChainRing size={180} />
+      <ChainRing size={180}>
+        <Image
+          source={logoSource}
+          style={styles.splashLogo}
+          resizeMode="contain"
+          accessibilityLabel="Halka Logo"
+        />
+      </ChainRing>
       <ActivityIndicator color={colors.textMuted} />
     </View>
   );
@@ -74,5 +82,6 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
     padding: spacing.xl,
   },
+  splashLogo: { width: 156, height: 156 },
   errorText: { textAlign: 'center' },
 });

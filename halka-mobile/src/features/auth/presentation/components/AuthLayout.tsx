@@ -1,7 +1,8 @@
 // Giriş/kayıt ekranlarının ortak düzeni: marka, başlık, form, sunucu durumu
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import logoSource from '@assets/logo.png';
 import { layout } from '@core/theme/layout';
 import { colors, fonts, spacing, fontSizes } from '@core/theme/tokens';
 import { ServerStatus } from '@features/auth/presentation/components/ServerStatus';
@@ -24,7 +25,14 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
       >
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.brand}>
-            <ChainRing size={120} />
+            <ChainRing size={120}>
+              <Image
+                source={logoSource}
+                style={styles.logo}
+                resizeMode="contain"
+                accessibilityLabel="Halka Logo"
+              />
+            </ChainRing>
             <AppText style={styles.brandTitle}>HALKA</AppText>
           </View>
           <Card style={styles.card}>
@@ -54,6 +62,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   brand: { alignItems: 'center', gap: spacing.sm },
+  logo: { width: 104, height: 104 },
   brandTitle: { fontFamily: fonts.bold, fontSize: fontSizes.xl, letterSpacing: 6 },
   card: { gap: spacing.xs, padding: spacing.xl },
   form: { gap: spacing.md, marginTop: spacing.lg },

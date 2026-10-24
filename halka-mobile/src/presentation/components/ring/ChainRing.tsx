@@ -1,6 +1,6 @@
 // 32 parçalı birbirine geçen zincir halka (web'deki ring.js'in react-native-svg karşılığı).
 // CSS filtreleri (feDropShadow) yerine kaydırılmış koyu kontur ile gölge verilir.
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useEffect, useMemo, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
   cancelAnimation,
@@ -44,12 +44,14 @@ interface ChainRingProps {
   readonly size: number;
   readonly pulseKey?: number;
   readonly spinning?: boolean;
+  readonly children?: ReactNode;
 }
 
 export const ChainRing = memo(function ChainRing({
   size,
   pulseKey = 0,
   spinning = true,
+  children,
 }: ChainRingProps) {
   const { palette } = useTheme();
 
@@ -123,8 +125,8 @@ export const ChainRing = memo(function ChainRing({
   const glowInset = (size * (CENTER - RADIUS)) / VIEWBOX;
 
   return (
-    <View style={{ width: size, height: size }} pointerEvents="none">
-      <Animated.View style={[StyleSheet.absoluteFill, ringStyle]}>
+    <View style={[styles.container, { width: size, height: size }]} pointerEvents="box-none">
+      <Animated.View style={[StyleSheet.absoluteFill, ringStyle]} pointerEvents="none">
         <Svg width={size} height={size} viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}>
           <Circle
             cx={CENTER}
@@ -171,12 +173,32 @@ export const ChainRing = memo(function ChainRing({
           },
           glowStyle,
         ]}
+        pointerEvents="none"
       />
+
+      {children ? (
+        <View style={styles.centerSlot} pointerEvents="box-none">
+          {children}
+        </View>
+      ) : null}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centerSlot: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   glow: {
     position: 'absolute',
     borderWidth: 1,
