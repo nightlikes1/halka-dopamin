@@ -105,6 +105,8 @@ jobs:
           context: ./halka-mobile
           file: ./halka-mobile/Dockerfile
           push: true
+          build-args: |
+            EXPO_PUBLIC_API_URL=https://halka.aegis.net.tr/api
           tags: |
             ghcr.io/${{ steps.repo_name.outputs.REPO }}/web:latest
             ghcr.io/${{ steps.repo_name.outputs.REPO }}/web:${{ github.sha }}
