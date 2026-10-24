@@ -16,9 +16,8 @@ services:
     container_name: halka-server-prod
     restart: unless-stopped
     ports:
-      # Sadece 127.0.0.1'e bağlar. Dış dünyadan doğrudan erişilemez;
-      # yalnızca Cloudflare Zero Trust tüneli erişebilir.
-      - "127.0.0.1:3000:3000"
+      # Sunucuda 3000 dolu olduğu için 3200 kullanılır. Konteyner içi yine 3000.
+      - "127.0.0.1:3200:3000"
     env_file:
       - ./server/.env
     environment:
