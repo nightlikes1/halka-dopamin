@@ -40,22 +40,22 @@ export const obsidian = {
 } as const;
 
 // Fildişi (açık tema): sıcak krem zemin, koyu mürekkep metin. Altın koyulaştırıldı (metin olarak
-// ≥ 4,8:1); mücevher tonları aynı (yalnızca dolgu). Zemin saf krem değil, hafif gri-bej (göz yormasın).
+// ≥ 4,7:1); mücevher tonları aynı (yalnızca dolgu). Zemin saf krem değil, hafif gri-bej (göz yormasın).
 export const ivory = {
-  base: '#E9E4DB',
-  elevated: '#F2EEE7',
-  raised: '#DFD9CE',
-  borderSubtle: '#D3CCBF',
-  borderStrong: '#BDB4A5',
+  base: '#DED8CE',
+  elevated: '#E8E3DA',
+  raised: '#D3CCC0',
+  borderSubtle: '#C7BFB1',
+  borderStrong: '#B0A696',
   textPrimary: '#1D1B18',
-  textSecondary: '#625C52',
-  textDisabled: '#A69F93',
-  gold: '#735624',
-  goldLight: '#927036',
-  goldDark: '#574116',
-  goldMuted: 'rgba(115, 86, 36, 0.12)',
+  textSecondary: '#5A544A',
+  textDisabled: '#9A9286',
+  gold: '#6B5021',
+  goldLight: '#8A6831',
+  goldDark: '#503B14',
+  goldMuted: 'rgba(107, 80, 33, 0.12)',
   error: '#B4544F',
-  danger: '#9A3F3A',
+  danger: '#8F3934',
 } as const;
 
 // Ana palet (tasarım spesifikasyonundaki adlar)
@@ -149,8 +149,8 @@ const LIGHT_PALETTE: BasePalette = {
   textOnAccent: ivory.elevated,
   accent: ivory.gold,
   hairline: ivory.borderSubtle,
-  overlay: 'rgba(233, 228, 219, 0.86)',
-  scrim: 'rgba(233, 228, 219, 0.92)',
+  overlay: 'rgba(222, 216, 206, 0.86)',
+  scrim: 'rgba(222, 216, 206, 0.92)',
 };
 
 const LIGHT_EXTRAS: ThemeExtras = {
@@ -165,8 +165,8 @@ const LIGHT_EXTRAS: ThemeExtras = {
   glass: 'rgba(29, 27, 24, 0.03)',
   glassBorder: 'rgba(29, 27, 24, 0.09)',
   glassStrong: 'rgba(29, 27, 24, 0.12)',
-  glassBar: 'rgba(242, 238, 231, 0.9)',
-  glassControl: 'rgba(233, 228, 219, 0.7)',
+  glassBar: 'rgba(232, 227, 218, 0.9)',
+  glassControl: 'rgba(222, 216, 206, 0.7)',
   textDisabled: ivory.textDisabled,
   // danger açık zeminlerde ≥ 4,7:1
   error: ivory.error,
@@ -272,11 +272,11 @@ const DARK_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
 
 // Açık: elevated üzerine %20 mücevher tonu (koyu ikon bu zeminde ≥ 10:1)
 const LIGHT_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
-  amber: '#E3D6C4',
-  sapphire: '#CBCDD1',
-  amethyst: '#D4CBD1',
-  ruby: '#E1C7C4',
-  emerald: '#C8D1C8',
+  amber: '#DBCDBA',
+  sapphire: '#C3C4C7',
+  amethyst: '#CCC2C7',
+  ruby: '#D9BEBA',
+  emerald: '#C0C8BD',
 };
 
 // Aktif temanın ikon kutusu zeminleri (applyThemeMode günceller)
