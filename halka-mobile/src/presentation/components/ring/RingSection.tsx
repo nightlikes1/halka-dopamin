@@ -11,7 +11,6 @@ import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { metricIcon } from '@presentation/components/common/iconMaps';
 import { TextInputDialog } from '@presentation/components/common/TextInputDialog';
-import { ChainRing } from '@presentation/components/ring/ChainRing';
 import { CoreHub } from '@presentation/components/ring/CoreHub';
 import { MetricPill } from '@presentation/components/ring/MetricPill';
 import { ParticleHalo } from '@presentation/particles/components/ParticleHalo';
@@ -47,16 +46,14 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
     <View style={styles.container}>
       {/* Halka butonu ile isim butonu kardeş: iç içe buton olmaz; çekirdeğin boş alanı dokunuşu halkaya geçirir */}
       <View style={{ width: size, height: size }} {...handlers}>
-        {/* Zincirin arkasında parçacık hale; zincire dokununca (pulseKey) kıvılcım */}
+        {/* Parçacık hale; halkaya dokununca (pulseKey) kıvılcım */}
         <ParticleHalo size={size} burstKey={pulseKey} pointer={channel} targetRef={targetRef} />
         <Pressable
           onPress={onRingPress}
           style={StyleSheet.absoluteFill}
           accessibilityRole="button"
-          accessibilityLabel="Zincir halka"
-        >
-          <ChainRing size={size} pulseKey={pulseKey} />
-        </Pressable>
+          accessibilityLabel="Halka"
+        />
         <View style={styles.hubWrapper} pointerEvents="box-none">
           <CoreHub
             diameter={size * 0.66}

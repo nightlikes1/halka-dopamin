@@ -38,7 +38,7 @@ const haloSim: ParticleSim<RingState> = {
   },
 };
 
-// Halka çizimlerinin yarıçap / kutu oranı (ChainRing: 200 / 500)
+// Halka yarıçapı / kutu oranı (çekirdek çevresinde, ChainRing ile aynı: 200 / 500)
 const CHAIN_RADIUS_RATIO = 0.4;
 
 interface ParticleHaloProps {
