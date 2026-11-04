@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, type TextInput } from 'react-native';
+import { View, type TextInputInstance } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import {
@@ -23,7 +23,7 @@ const t = strings.auth;
 
 export function ResetPasswordScreen({ route, navigation }: RootStackScreenProps<'ResetPassword'>) {
   const { resetPassword } = useAuth();
-  const confirmPasswordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInputInstance>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 

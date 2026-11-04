@@ -7,7 +7,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 | Klasör | Ne | Durum |
 |---|---|---|
 | `halka---Kopya-main/` | Orijinal Halka web uygulaması (Vite + vanilla JS) | Referans; **dokunma** |
-| `halka-mobile/` | Expo SDK 57 + React Native 0.86 + TS strict mobil uygulama | Aktif |
+| `halka-mobile/` | Expo SDK 58 + React Native 0.88 + TS strict mobil uygulama | Aktif |
 | `server/` | Fastify 5 + Prisma 7 + Supabase PostgreSQL API | Aktif |
 
 ## Ürün kararları (kullanıcı onaylı)

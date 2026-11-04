@@ -79,11 +79,23 @@ const constant = (v) => () => v;
 const EFFECTS = {
   click: () =>
     effect(0.04, [
-      { start: 0, duration: 0.04, type: 'sine', freq: expFreq(800, 300, 0.04), gain: expGain(0.08, 0.001, 0.04) },
+      {
+        start: 0,
+        duration: 0.04,
+        type: 'sine',
+        freq: expFreq(800, 300, 0.04),
+        gain: expGain(0.08, 0.001, 0.04),
+      },
     ]),
   waterDrop: () =>
     effect(0.12, [
-      { start: 0, duration: 0.12, type: 'sine', freq: expFreq(450, 950, 0.08), gain: expGain(0.15, 0.001, 0.12) },
+      {
+        start: 0,
+        duration: 0.12,
+        type: 'sine',
+        freq: expFreq(450, 950, 0.08),
+        gain: expGain(0.15, 0.001, 0.12),
+      },
     ]),
   chime: () =>
     effect(
@@ -109,12 +121,30 @@ const EFFECTS = {
     ),
   delete: () =>
     effect(0.15, [
-      { start: 0, duration: 0.15, type: 'sawtooth', freq: expFreq(320, 110, 0.15), gain: expGain(0.08, 0.001, 0.15) },
+      {
+        start: 0,
+        duration: 0.15,
+        type: 'sawtooth',
+        freq: expFreq(320, 110, 0.15),
+        gain: expGain(0.08, 0.001, 0.15),
+      },
     ]),
   chainPulse: () =>
     effect(0.25, [
-      { start: 0, duration: 0.25, type: 'sine', freq: constant(1200), gain: expGain(0.05, 0.001, 0.25) },
-      { start: 0, duration: 0.25, type: 'triangle', freq: constant(1207), gain: expGain(0.05, 0.001, 0.25) },
+      {
+        start: 0,
+        duration: 0.25,
+        type: 'sine',
+        freq: constant(1200),
+        gain: expGain(0.05, 0.001, 0.25),
+      },
+      {
+        start: 0,
+        duration: 0.25,
+        type: 'triangle',
+        freq: constant(1207),
+        gain: expGain(0.05, 0.001, 0.25),
+      },
     ]),
   focusZoom: () =>
     effect(0.38, [
@@ -132,7 +162,13 @@ const EFFECTS = {
     ]),
   focusExit: () =>
     effect(0.25, [
-      { start: 0, duration: 0.25, type: 'sine', freq: expFreq(680, 260, 0.25), gain: expGain(0.08, 0.001, 0.25) },
+      {
+        start: 0,
+        duration: 0.25,
+        type: 'sine',
+        freq: expFreq(680, 260, 0.25),
+        gain: expGain(0.08, 0.001, 0.25),
+      },
     ]),
 };
 
@@ -154,17 +190,25 @@ function biquad(type, freq, q, rate) {
   const a0 = 1 + alpha;
   const a1 = -2 * cos;
   const a2 = 1 - alpha;
-  let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+  let x1 = 0,
+    x2 = 0,
+    y1 = 0,
+    y2 = 0;
   return (x) => {
     const y = (b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2) / a0;
-    x2 = x1; x1 = x; y2 = y1; y1 = y;
+    x2 = x1;
+    x1 = x;
+    y2 = y1;
+    y1 = y;
     return y;
   };
 }
 
 function noiseGenerator(type) {
   if (type === 'rain') {
-    let b0 = 0, b1 = 0, b2 = 0;
+    let b0 = 0,
+      b1 = 0,
+      b2 = 0;
     return () => {
       const white = Math.random() * 2 - 1;
       b0 = 0.99886 * b0 + white * 0.0555179;
@@ -188,7 +232,8 @@ function ambient(type) {
   const rate = AMBIENT_RATE;
   const total = Math.floor((AMBIENT_SECONDS + LOOP_CROSSFADE_SECONDS) * rate);
   const next = noiseGenerator(type);
-  const filter = type === 'rain' ? biquad('lowpass', 800, 0.707, rate) : biquad('bandpass', 400, 1, rate);
+  const filter =
+    type === 'rain' ? biquad('lowpass', 800, 0.707, rate) : biquad('bandpass', 400, 1, rate);
   const raw = new Float32Array(total);
   // Filtre ısınması için ilk saniyeyi at
   for (let i = 0; i < rate; i += 1) filter(next());

@@ -7,6 +7,7 @@ import {
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
+  type ScrollViewInstance,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { strings } from '@core/i18n/tr';
@@ -35,7 +36,7 @@ const DOT_HEIGHT = 3;
 export function OnboardingScreen({ navigation }: RootStackScreenProps<'Onboarding'>) {
   const { width } = useWindowDimensions();
   const [page, setPage] = useState(0);
-  const scroller = useRef<ScrollView>(null);
+  const scroller = useRef<ScrollViewInstance>(null);
   const completeOnboarding = usePreferencesStore((s) => s.completeOnboarding);
   // Ekranın her yerinde dokunma/fare girdabı etkiler (butonlar ve kaydırma normal çalışır)
   const { channel, targetRef, handlers } = useParticlePointer();

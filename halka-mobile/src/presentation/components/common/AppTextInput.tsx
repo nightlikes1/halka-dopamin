@@ -1,13 +1,13 @@
 // Tema uyumlu metin girişi (en az 44 px yükseklik)
 import { forwardRef } from 'react';
-import { TextInput, type TextInputProps } from 'react-native';
+import { TextInput, type TextInputInstance, type TextInputProps } from 'react-native';
 import { layout } from '@core/theme/layout';
 import { themedStyles } from '@core/theme/themed';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { typography } from '@core/theme/typography';
 
-export const AppTextInput = forwardRef<TextInput, TextInputProps>(function AppTextInput(
+export const AppTextInput = forwardRef<TextInputInstance, TextInputProps>(function AppTextInput(
   { style, ...rest },
   ref,
 ) {

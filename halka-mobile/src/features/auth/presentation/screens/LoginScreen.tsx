@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, type TextInput } from 'react-native';
+import { Pressable, type TextInputInstance } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { loginFormSchema, type LoginFormValues } from '@features/auth/presentation/authSchemas';
@@ -19,7 +19,7 @@ const t = strings.auth;
 
 export function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const { login } = useAuth();
-  const passwordRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInputInstance>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { control, handleSubmit, formState } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),

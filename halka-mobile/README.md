@@ -17,15 +17,15 @@ bulunur; ayrı development build gerekmez.
 
 ## Komutlar
 
-| Komut | Açıklama |
-|---|---|
-| `npm test` | Jest birim testleri (domain + data) |
-| `npm run test:coverage` | Kapsam raporu |
-| `npm run typecheck` | `tsc --noEmit` |
+| Komut                       | Açıklama                                           |
+| --------------------------- | -------------------------------------------------- |
+| `npm test`                  | Jest birim testleri (domain + data)                |
+| `npm run test:coverage`     | Kapsam raporu                                      |
+| `npm run typecheck`         | `tsc --noEmit`                                     |
 | `npm run lint` / `lint:fix` | ESLint (Expo + Prettier + katman sınırı kuralları) |
-| `npm run format` | Prettier |
-| `npm run validate` | typecheck + lint + test |
-| `npm run generate:sounds` | `assets/sounds/*.wav` dosyalarını yeniden üretir |
+| `npm run format`            | Prettier                                           |
+| `npm run validate`          | typecheck + lint + test                            |
+| `npm run generate:sounds`   | `assets/sounds/*.wav` dosyalarını yeniden üretir   |
 
 ## Mimari
 

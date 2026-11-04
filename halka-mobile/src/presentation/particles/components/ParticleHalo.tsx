@@ -2,7 +2,7 @@
 // şekilde ölçeklenir. burstKey değişince halkanın ucundan kıvılcım çıkar. Katman dokunuş almaz
 // (box-none); dokunma/sürükleme `pointer` kanalıyla, olayları dinleyen ata görünümden gelir.
 import { useMemo, type Ref } from 'react';
-import { View } from 'react-native';
+import { View, type ViewInstance } from 'react-native';
 import { themedStyles } from '@core/theme/themed';
 import {
   HALO_DUST,
@@ -50,7 +50,7 @@ interface ParticleHaloProps {
   readonly palette?: ParticlePaletteName;
   readonly pointer?: PointerChannel;
   // useParticlePointer'ın targetRef'i (dokunuş konumu bu pencereye göre çevrilir)
-  readonly targetRef?: Ref<View>;
+  readonly targetRef?: Ref<ViewInstance>;
 }
 
 export function ParticleHalo({

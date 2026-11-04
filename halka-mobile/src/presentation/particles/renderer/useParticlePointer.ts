@@ -7,7 +7,7 @@ import {
   Platform,
   type GestureResponderEvent,
   type PointerEvent,
-  type View,
+  type ViewInstance,
   type ViewProps,
 } from 'react-native';
 import { useReducedMotion, useSharedValue } from 'react-native-reanimated';
@@ -28,7 +28,7 @@ type PointerHandlers = Pick<
 
 interface ParticlePointer {
   readonly channel: PointerChannel;
-  readonly targetRef: React.RefObject<View | null>;
+  readonly targetRef: React.RefObject<ViewInstance | null>;
   readonly handlers: PointerHandlers;
 }
 
@@ -48,7 +48,7 @@ export function useParticlePointer(
 ): ParticlePointer {
   const reduced = useReducedMotion();
   const channel = useSharedValue<readonly number[]>(IDLE);
-  const targetRef = useRef<View | null>(null);
+  const targetRef = useRef<ViewInstance | null>(null);
   const origin = useRef<Origin>({ x: 0, y: 0, scale: 1 });
   const serial = useRef(0);
   const measuredAt = useRef(0);
@@ -80,7 +80,7 @@ export function useParticlePointer(
         run();
         return;
       }
-      target.measureInWindow((x, y, width) => {
+      target.measureInWindow((x: number, y: number, width: number) => {
         origin.current = { x, y, scale: width > 0 ? width / referenceWidth : 1 };
         measuredAt.current = Date.now();
         run();

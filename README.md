@@ -4,7 +4,7 @@ Halka panosunun React Native sürümü ve üzerine eklenen "Boş Vakit & Dopamin
 
 | Klasör | İçerik |
 |---|---|
-| [`halka-mobile/`](halka-mobile) | Expo SDK 57 + React Native + TypeScript (strict) mobil uygulama, Clean Architecture |
+| [`halka-mobile/`](halka-mobile) | Expo SDK 58 + React Native + TypeScript (strict) mobil uygulama, Clean Architecture |
 | [`server/`](server) | Fastify + Prisma 7 + Supabase PostgreSQL API (giriş, alışkanlıklar, akşam check-in, gün notları) |
 | [`halka---Kopya-main/`](halka---Kopya-main) | Orijinal Halka web uygulaması (Vite + JS) — referans |
 

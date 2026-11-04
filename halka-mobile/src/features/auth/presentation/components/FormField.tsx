@@ -1,6 +1,6 @@
 // Etiketli form alanı (react-hook-form Controller ile kullanılır)
 import { forwardRef } from 'react';
-import { View, type TextInput, type TextInputProps } from 'react-native';
+import { View, type TextInputInstance, type TextInputProps } from 'react-native';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
@@ -11,7 +11,7 @@ interface FormFieldProps extends TextInputProps {
   readonly error?: string;
 }
 
-export const FormField = forwardRef<TextInput, FormFieldProps>(function FormField(
+export const FormField = forwardRef<TextInputInstance, FormFieldProps>(function FormField(
   { label, error, ...inputProps },
   ref,
 ) {
@@ -38,6 +38,6 @@ export const FormField = forwardRef<TextInput, FormFieldProps>(function FormFiel
 const styles = themedStyles(() => ({
   field: { gap: spacing.xs },
   label: { color: colors.textMuted },
-  inputError: { borderColor: colors.error },
-  error: { color: colors.danger, fontSize: fontSizes.xs },
+  inputError: { borderColor: colors.ruby },
+  error: { color: colors.ruby, fontSize: fontSizes.xs },
 }));

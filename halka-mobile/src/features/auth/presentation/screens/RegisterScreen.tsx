@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { type TextInput } from 'react-native';
+import { type TextInputInstance } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes } from '@core/theme/tokens';
 import {
@@ -22,8 +22,8 @@ const t = strings.auth;
 
 export function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
   const { register } = useAuth();
-  const emailRef = useRef<TextInput>(null);
-  const passwordRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInputInstance>(null);
+  const passwordRef = useRef<TextInputInstance>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { control, handleSubmit, formState } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
