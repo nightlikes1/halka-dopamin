@@ -12,11 +12,17 @@ export const loginFormSchema = z.object({
 });
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
-export const registerFormSchema = z.object({
-  email,
-  password: z.string().min(8, t.passwordTooShort).max(128),
-  displayName: z.string().trim().max(40, t.displayNameTooLong),
-});
+export const registerFormSchema = z
+  .object({
+    displayName: z.string().trim().max(40, t.displayNameTooLong),
+    email,
+    password: z.string().min(8, t.passwordTooShort).max(128),
+    confirmPassword: z.string().min(1, t.passwordRequired),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: t.passwordsDoNotMatch,
+    path: ['confirmPassword'],
+  });
 export type RegisterFormValues = z.infer<typeof registerFormSchema>;
 
 export const forgotPasswordFormSchema = z.object({
