@@ -24,14 +24,21 @@ export function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>)
   const { register } = useAuth();
   const emailRef = useRef<TextInputInstance>(null);
   const passwordRef = useRef<TextInputInstance>(null);
+  const confirmPasswordRef = useRef<TextInputInstance>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { control, handleSubmit, formState } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
-    defaultValues: { displayName: '', email: '', password: '' },
+    defaultValues: { displayName: '', email: '', password: '', confirmPassword: '' },
   });
 
   const submit = handleSubmit(async (values) => {
-    setSubmitError(await register(values));
+    setSubmitError(
+      await register({
+        displayName: values.displayName || undefined,
+        email: values.email,
+        password: values.password,
+      }),
+    );
   });
 
   return (
@@ -85,6 +92,25 @@ export function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>)
             onChangeText={onChange}
             onBlur={onBlur}
             error={formState.errors.password?.message}
+            secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="next"
+            onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="confirmPassword"
+        render={({ field: { value, onChange, onBlur } }) => (
+          <FormField
+            ref={confirmPasswordRef}
+            label={t.confirmPasswordRegister}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={formState.errors.confirmPassword?.message}
             secureTextEntry
             autoComplete="new-password"
             textContentType="newPassword"

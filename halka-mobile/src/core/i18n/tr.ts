@@ -535,6 +535,7 @@ export const tr = {
     resetPasswordSubtitle: 'Hesabın için yeni ve güçlü bir şifre belirle.',
     newPassword: 'Yeni şifre',
     confirmPassword: 'Yeni şifreyi onayla',
+    confirmPasswordRegister: 'Şifre tekrarı',
     passwordsDoNotMatch: 'Şifreler birbiriyle eşleşmiyor.',
     resetPasswordSuccess: 'Şifren başarıyla güncellendi! Yeni şifrenle giriş yapabilirsin.',
     updatePassword: 'Şifreyi Güncelle',
