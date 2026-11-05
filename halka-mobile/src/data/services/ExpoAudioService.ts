@@ -15,7 +15,7 @@ import waterDropSound from '@assets/sounds/waterDrop.wav';
 import { AudioFailure } from '@core/errors/Failure';
 import { err, okVoid, type AsyncResult, type Result } from '@core/result/Result';
 import type { AmbientType, SoundEffect } from '@domain/entities/Audio';
-import type { AudioPort } from '@domain/ports/AudioPort';
+import type { AudioPort } from '@domain/ports';
 
 const EFFECT_SOURCES: Record<SoundEffect, number> = {
   click: clickSound,

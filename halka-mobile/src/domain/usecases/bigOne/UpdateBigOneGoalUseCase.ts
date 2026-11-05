@@ -2,11 +2,11 @@
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
 import { BIG_ONE_GOAL_MAX_LENGTH, type BigOne } from '@domain/entities/BigOne';
-import type { IBigOneRepository } from '@domain/repositories/IBigOneRepository';
+import type { IEntityRepository } from '@domain/ports';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export class UpdateBigOneGoalUseCase {
-  constructor(private readonly repository: IBigOneRepository) {}
+  constructor(private readonly repository: IEntityRepository<BigOne>) {}
 
   async execute(goal: string): AsyncResult<BigOne> {
     const trimmed = goal.trim();

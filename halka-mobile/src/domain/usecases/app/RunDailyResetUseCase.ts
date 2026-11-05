@@ -1,8 +1,6 @@
 // Yeni güne geçildiyse günlük sayaçları sıfırlar; sıfırlama yapıldıysa true döner
 import { ok, okVoid, type AsyncResult, type Result } from '@core/result/Result';
-import { todayOf, type Clock } from '@domain/ports/Clock';
-import type { IEntityRepository } from '@domain/repositories/IEntityRepository';
-import type { Repositories } from '@domain/repositories/Repositories';
+import { type Clock, type IEntityRepository, type Repositories, todayOf } from '@domain/ports';
 import {
   resetBigOneForNewDay,
   resetBudgetForNewDay,

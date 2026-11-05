@@ -1,6 +1,6 @@
 // Çalan ortam sesini durdurur
 import type { AsyncResult } from '@core/result/Result';
-import type { AudioPort } from '@domain/ports/AudioPort';
+import type { AudioPort } from '@domain/ports';
 
 export class StopAmbientUseCase {
   constructor(private readonly audio: AudioPort) {}

@@ -1,6 +1,6 @@
 // Ortak akış: oku -> kuralı uygula -> kaydet -> yeni değeri döndür
 import { ok, type AsyncResult, type Result } from '@core/result/Result';
-import type { IEntityRepository } from '@domain/repositories/IEntityRepository';
+import type { IEntityRepository } from '@domain/ports';
 
 export async function updateEntity<T>(
   repository: IEntityRepository<T>,

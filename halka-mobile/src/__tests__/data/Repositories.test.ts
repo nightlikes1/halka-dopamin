@@ -1,9 +1,8 @@
 // Repository implementasyonu testleri (gerçek datasource + bellek içi depolama)
 import { FakeClock, InMemoryKeyValueStorage, TEST_NOW } from '../fakes/fakes';
-import { STORAGE_KEY } from '@core/constants/storage';
-import { createDefaultStorageDto } from '@data/datasources/createDefaultStorageDto';
-import { HalkaLocalDataSource } from '@data/datasources/HalkaLocalDataSource';
-import { createRepositories, WaterRepository } from '@data/repositories/repositories';
+import { HalkaLocalDataSource, STORAGE_KEY } from '@data/storage';
+import { createDefaultStorageDto } from '@data/mappers';
+import { createRepositories } from '@data/repositories';
 
 const setup = () => {
   const storage = new InMemoryKeyValueStorage();
@@ -16,7 +15,7 @@ const setup = () => {
 describe('SliceRepository', () => {
   it('entity yi kaydeder ve tekrar okur', async () => {
     const { dataSource } = setup();
-    const repository = new WaterRepository(dataSource);
+    const repository = createRepositories(dataSource).water;
 
     await repository.save({ current: 750, target: 2000 });
     const result = await repository.get();
@@ -43,7 +42,7 @@ describe('SliceRepository', () => {
     const { dataSource, storage } = setup();
     storage.failOnRead = true;
 
-    const result = await new WaterRepository(dataSource).get();
+    const result = await createRepositories(dataSource).water.get();
 
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.kind).toBe('storage');
@@ -53,7 +52,7 @@ describe('SliceRepository', () => {
     const { dataSource, storage } = setup();
     storage.failOnWrite = true;
 
-    const result = await new WaterRepository(dataSource).save({ current: 1, target: 1 });
+    const result = await createRepositories(dataSource).water.save({ current: 1, target: 1 });
 
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.kind).toBe('storage');

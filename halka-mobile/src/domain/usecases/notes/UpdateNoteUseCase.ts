@@ -2,11 +2,11 @@
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
 import { NOTE_MAX_LENGTH, type Note } from '@domain/entities/Note';
-import type { INotesRepository } from '@domain/repositories/INotesRepository';
+import type { IEntityRepository } from '@domain/ports';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export class UpdateNoteUseCase {
-  constructor(private readonly repository: INotesRepository) {}
+  constructor(private readonly repository: IEntityRepository<Note>) {}
 
   async execute(content: string): AsyncResult<Note> {
     if (content.length > NOTE_MAX_LENGTH) {

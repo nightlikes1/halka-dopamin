@@ -13,12 +13,14 @@ import type {
   ResetPasswordInput,
 } from '@features/auth/domain/entities';
 import type { AuthRepository } from '@features/auth/domain/ports';
-import { ForgotPasswordUseCase } from '@features/auth/domain/usecases/ForgotPasswordUseCase';
-import { LoginUseCase } from '@features/auth/domain/usecases/LoginUseCase';
-import { LogoutUseCase } from '@features/auth/domain/usecases/LogoutUseCase';
-import { RegisterUseCase } from '@features/auth/domain/usecases/RegisterUseCase';
-import { ResetPasswordUseCase } from '@features/auth/domain/usecases/ResetPasswordUseCase';
-import { RestoreSessionUseCase } from '@features/auth/domain/usecases/RestoreSessionUseCase';
+import {
+  ForgotPasswordUseCase,
+  LoginUseCase,
+  LogoutUseCase,
+  RegisterUseCase,
+  ResetPasswordUseCase,
+  RestoreSessionUseCase,
+} from '@features/auth/domain/usecases/AuthUseCases';
 
 const USER: AuthUser = { id: 'u1', email: 'ada@ornek.com', displayName: 'Ada' };
 const SESSION: AuthSession = { token: 'jwt-token', user: USER };

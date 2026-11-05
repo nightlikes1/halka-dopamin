@@ -1,13 +1,12 @@
 // Sesleri açar/kapatır; tercih kalıcı olarak saklanır
 import { ok, type AsyncResult } from '@core/result/Result';
 import type { Profile } from '@domain/entities/Profile';
-import type { AudioPort } from '@domain/ports/AudioPort';
-import type { IProfileRepository } from '@domain/repositories/IProfileRepository';
+import type { AudioPort, IEntityRepository } from '@domain/ports';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export class ToggleSoundUseCase {
   constructor(
-    private readonly repository: IProfileRepository,
+    private readonly repository: IEntityRepository<Profile>,
     private readonly audio: AudioPort,
   ) {}
 

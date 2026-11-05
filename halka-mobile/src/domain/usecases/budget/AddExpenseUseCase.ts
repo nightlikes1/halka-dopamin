@@ -9,8 +9,7 @@ import {
   type Budget,
   type Expense,
 } from '@domain/entities/Budget';
-import type { Clock } from '@domain/ports/Clock';
-import type { IBudgetRepository } from '@domain/repositories/IBudgetRepository';
+import type { Clock, IEntityRepository } from '@domain/ports';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export interface AddExpenseInput {
@@ -20,7 +19,7 @@ export interface AddExpenseInput {
 
 export class AddExpenseUseCase {
   constructor(
-    private readonly repository: IBudgetRepository,
+    private readonly repository: IEntityRepository<Budget>,
     private readonly clock: Clock,
   ) {}
 

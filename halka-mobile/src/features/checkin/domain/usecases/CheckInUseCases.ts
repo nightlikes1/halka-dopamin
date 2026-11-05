@@ -2,7 +2,7 @@
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
 import { addDays } from '@core/utils/date';
-import { todayOf, type Clock } from '@domain/ports/Clock';
+import { type Clock, todayOf } from '@domain/ports';
 import {
   computeDailyBalance,
   isTroubledDay,

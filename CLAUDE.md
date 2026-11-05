@@ -82,9 +82,17 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 ```
 core/          DI container (composition root), Failure/Result, api/ (axios + toFailure), i18n/tr.ts, theme/, utils/
 domain/ data/ presentation/   ← Halka panosu (katman bazlı Clean Architecture)
+  domain/ports.ts              repository sözleşmesi (`IEntityRepository<T>`, `Repositories`), AudioPort, ClipboardPort, Clock
+  data/storage.ts              anahtar, JSON şeması (DTO), ayrıştırma, HalkaLocalDataSource
+  data/mappers.ts              DTO ↔ Entity dönüşümleri (bozuk veriyi düzeltir), varsayılan DTO
+  data/repositories.ts         tek `SliceRepository` + `createRepositories`
 features/<ad>/{domain,data,presentation}   ← yeni özellikler (özellik bazlı, içi katmanlı)
   auth/ activities/ focus/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
 ```
+
+- Dosya düzeni: birlikte değişen kısa kodlar tek dosyada durur (`features/*/domain/usecases/<Ad>UseCases.ts`, `ports.ts`);
+  tek satırlık takma ad ya da gövdesiz sınıf için yeni dosya açılmaz.
+- Cihazdaki kayıt biçimi (`STORAGE_KEY`, alan adları) değişmez; değişirse kullanıcı verisi için geçiş yazılır.
 
 - Bağımlılık kuralı: `domain` (ve `features/*/domain`) React/RN/Expo/zod/`@data`/`@presentation` import edemez — ESLint zorlar.
 - try/catch yalnızca data katmanında; üst katmanlar `Result<T>` görür. HTTP hataları `toFailure()` ile `network | auth | validation | server`.
@@ -150,7 +158,7 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
 
 Tema dosyaları `halka-mobile/src/core/theme/` (tek kaynak; `src/presentation/theme` yok):
 `tokens.ts` (renk, boşluk, yarıçap, font), `typography.ts` (metin varyantları), `motion.ts` (eğri, süre, gecikme),
-`elevation.ts` (gölge/parlama), `layout.ts` (kenar boşluğu, genişlik, dokunma alanı), `palettes.ts` (`withAlpha`,
+`layout.ts` (kenar boşluğu, genişlik, dokunma alanı), `palettes.ts` (`withAlpha`,
 Halka zincir paleti), `themed.ts` (temaya bağlı modül sabitleri). Ekran ve bileşenlerde sabit değer yazılmaz; hep bu
 dosyalardan okunur. Stil dosyaları `StyleSheet.create` yerine **`themedStyles(() => ({ ... }))`** kullanır; modül
 düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)` ile sarılır ya da render içinde okunur.

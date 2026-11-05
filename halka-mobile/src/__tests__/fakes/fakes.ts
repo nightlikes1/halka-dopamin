@@ -1,14 +1,16 @@
 // Testlerde kullanılan sahte (fake) uygulamalar
 import { AudioFailure, StorageFailure } from '@core/errors/Failure';
 import { err, ok, okVoid, type AsyncResult, type Result } from '@core/result/Result';
-import type { KeyValueStorage } from '@data/datasources/KeyValueStorage';
+import type { KeyValueStorage } from '@data/storage';
+import type {
+  AudioPort,
+  ClipboardPort,
+  Clock,
+  IEntityRepository,
+  Repositories,
+} from '@domain/ports';
 import type { AmbientType, SoundEffect } from '@domain/entities/Audio';
 import type { HalkaSnapshot } from '@domain/entities/HalkaSnapshot';
-import type { AudioPort } from '@domain/ports/AudioPort';
-import type { ClipboardPort } from '@domain/ports/ClipboardPort';
-import type { Clock } from '@domain/ports/Clock';
-import type { IEntityRepository } from '@domain/repositories/IEntityRepository';
-import type { Repositories } from '@domain/repositories/Repositories';
 
 // Bellek içi repository; hata senaryoları için açılıp kapatılabilir
 export class InMemoryRepository<T> implements IEntityRepository<T> {

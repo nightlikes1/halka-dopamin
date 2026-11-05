@@ -1,7 +1,7 @@
 // Potansiyel Karakterim use case'leri
 import { ok, type AsyncResult } from '@core/result/Result';
 import { addDays } from '@core/utils/date';
-import { todayOf, type Clock } from '@domain/ports/Clock';
+import { type Clock, todayOf } from '@domain/ports';
 import type { CheckInRepository } from '@features/checkin/domain/ports';
 import type { Character, CharacterDraft, Trait } from '@features/character/domain/entities';
 import type { CharacterRepository } from '@features/character/domain/ports';

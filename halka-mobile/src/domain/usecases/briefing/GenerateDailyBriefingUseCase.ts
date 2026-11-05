@@ -1,7 +1,7 @@
 // Merkezdeki günlük özeti üretir
 import type { DailyBriefing } from '@domain/entities/Briefing';
 import type { HalkaSnapshot } from '@domain/entities/HalkaSnapshot';
-import type { Clock } from '@domain/ports/Clock';
+import type { Clock } from '@domain/ports';
 import { generateDailyBriefing } from '@domain/services/briefingGenerator';
 
 export class GenerateDailyBriefingUseCase {

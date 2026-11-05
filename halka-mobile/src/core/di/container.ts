@@ -1,16 +1,21 @@
 // Manuel DI container: tüm bağımlılıklar burada tek noktada kurulur (composition root)
 import { resolveApiBaseUrl } from '@core/api/apiConfig';
 import { createHttpClient } from '@core/api/httpClient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { BrowserKeyValueStore } from '@features/auth/data/BrowserKeyValueStore';
 import { HttpAuthRepository } from '@features/auth/data/HttpAuthRepository';
-import { SecureSessionStorage } from '@features/auth/data/SecureSessionStorage';
-import { ForgotPasswordUseCase } from '@features/auth/domain/usecases/ForgotPasswordUseCase';
-import { LoginUseCase } from '@features/auth/domain/usecases/LoginUseCase';
-import { LogoutUseCase } from '@features/auth/domain/usecases/LogoutUseCase';
-import { RegisterUseCase } from '@features/auth/domain/usecases/RegisterUseCase';
-import { ResetPasswordUseCase } from '@features/auth/domain/usecases/ResetPasswordUseCase';
-import { RestoreSessionUseCase } from '@features/auth/domain/usecases/RestoreSessionUseCase';
+import {
+  BrowserKeyValueStore,
+  SecureSessionStorage,
+} from '@features/auth/data/SecureSessionStorage';
+import {
+  ForgotPasswordUseCase,
+  LoginUseCase,
+  LogoutUseCase,
+  RegisterUseCase,
+  ResetPasswordUseCase,
+  RestoreSessionUseCase,
+} from '@features/auth/domain/usecases/AuthUseCases';
 import { HttpCharacterRepository } from '@features/character/data/HttpCharacterRepository';
 import {
   DeleteCharacterUseCase,
@@ -41,17 +46,13 @@ import {
   GetMonthHistoryUseCase,
   SaveDayNoteUseCase,
 } from '@features/history/domain/usecases/HistoryUseCases';
-import { AsyncStorageKeyValueStorage } from '@data/datasources/AsyncStorageKeyValueStorage';
-import { createDefaultStorageDto } from '@data/datasources/createDefaultStorageDto';
-import { HalkaLocalDataSource } from '@data/datasources/HalkaLocalDataSource';
-import type { KeyValueStorage } from '@data/datasources/KeyValueStorage';
-import { createRepositories } from '@data/repositories/repositories';
+import { createDefaultStorageDto } from '@data/mappers';
+import { createRepositories } from '@data/repositories';
 import { ExpoAudioService } from '@data/services/ExpoAudioService';
 import { ExpoClipboardService } from '@data/services/ExpoClipboardService';
 import { SystemClock } from '@data/services/SystemClock';
-import type { AudioPort } from '@domain/ports/AudioPort';
-import type { ClipboardPort } from '@domain/ports/ClipboardPort';
-import type { Clock } from '@domain/ports/Clock';
+import { HalkaLocalDataSource, type KeyValueStorage } from '@data/storage';
+import type { AudioPort, ClipboardPort, Clock } from '@domain/ports';
 import { InitializeAppUseCase } from '@domain/usecases/app/InitializeAppUseCase';
 import { LoadSnapshotUseCase } from '@domain/usecases/app/LoadSnapshotUseCase';
 import { RunDailyResetUseCase } from '@domain/usecases/app/RunDailyResetUseCase';
@@ -101,7 +102,7 @@ type UnauthorizedListener = () => void;
 
 export function createContainer(overrides: Partial<ContainerDependencies> = {}) {
   const clock = overrides.clock ?? new SystemClock();
-  const storage = overrides.storage ?? new AsyncStorageKeyValueStorage();
+  const storage = overrides.storage ?? AsyncStorage;
   const audio = overrides.audio ?? new ExpoAudioService();
   const clipboard = overrides.clipboard ?? new ExpoClipboardService();
   const apiBaseUrl = overrides.apiBaseUrl ?? resolveApiBaseUrl();

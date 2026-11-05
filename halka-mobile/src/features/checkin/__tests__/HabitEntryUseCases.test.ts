@@ -1,5 +1,5 @@
 import { okVoid, ok, type AsyncResult } from '@core/result/Result';
-import type { Clock } from '@domain/ports/Clock';
+import type { Clock } from '@domain/ports';
 import type { DatedHabitCheck } from '@features/checkin/domain/entities';
 import type { HabitEntryRepository } from '@features/checkin/domain/ports';
 import {

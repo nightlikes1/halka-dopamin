@@ -1,7 +1,7 @@
 // Notu panoya kopyalar
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, type AsyncResult } from '@core/result/Result';
-import type { ClipboardPort } from '@domain/ports/ClipboardPort';
+import type { ClipboardPort } from '@domain/ports';
 
 export class CopyNoteUseCase {
   constructor(private readonly clipboard: ClipboardPort) {}

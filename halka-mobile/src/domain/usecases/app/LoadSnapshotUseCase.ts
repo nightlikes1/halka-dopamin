@@ -1,7 +1,7 @@
 // Tüm kalıcı durumu tek seferde yükler
 import { ok, type AsyncResult } from '@core/result/Result';
 import type { HalkaSnapshot } from '@domain/entities/HalkaSnapshot';
-import type { Repositories } from '@domain/repositories/Repositories';
+import type { Repositories } from '@domain/ports';
 
 export class LoadSnapshotUseCase {
   constructor(private readonly repositories: Repositories) {}

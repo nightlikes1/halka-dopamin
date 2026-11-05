@@ -2,11 +2,11 @@
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
 import { PROFILE_NAME_MAX_LENGTH, type Profile } from '@domain/entities/Profile';
-import type { IProfileRepository } from '@domain/repositories/IProfileRepository';
+import type { IEntityRepository } from '@domain/ports';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export class UpdateUserNameUseCase {
-  constructor(private readonly repository: IProfileRepository) {}
+  constructor(private readonly repository: IEntityRepository<Profile>) {}
 
   async execute(name: string): AsyncResult<Profile> {
     const trimmed = name.trim();

@@ -1,7 +1,7 @@
 // Açılış akışı: günlük sıfırlama -> durumu yükle -> ses tercihini uygula
 import type { AsyncResult } from '@core/result/Result';
 import type { HalkaSnapshot } from '@domain/entities/HalkaSnapshot';
-import type { AudioPort } from '@domain/ports/AudioPort';
+import type { AudioPort } from '@domain/ports';
 import type { LoadSnapshotUseCase } from '@domain/usecases/app/LoadSnapshotUseCase';
 import type { RunDailyResetUseCase } from '@domain/usecases/app/RunDailyResetUseCase';
 

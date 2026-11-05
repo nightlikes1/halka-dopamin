@@ -1,14 +1,13 @@
 // Bugünkü halkayı zincire ekler (günde bir kez)
 import type { AsyncResult } from '@core/result/Result';
 import type { Streak } from '@domain/entities/Streak';
-import { todayOf, type Clock } from '@domain/ports/Clock';
-import type { IStreakRepository } from '@domain/repositories/IStreakRepository';
+import { type Clock, type IEntityRepository, todayOf } from '@domain/ports';
 import { checkInStreak } from '@domain/services/streakRules';
 import { updateEntity } from '@domain/usecases/shared/updateEntity';
 
 export class CheckInStreakUseCase {
   constructor(
-    private readonly repository: IStreakRepository,
+    private readonly repository: IEntityRepository<Streak>,
     private readonly clock: Clock,
   ) {}
 

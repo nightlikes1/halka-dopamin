@@ -1,9 +1,11 @@
 // DTO <-> Entity mapper testleri
-import { layoutMapper } from '@data/mappers/layoutMapper';
-import { moodMapper } from '@data/mappers/moodMapper';
-import { pomodoroMapper } from '@data/mappers/pomodoroMapper';
-import { profileMapper } from '@data/mappers/profileMapper';
-import { streakMapper } from '@data/mappers/streakMapper';
+import {
+  layoutMapper,
+  moodMapper,
+  pomodoroMapper,
+  profileMapper,
+  streakMapper,
+} from '@data/mappers';
 import { DEFAULT_POMODORO_DURATIONS, type Pomodoro } from '@domain/entities/Pomodoro';
 
 describe('profileMapper', () => {

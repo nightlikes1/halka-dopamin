@@ -2,7 +2,7 @@
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
 import type { AmbientType } from '@domain/entities/Audio';
-import type { AudioPort } from '@domain/ports/AudioPort';
+import type { AudioPort } from '@domain/ports';
 
 export class ToggleAmbientUseCase {
   constructor(private readonly audio: AudioPort) {}

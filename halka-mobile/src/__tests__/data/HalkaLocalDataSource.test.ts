@@ -1,8 +1,7 @@
 // Yerel veri kaynağı testleri
 import { FakeClock, InMemoryKeyValueStorage, TEST_NOW } from '../fakes/fakes';
-import { STORAGE_KEY } from '@core/constants/storage';
-import { createDefaultStorageDto } from '@data/datasources/createDefaultStorageDto';
-import { HalkaLocalDataSource } from '@data/datasources/HalkaLocalDataSource';
+import { HalkaLocalDataSource, STORAGE_KEY } from '@data/storage';
+import { createDefaultStorageDto } from '@data/mappers';
 
 const createDataSource = (storage: InMemoryKeyValueStorage) =>
   new HalkaLocalDataSource(storage, () => createDefaultStorageDto(new FakeClock(TEST_NOW)));
