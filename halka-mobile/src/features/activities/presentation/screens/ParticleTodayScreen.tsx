@@ -22,8 +22,10 @@ import { CheckInCard } from '@features/checkin/presentation/components/CheckInCa
 import { useCheckInOverview } from '@features/checkin/presentation/useCheckInOverview';
 import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
+import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
+import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { PillButton } from '@presentation/components/common/PillButton';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
@@ -67,10 +69,11 @@ export function ParticleTodayScreen() {
   const { currentStreak } = useStreak();
   const { water, progress: waterProgress, add: addWater } = useWater();
   const pomodoro = useSnapshotSlice('pomodoro');
-  const { habits, entries, statusOf, mark, error } = useTodayHabits();
+  const { habits, entries, statusOf, mark, error, isEmpty } = useTodayHabits();
   const { state: overviewState } = useCheckInOverview();
   const { overview: character, reload: reloadCharacter } = useCharacter();
   const [burstKey, setBurstKey] = useState(0);
+  const [adding, setAdding] = useState(false);
 
   // Yakınlık check-in ve alışkanlık değişince güncellenir
   useFocusEffect(
@@ -154,22 +157,31 @@ export function ParticleTodayScreen() {
         </GlassCard>
       </Appear>
 
-      {/* Sıradakiler */}
+      {/* Alışkanlıklar: ekleme bu ekrandan çıkmadan, düzenleme ayrı sayfada */}
       <Appear delay={staggers.list} style={styles.section}>
         <View style={styles.sectionHeader}>
-          <AppText variant="section" accessibilityRole="header">
-            {p.upNext}
+          <AppText variant="section" accessibilityRole="header" style={styles.sectionTitle}>
+            {t.habitsCardTitle}
           </AppText>
-          <ScalePressable
-            onPress={() => navigation.navigate('Habits')}
-            accessibilityRole="link"
-            accessibilityLabel={`${p.upNext}: ${t.seeAll}`}
-            hitSlop={12}
-          >
-            <AppText variant="label" style={styles.link}>
-              {t.seeAll}
-            </AppText>
-          </ScalePressable>
+          {habits.length > 0 ? (
+            <ScalePressable
+              onPress={() => navigation.navigate('Habits')}
+              accessibilityRole="link"
+              accessibilityLabel={`${t.habitsCardTitle}: ${t.manageHabits}`}
+              hitSlop={12}
+            >
+              <AppText variant="label" style={styles.link}>
+                {t.manageHabits}
+              </AppText>
+            </ScalePressable>
+          ) : null}
+          <Chip
+            label={strings.habits.add}
+            icon="plus"
+            variant="primary"
+            accessibilityLabel={t.addHabit}
+            onPress={() => setAdding(true)}
+          />
         </View>
 
         {habits.map((habit, index) => {
@@ -210,18 +222,9 @@ export function ParticleTodayScreen() {
           }}
         />
 
-        {habits.length === 0 ? (
+        {isEmpty ? (
           <GlassCard style={styles.empty}>
             <AppText variant="muted">{t.noHabits}</AppText>
-            <ScalePressable
-              onPress={() => navigation.navigate('Habits')}
-              accessibilityRole="link"
-              hitSlop={12}
-            >
-              <AppText variant="label" style={styles.link}>
-                {t.addHabit}
-              </AppText>
-            </ScalePressable>
           </GlassCard>
         ) : null}
 
@@ -248,6 +251,7 @@ export function ParticleTodayScreen() {
           />
         ) : null}
       </Appear>
+      <AddHabitSheet visible={adding} onClose={() => setAdding(false)} />
     </Screen>
   );
 }
@@ -275,11 +279,8 @@ const styles = themedStyles(() => ({
   stats: { flexDirection: 'row', gap: spacing.smd, marginTop: -spacing.xxl },
   stat: { flex: 1, alignItems: 'center', gap: spacing.xxs },
   section: { gap: spacing.smd },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  sectionTitle: { flex: 1 },
   link: { color: colors.textPrimary, textDecorationLine: 'underline' },
   empty: { gap: spacing.sm },
   error: { color: colors.danger },

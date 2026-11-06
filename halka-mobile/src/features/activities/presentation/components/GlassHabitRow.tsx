@@ -52,9 +52,14 @@ export function GlassHabitRow({
       >
         {done ? (
           <Icon name="check" size={20} color={colors.ink} />
-        ) : actionIcon ? (
-          <Icon name={actionIcon} size={18} color={colors.textPrimary} />
-        ) : null}
+        ) : (
+          // Soluk tik: boş daireye dokununca işaretleneceği anlaşılsın
+          <Icon
+            name={actionIcon ?? 'check'}
+            size={18}
+            color={actionIcon ? colors.textPrimary : colors.textDisabled}
+          />
+        )}
       </ScalePressable>
     </View>
   );

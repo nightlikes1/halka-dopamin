@@ -113,6 +113,13 @@ export const tr = {
   },
   habits: {
     title: 'Alışkanlıklarım',
+    addTitle: 'Yeni alışkanlık',
+    addCta: 'Alışkanlığı ekle',
+    adding: 'Ekleniyor…',
+    kindLabel: 'Alışkanlık türü',
+    kindBuild: 'Yapmak istiyorum',
+    kindQuit: 'Azaltmak istiyorum',
+    titleLabel: 'Alışkanlığın adı',
     buildTitle: 'Yapmak istediklerim',
     quitTitle: 'Azaltmak istediklerim',
     buildPlaceholder: 'Ör. Günde 20 sayfa kitap',

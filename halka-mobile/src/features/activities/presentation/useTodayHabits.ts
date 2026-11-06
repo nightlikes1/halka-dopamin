@@ -1,7 +1,7 @@
 // Bugün ekranı alışkanlık ViewModel'i: alışkanlıklar + bugünün işaretleri; dokununca anında
 // işaretler (iyimser güncelleme), sunucu hata verirse geri alır.
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { HabitCheck } from '@features/checkin/domain/entities';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
 import { useHabits } from '@features/habits/presentation/useHabits';
@@ -9,16 +9,20 @@ import { useDI } from '@presentation/providers/DIProvider';
 
 export function useTodayHabits() {
   const { checkIn } = useDI();
-  const { habits, reload: reloadHabits } = useHabits();
+  const { habits, status, reload: reloadHabits } = useHabits();
   const [date, setDate] = useState<string | null>(null);
   const [entries, setEntries] = useState<readonly HabitCheck[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // İşaret sayacı: yenileme sürerken tik atıldıysa geç gelen eski liste işareti ezmesin
+  const markCount = useRef(0);
+
   const reload = useCallback(async () => {
+    const marksAtStart = markCount.current;
     const [result] = await Promise.all([checkIn.entries.execute(), reloadHabits()]);
     if (result.ok) {
       setDate(result.value.date);
-      setEntries(result.value.entries);
+      if (markCount.current === marksAtStart) setEntries(result.value.entries);
       setError(null);
     } else {
       setError(result.error.message);
@@ -39,6 +43,7 @@ export function useTodayHabits() {
   const mark = useCallback(
     async (habit: Habit, status: HabitEntryStatus | undefined) => {
       if (!date) return;
+      markCount.current += 1;
       const previous = entries;
       const rest = entries.filter((entry) => entry.habitId !== habit.id);
       setEntries(status ? [...rest, { habitId: habit.id, status }] : rest);
@@ -51,5 +56,8 @@ export function useTodayHabits() {
     [checkIn, date, entries],
   );
 
-  return { habits, entries, statusOf, mark, error, reload };
+  // Yüklenirken "henüz eklemedin" denmesin: boş liste yalnızca sunucu cevabından sonra gerçektir
+  const isEmpty = status === 'ready' && habits.length === 0;
+
+  return { habits, entries, statusOf, mark, error, reload, isEmpty };
 }

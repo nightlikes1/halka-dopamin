@@ -124,9 +124,14 @@ export function HabitCard({
           >
             {done ? (
               <Icon name="check" size={22} color={colors.textOnAccent} />
-            ) : actionIcon ? (
-              <Icon name={actionIcon} size={20} color={colors.textMain} />
-            ) : null}
+            ) : (
+              // Soluk tik: boş daireye dokununca işaretleneceği anlaşılsın
+              <Icon
+                name={actionIcon ?? 'check'}
+                size={20}
+                color={actionIcon ? colors.textMain : colors.textDisabled}
+              />
+            )}
           </ScalePressable>
         </Animated.View>
       </View>

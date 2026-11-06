@@ -38,3 +38,16 @@ export const HABIT_TITLE_MAX_LENGTH = 80;
 // Aynı ad (büyük/küçük harf ve kenar boşluğu farkı gözetmeden) ikinci kez eklenemez
 export const sameHabitTitle = (a: string, b: string): boolean =>
   a.trim().toLocaleLowerCase('tr') === b.trim().toLocaleLowerCase('tr');
+
+export type HabitTitleError = 'required' | 'tooLong' | 'duplicate';
+
+// Yeni alışkanlık adının sorunu (yoksa null); aynı kural sunucuda da uygulanır
+export function habitTitleError(
+  title: string,
+  existing: readonly Pick<Habit, 'title'>[],
+): HabitTitleError | null {
+  const trimmed = title.trim();
+  if (trimmed.length === 0) return 'required';
+  if (trimmed.length > HABIT_TITLE_MAX_LENGTH) return 'tooLong';
+  return existing.some((habit) => sameHabitTitle(habit.title, trimmed)) ? 'duplicate' : null;
+}

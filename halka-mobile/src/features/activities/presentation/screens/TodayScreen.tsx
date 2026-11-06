@@ -1,5 +1,6 @@
 // Bugün sekmesi: selam + seri, günlük özet halkaları, alışkanlık kartları, odak seansı ve akşam check-in
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { staggers } from '@core/theme/motion';
@@ -16,9 +17,11 @@ import { useAuth } from '@features/auth/presentation/useAuth';
 import { CheckInCard } from '@features/checkin/presentation/components/CheckInCard';
 import { useCheckInOverview } from '@features/checkin/presentation/useCheckInOverview';
 import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
+import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
 import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
+import { Chip } from '@presentation/components/common/Chip';
 import { SwipeToComplete } from '@presentation/components/common/SwipeToComplete';
 import { HabitCard } from '@presentation/components/common/HabitCard';
 import { IconButton } from '@presentation/components/common/IconButton';
@@ -60,8 +63,9 @@ export function TodayScreen() {
   const { currentStreak } = useStreak();
   const { water, progress: waterProgress, add: addWater } = useWater();
   const pomodoro = useSnapshotSlice('pomodoro');
-  const { habits, entries, statusOf, mark, error } = useTodayHabits();
+  const { habits, entries, statusOf, mark, error, isEmpty } = useTodayHabits();
   const { state: overviewState } = useCheckInOverview();
+  const [adding, setAdding] = useState(false);
 
   const summary = summarizeToday({
     habits,
@@ -143,19 +147,28 @@ export function TodayScreen() {
       {/* Alışkanlıklarım */}
       <Appear delay={staggers.list} style={styles.section}>
         <View style={styles.sectionHeader}>
-          <AppText variant="section" accessibilityRole="header">
+          <AppText variant="section" accessibilityRole="header" style={styles.sectionTitle}>
             {t.habitsCardTitle}
           </AppText>
-          <ScalePressable
-            onPress={() => navigation.navigate('Habits')}
-            accessibilityRole="link"
-            accessibilityLabel={`${t.habitsCardTitle}: ${t.seeAll}`}
-            hitSlop={12}
-          >
-            <AppText variant="label" style={styles.link}>
-              {t.seeAll}
-            </AppText>
-          </ScalePressable>
+          {habits.length > 0 ? (
+            <ScalePressable
+              onPress={() => navigation.navigate('Habits')}
+              accessibilityRole="link"
+              accessibilityLabel={`${t.habitsCardTitle}: ${t.manageHabits}`}
+              hitSlop={12}
+            >
+              <AppText variant="label" style={styles.link}>
+                {t.manageHabits}
+              </AppText>
+            </ScalePressable>
+          ) : null}
+          <Chip
+            label={strings.habits.add}
+            icon="plus"
+            variant="primary"
+            accessibilityLabel={t.addHabit}
+            onPress={() => setAdding(true)}
+          />
         </View>
 
         <HabitCard
@@ -204,18 +217,9 @@ export function TodayScreen() {
           );
         })}
 
-        {habits.length === 0 ? (
+        {isEmpty ? (
           <View style={styles.empty}>
             <AppText variant="muted">{t.noHabits}</AppText>
-            <ScalePressable
-              onPress={() => navigation.navigate('Habits')}
-              accessibilityRole="link"
-              hitSlop={12}
-            >
-              <AppText variant="label" style={styles.link}>
-                {t.addHabit}
-              </AppText>
-            </ScalePressable>
           </View>
         ) : null}
 
@@ -240,6 +244,7 @@ export function TodayScreen() {
           />
         ) : null}
       </Appear>
+      <AddHabitSheet visible={adding} onClose={() => setAdding(false)} />
     </Screen>
   );
 }
@@ -264,9 +269,10 @@ const styles = themedStyles(() => ({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: spacing.md,
     marginBottom: spacing.xs,
   },
+  sectionTitle: { flex: 1 },
   link: { color: colors.textPrimary, fontSize: fontSizes.body, textDecorationLine: 'underline' },
   empty: {
     gap: spacing.sm,

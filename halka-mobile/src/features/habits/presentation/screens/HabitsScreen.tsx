@@ -1,23 +1,18 @@
-// "Alışkanlıklarım": yapmak ve azaltmak istediklerini ekle/kaldır
+// "Alışkanlıklarım": yapmak ve azaltmak istediklerini gör, kaldır; ekleme tek pencereden (AddHabitSheet)
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, dopamineColors, radius, spacing } from '@core/theme/tokens';
-import {
-  HABIT_TITLE_MAX_LENGTH,
-  sameHabitTitle,
-  type Habit,
-  type HabitKind,
-} from '@features/habits/domain/entities';
+import type { Habit, HabitKind } from '@features/habits/domain/entities';
 import { themedStyles } from '@core/theme/themed';
+import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
 import { useHabits } from '@features/habits/presentation/useHabits';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
-import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Card } from '@presentation/components/common/Card';
-import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
+import { PillButton } from '@presentation/components/common/PillButton';
 import { Screen } from '@presentation/components/common/Screen';
 import { ScreenHeader } from '@presentation/components/common/ScreenHeader';
 import { SectionTitle } from '@presentation/components/common/SectionTitle';
@@ -29,28 +24,12 @@ const t = strings.habits;
 interface HabitSectionProps {
   readonly kind: HabitKind;
   readonly habits: readonly Habit[];
-  readonly onAdd: (kind: HabitKind, title: string) => Promise<boolean>;
   readonly onRemove: (habit: Habit) => void;
-  // Tüm aktif alışkanlıklar (iki bölüm birlikte): aynı ad kontrolü
-  readonly allHabits: readonly Habit[];
 }
 
-function HabitSection({ kind, habits, onAdd, onRemove, allHabits }: HabitSectionProps) {
-  const [title, setTitle] = useState('');
-  const [error, setError] = useState<string | null>(null);
+function HabitSection({ kind, habits, onRemove }: HabitSectionProps) {
   const isBuild = kind === 'build';
   const tint = isBuild ? dopamineColors.quality : dopamineColors.cheap;
-
-  const submit = async () => {
-    const trimmed = title.trim();
-    if (trimmed.length === 0) return setError(t.titleRequired);
-    if (trimmed.length > HABIT_TITLE_MAX_LENGTH) return setError(t.titleTooLong);
-    if (allHabits.some((habit) => sameHabitTitle(habit.title, trimmed))) {
-      return setError(t.titleDuplicate);
-    }
-    setError(null);
-    if (await onAdd(kind, trimmed)) setTitle('');
-  };
 
   return (
     <Card>
@@ -74,31 +53,13 @@ function HabitSection({ kind, habits, onAdd, onRemove, allHabits }: HabitSection
           />
         </View>
       ))}
-
-      <View style={styles.addRow}>
-        <AppTextInput
-          value={title}
-          onChangeText={setTitle}
-          placeholder={isBuild ? t.buildPlaceholder : t.quitPlaceholder}
-          maxLength={HABIT_TITLE_MAX_LENGTH}
-          returnKeyType="done"
-          onSubmitEditing={() => void submit()}
-          style={styles.input}
-          accessibilityLabel={isBuild ? t.buildTitle : t.quitTitle}
-        />
-        <Chip label={t.add} icon="plus" variant="primary" onPress={() => void submit()} />
-      </View>
-      {error ? (
-        <AppText variant="muted" style={styles.error}>
-          {error}
-        </AppText>
-      ) : null}
     </Card>
   );
 }
 
 export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
-  const { habits, status, errorMessage, reload, createHabit, archiveHabit } = useHabits();
+  const { habits, status, errorMessage, reload, archiveHabit } = useHabits();
+  const [adding, setAdding] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -117,12 +78,9 @@ export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
     });
   };
 
-  const add = (kind: HabitKind, title: string) => createHabit({ kind, title });
-
   return (
     <Screen
       modal
-      keyboard
       header={<ScreenHeader title={t.title} onClose={() => navigation.goBack()} bordered />}
     >
       {status === 'loading' && habits.length === 0 ? (
@@ -136,20 +94,18 @@ export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
           <ActionButton label={strings.common.retry} onPress={() => void reload()} />
         </View>
       ) : null}
+      <PillButton label={t.addCta} icon="plus" onPress={() => setAdding(true)} />
       <HabitSection
         kind="build"
         habits={habits.filter((habit) => habit.kind === 'build')}
-        onAdd={add}
-        allHabits={habits}
         onRemove={confirmRemove}
       />
       <HabitSection
         kind="quit"
         habits={habits.filter((habit) => habit.kind === 'quit')}
-        onAdd={add}
-        allHabits={habits}
         onRemove={confirmRemove}
       />
+      <AddHabitSheet visible={adding} onClose={() => setAdding(false)} />
     </Screen>
   );
 }
@@ -165,8 +121,6 @@ const styles = themedStyles(() => ({
     backgroundColor: colors.bgCardPressed,
   },
   rowTitle: { flex: 1 },
-  addRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
-  input: { flex: 1 },
   error: { color: colors.danger },
   errorBox: { gap: spacing.sm },
 }));
