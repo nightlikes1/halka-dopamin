@@ -77,7 +77,7 @@ function FpsLabel({
     () => fps.value,
     (value) => {
       if (value > 0) {
-        scheduleOnRN(setLabel, `${name} ${value} fps${fraction.value < 1 ? ' · kısık' : ''}`);
+        scheduleOnRN(setLabel, `${name} ${value} fps${fraction.value < 1 ? ' · hafif mod' : ''}`);
       }
     },
   );

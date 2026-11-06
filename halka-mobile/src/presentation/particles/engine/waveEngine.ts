@@ -21,8 +21,8 @@ import {
   REFERENCE_WIDTH,
 } from '@presentation/particles/engine/types';
 
-export const WAVE_COLS = 78;
-export const WAVE_ROWS = 40;
+export const WAVE_COLS = 62;
+export const WAVE_ROWS = 32;
 export const WAVE_HORIZON = 548;
 export const WAVE_FOCAL = 250;
 export const WAVE_RUNNING_AMP = 1;
