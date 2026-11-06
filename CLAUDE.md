@@ -127,6 +127,8 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
   Veritabanı Tokyo'da (`ap-northeast-1`): yeni bağlantı ~2,6 sn, sorgu ~350 ms. Bu yüzden havuz bağlantıları boşta açık kalır (`db/prisma.ts`).
 - Her sorgu `userId` ile filtrelenir; kullanıcı yalnızca kendi verisine erişir.
 - İstek sınırları (bellekte, sunucu yeniden başlayınca sıfırlanır; `plugins/rateLimit.ts`, `modules/auth/attemptLimiter.ts`): giriş 5 başarısız/dk (IP ve e-posta ayrı ayrı; başarılı giriş sayılmaz) + 30 istek/dk, kayıt 10/saat, şifremi unuttum 3/saat (IP ve e-posta), sıfırlama 10/saat. Hata `429 RATE_LIMITED` + `Retry-After`. Üretimde istemci adresi `CF-Connecting-IP`'den okunur (`request.ip` herkes için Docker ağ geçididir); bu yüzden kaynak sunucu Cloudflare dışından erişilebilir olmamalı.
+- Güvenlik başlıkları iki yerde: API `app.ts` (Helmet; HSTS'i Cloudflare ekler), web sayfası `halka-mobile/nginx.conf` (CSP dahil; `location` içinde `add_header` kullanılmaz, üsttekileri iptal eder). Web'e yeni dış kaynak eklenirse CSP güncellenir.
+- `/auth/forgot-password` hesabın varlığını belli etmez: yanıt hep aynı, posta arka planda, hatası yalnızca günlükte. `/auth/register` 409'u açık kalan bilinen sızıntı (e-posta doğrulaması olmadan kapanmaz).
 - Hata gövdesi her zaman `{ error: { code, message, issues? } }`, mesajlar Türkçe.
 - `.env` git'e girmez (`DATABASE_URL`, `JWT_SECRET`); örnek: `.env.example`.
 - Şema değişince: `npm run db:migrate` (Prisma 7'de `migrate dev` istemciyi üretmez; script `prisma generate`'i de çalıştırır).

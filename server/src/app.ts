@@ -1,5 +1,6 @@
 // Fastify uygulamasını bağımlılıklarla kurar (testlerde sahte bağımlılıklar verilebilir)
 import fastifyCors from '@fastify/cors';
+import fastifyHelmet from '@fastify/helmet';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppConfig } from './config/env.js';
 import { systemClock, type Clock } from './core/dates.js';
@@ -25,6 +26,21 @@ import { registerAuth } from './plugins/auth.js';
 import { registerErrorHandler } from './plugins/errorHandler.js';
 import { registerRateLimit } from './plugins/rateLimit.js';
 
+// API yalnızca JSON döner: sayfa yüklemez, kaynak çekmez, çerçeveye girmez. Web sayfasının başlıkları
+// halka-mobile/nginx.conf'ta. HSTS'i Cloudflare ekliyor; ikinci kez yazılmaz.
+const API_SECURITY_HEADERS = {
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives: {
+      defaultSrc: ["'none'"],
+      baseUri: ["'none'"],
+      formAction: ["'none'"],
+      frameAncestors: ["'none'"],
+    },
+  },
+  hsts: false,
+};
+
 export interface AppDependencies {
   readonly config: AppConfig;
   readonly userRepository: UserRepository;
@@ -45,6 +61,7 @@ export async function buildApp(deps: AppDependencies): Promise<FastifyInstance> 
   const app = Fastify({ logger: deps.logger ?? false, bodyLimit: 100 * 1024 });
   const clock = deps.clock ?? systemClock;
 
+  await app.register(fastifyHelmet, API_SECURITY_HEADERS);
   registerErrorHandler(app);
   // Yalnızca geliştirmede: tarayıcıdaki Expo web önizlemesinin API'ye erişebilmesi için.
   // Mobil uygulama CORS'a ihtiyaç duymaz; üretimde kapalıdır.

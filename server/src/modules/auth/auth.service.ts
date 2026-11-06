@@ -67,9 +67,8 @@ export class AuthService {
 
   async forgotPassword(email: string, appUrl: string): Promise<void> {
     const user = await this.users.findByEmail(email);
-    if (!user) {
-      throw notFound('Bu e-posta adresiyle kayıtlı bir kullanıcı bulunamadı.');
-    }
+    // Kayıtsız e-postada sessizce biter: yanıttan hesabın varlığı anlaşılmamalı
+    if (!user) return;
 
     // Varsa önceki kullanılmamış belirteçleri geçersiz kıl
     await this.resetTokens.invalidateAllForUser(user.id);

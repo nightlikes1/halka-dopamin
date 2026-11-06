@@ -82,9 +82,13 @@ export async function authRoutes(
       const emailKey = `email:${input.email}`;
       resetMails.assertAllowed([emailKey]);
       resetMails.hit([emailKey]);
-      await authService.forgotPassword(input.email, appUrl);
+      // Arka planda: hesap varsa posta gönderildiği için yanıt süresi hesabı ele vermesin.
+      // Posta hatası da aynı sebeple kullanıcıya yansımaz, yalnızca günlüğe yazılır
+      void authService.forgotPassword(input.email, appUrl).catch((error: unknown) => {
+        request.log.error({ err: error }, 'Şifre sıfırlama e-postası gönderilemedi');
+      });
       return reply.status(200).send({
-        message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.',
+        message: 'Bu e-posta kayıtlıysa şifre sıfırlama bağlantısı gönderildi.',
       });
     },
   );

@@ -168,7 +168,7 @@ describe('İstek sınırları', () => {
       expect(blocked.statusCode).toBe(429);
       expect(blocked.json()).toMatchObject({ error: { code: 'RATE_LIMITED' } });
       expect(blocked.json<{ error: { message: string } }>().error.message).toMatch(/dakika sonra/);
-      expect(emailService.sentEmails).toHaveLength(3);
+      await vi.waitFor(() => expect(emailService.sentEmails).toHaveLength(3));
     });
 
     it('IP değiştirerek aynı kişiye posta yağdırılamaz', async () => {
@@ -177,7 +177,7 @@ describe('İstek sınırları', () => {
         expect((await forgot(EMAIL, `203.0.113.${i}`)).statusCode).toBe(200);
       }
       expect((await forgot(EMAIL, '203.0.113.9')).statusCode).toBe(429);
-      expect(emailService.sentEmails).toHaveLength(3);
+      await vi.waitFor(() => expect(emailService.sentEmails).toHaveLength(3));
     });
   });
 

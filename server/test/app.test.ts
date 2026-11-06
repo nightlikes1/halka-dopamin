@@ -1,12 +1,16 @@
 // HTTP seviyesinde uçtan uca testler (veritabanı yerine bellek içi repository)
 import type { FastifyInstance } from 'fastify';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { createTestApp, type InMemoryUserRepository } from './fakes.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  createTestApp,
+  type InMemoryEmailService,
+  type InMemoryUserRepository,
+} from './fakes.js';
 
 describe('API', () => {
   let app: FastifyInstance;
   let users: InMemoryUserRepository;
-  let emailService: { sentEmails: { to: string; resetUrl: string }[] };
+  let emailService: InMemoryEmailService;
   let databaseUp: boolean;
 
   beforeEach(async () => {
@@ -151,8 +155,8 @@ describe('API', () => {
       });
       expect(forgotRes.statusCode).toBe(200);
 
-      // 2. E-postadaki bağlantıyı ve token'ı doğrula
-      expect(emailService.sentEmails).toHaveLength(1);
+      // 2. E-postadaki bağlantıyı ve token'ı doğrula (posta arka planda gider)
+      await vi.waitFor(() => expect(emailService.sentEmails).toHaveLength(1));
       const email = emailService.sentEmails[0];
       expect(email).toBeDefined();
       if (!email) throw new Error('Email must be defined');
@@ -197,21 +201,47 @@ describe('API', () => {
       expect(reuseRes.statusCode).toBe(400);
     });
 
-    it('kayıtlı olmayan e-postada 404 döner ve e-posta göndermez', async () => {
-      const response = await app.inject({
-        method: 'POST',
-        url: '/auth/forgot-password',
-        payload: { email: 'kayitsiz@ornek.com' },
+    describe('hesabın varlığı yanıttan anlaşılmaz', () => {
+      const forgot = (email: string) =>
+        app.inject({ method: 'POST', url: '/auth/forgot-password', payload: { email } });
+
+      it('kayıtlı ve kayıtsız e-postaya aynı yanıtı verir, kayıtsıza posta göndermez', async () => {
+        await register({ email: 'ada@ornek.com', password: 'eski-sifre-123' });
+
+        const known = await forgot('ada@ornek.com');
+        const unknown = await forgot('kayitsiz@ornek.com');
+
+        expect(unknown.statusCode).toBe(200);
+        expect(unknown.body).toBe(known.body);
+        await vi.waitFor(() => expect(emailService.sentEmails).toHaveLength(1));
+        expect(emailService.sentEmails[0]?.to).toBe('ada@ornek.com');
       });
 
-      expect(response.statusCode).toBe(404);
-      expect(response.json()).toMatchObject({
-        error: {
-          code: 'NOT_FOUND',
-          message: 'Bu e-posta adresiyle kayıtlı bir kullanıcı bulunamadı.',
-        },
+      it('posta gönderilemese de yanıt değişmez', async () => {
+        await register({ email: 'ada@ornek.com', password: 'eski-sifre-123' });
+        const send = vi
+          .spyOn(emailService, 'sendPasswordResetEmail')
+          .mockRejectedValue(new Error('SMTP kapalı'));
+
+        const response = await forgot('ada@ornek.com');
+
+        expect(response.statusCode).toBe(200);
+        await vi.waitFor(() => expect(send).toHaveBeenCalled());
       });
-      expect(emailService.sentEmails).toHaveLength(0);
+
+      it('yanıt postanın gönderilmesini beklemez', async () => {
+        await register({ email: 'ada@ornek.com', password: 'eski-sifre-123' });
+        let finishSending = (): void => undefined;
+        const sending = new Promise<void>((resolve) => {
+          finishSending = resolve;
+        });
+        vi.spyOn(emailService, 'sendPasswordResetEmail').mockReturnValue(sending);
+
+        const response = await forgot('ada@ornek.com');
+
+        expect(response.statusCode).toBe(200);
+        finishSending();
+      });
     });
 
     it('geçersiz veya süresi dolmuş token 400 döner', async () => {
@@ -242,8 +272,9 @@ describe('API', () => {
       });
 
       expect(response.statusCode).toBe(302);
-      expect(response.headers.location).toBe('http://localhost:8080/reset-password?token=test-token-123');
+      expect(response.headers.location).toBe(
+        'http://localhost:8080/reset-password?token=test-token-123',
+      );
     });
   });
 });
-

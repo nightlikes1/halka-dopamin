@@ -540,7 +540,7 @@ export const tr = {
     forgotPasswordSubtitle: 'E-posta adresini gir, sana şifre sıfırlama bağlantısı gönderelim.',
     sendResetLink: 'Sıfırlama Bağlantısı Gönder',
     resetLinkSent:
-      'Şifre sıfırlama bağlantısı e-posta adresine gönderildi. Lütfen gelen kutunu ve spam klasörünü kontrol et.',
+      'Bu e-posta kayıtlıysa şifre sıfırlama bağlantısı gönderildi. Lütfen gelen kutunu ve spam klasörünü kontrol et.',
     backToLogin: 'Giriş ekranına dön',
     resetPasswordTitle: 'Yeni şifre belirle',
     resetPasswordSubtitle: 'Hesabın için yeni ve güçlü bir şifre belirle.',
