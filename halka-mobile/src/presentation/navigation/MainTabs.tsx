@@ -17,7 +17,7 @@ import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { GlassTabBar } from '@presentation/navigation/GlassTabBar';
 import { TabScene } from '@presentation/navigation/TabScene';
 import type { MainTabParamList } from '@presentation/navigation/types';
-import { HomeScreen } from '@presentation/screens/HomeScreen';
+import { HomeScreen } from '@features/halka/presentation/screens/HomeScreen';
 import { themedStyles } from '@core/theme/themed';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
 

@@ -9,7 +9,7 @@ import {
   SaveCheckInUseCase,
 } from '@features/checkin/domain/usecases/CheckInUseCases';
 import type { Habit } from '@features/habits/domain/entities';
-import { FakeClock } from '../../../__tests__/fakes/fakes';
+import { FakeClock } from '@features/halka/__tests__/fakes/fakes';
 
 // 14 Ekim 2026, 22:30 (yerel)
 const NOW = new Date(2026, 9, 14, 22, 30);

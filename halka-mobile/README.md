@@ -31,18 +31,18 @@ bulunur; ayrı development build gerekmez.
 
 ```
 src/
-  core/          DI container, Failure/Result, sabitler, yardımcılar, tema
-  domain/        entity, repository arayüzleri, port'lar, saf kurallar, use case'ler (React/RN yok)
-  data/          DTO (zod), mapper, AsyncStorage datasource, repository ve servis implementasyonları
-  presentation/  ekranlar, bileşenler, navigation, hook (ViewModel), Zustand store
-  __tests__/     Jest testleri ve fake'ler
+  core/          DI container, Failure/Result, yardımcılar, tema
+  features/<ad>/ her özellik kendi klasöründe: domain (React/RN yok), data, presentation
+  presentation/  ortak bileşenler, navigation, parçacıklar
 ```
 
-Akış: `Screen → hook → UseCase.execute() → IRepository → SliceRepository → HalkaLocalDataSource → AsyncStorage`
+Halka panosu `features/halka/` altındadır.
 
-- Bağımlılık kuralı ESLint ile zorlanır: `src/domain/**` React, RN, Expo, zod, `@data`, `@presentation` import edemez.
+Akış: `Screen → hook → UseCase.execute() → IEntityRepository → SliceRepository → HalkaLocalDataSource → AsyncStorage`
+
+- Bağımlılık kuralı ESLint ile zorlanır: `src/features/*/domain/**` React, RN, Expo, zod, `@presentation` ve özelliklerin `data`/`presentation` klasörlerini import edemez.
 - Tüm try/catch `data` katmanındadır; üst katmanlar yalnızca `Result<T>` görür.
-- Path alias'ları: `@core/*`, `@domain/*`, `@data/*`, `@presentation/*`, `@assets/*`
+- Path alias'ları: `@core/*`, `@presentation/*`, `@features/*`, `@assets/*`
   (tsconfig `paths` + babel `module-resolver`).
 
 ## Sesler

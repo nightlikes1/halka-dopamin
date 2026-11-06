@@ -10,7 +10,7 @@ import {
   GetMonthHistoryUseCase,
   SaveDayNoteUseCase,
 } from '@features/history/domain/usecases/HistoryUseCases';
-import { FakeClock } from '../../../__tests__/fakes/fakes';
+import { FakeClock } from '@features/halka/__tests__/fakes/fakes';
 
 const NOW = new Date(2026, 9, 14, 21, 0);
 

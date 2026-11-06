@@ -1,7 +1,7 @@
 // Geçmiş ve gün notu use case'leri
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
-import { type Clock, todayOf } from '@domain/ports';
+import { type Clock, todayOf } from '@core/utils/clock';
 import type { CheckInRepository } from '@features/checkin/domain/ports';
 import {
   buildMonthGrid,

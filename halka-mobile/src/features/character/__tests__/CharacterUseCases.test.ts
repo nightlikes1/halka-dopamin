@@ -12,7 +12,7 @@ import {
 } from '@features/character/domain/usecases/CharacterUseCases';
 import type { CreateHabitInput, Habit } from '@features/habits/domain/entities';
 import type { HabitRepository } from '@features/habits/domain/ports';
-import { FakeClock } from '../../../__tests__/fakes/fakes';
+import { FakeClock } from '@features/halka/__tests__/fakes/fakes';
 
 const NOW = new Date(2026, 9, 14, 21, 0);
 

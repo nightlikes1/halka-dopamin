@@ -1,7 +1,7 @@
 // Görsel stil ayarı (parçacık / klasik). Seçim kaydedilip uygulama yeniden yüklenir (reloadToApply).
 import { useState } from 'react';
 import { strings } from '@core/i18n/tr';
-import { saveVisualStyle, type VisualStyle } from '@data/preferences/devicePreferences';
+import { saveVisualStyle, type VisualStyle } from '@features/settings/data/devicePreferences';
 import { reloadToApply } from '@features/settings/presentation/reloadToApply';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { showMessage } from '@presentation/utils/dialogs';

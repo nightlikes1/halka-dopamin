@@ -1,7 +1,7 @@
 // Gün içi alışkanlık işaretleme use case'leri. Akşam check-in'i bu cevaplarla önceden dolar.
 import { ValidationFailure } from '@core/errors/Failure';
 import { err, ok, type AsyncResult } from '@core/result/Result';
-import { type Clock, todayOf } from '@domain/ports';
+import { type Clock, todayOf } from '@core/utils/clock';
 import type { HabitCheck } from '@features/checkin/domain/entities';
 import type { HabitEntryRepository } from '@features/checkin/domain/ports';
 import { resolveCheckInDay } from '@features/checkin/domain/rules';

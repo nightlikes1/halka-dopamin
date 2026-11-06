@@ -2,7 +2,7 @@
 // renkler güncellenir, ekran ağacı yeni temayla yeniden kurulur (AppShell). Veri ve oturum korunur.
 import { strings } from '@core/i18n/tr';
 import { applyThemeMode } from '@core/theme/tokens';
-import { saveThemeMode, type ThemeModePreference } from '@data/preferences/devicePreferences';
+import { saveThemeMode, type ThemeModePreference } from '@features/settings/data/devicePreferences';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { showMessage } from '@presentation/utils/dialogs';
 import { injectWebGlobalStyles } from '@presentation/utils/webGlobalStyles';

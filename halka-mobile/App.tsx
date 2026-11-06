@@ -15,7 +15,7 @@ import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createContainer } from '@core/di/container';
 import { applyColorScheme, applyThemeMode, colors } from '@core/theme/tokens';
-import { loadDevicePreferences } from '@data/preferences/devicePreferences';
+import { loadDevicePreferences } from '@features/settings/data/devicePreferences';
 import { DIProvider } from '@presentation/providers/DIProvider';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 import { injectWebGlobalStyles } from '@presentation/utils/webGlobalStyles';

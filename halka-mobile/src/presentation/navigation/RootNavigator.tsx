@@ -25,8 +25,8 @@ import { SettingsScreen } from '@features/settings/presentation/screens/Settings
 import { MainTabs } from '@presentation/navigation/MainTabs';
 import type { RootStackParamList } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
-import { CatalogScreen } from '@presentation/screens/CatalogScreen';
-import { WidgetFocusScreen } from '@presentation/screens/WidgetFocusScreen';
+import { CatalogScreen } from '@features/halka/presentation/screens/CatalogScreen';
+import { WidgetFocusScreen } from '@features/halka/presentation/screens/WidgetFocusScreen';
 import { themed } from '@core/theme/themed';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

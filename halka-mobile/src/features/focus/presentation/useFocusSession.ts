@@ -6,11 +6,11 @@ import {
   getModeDurationSeconds,
   SESSIONS_BEFORE_LONG_BREAK,
   type PomodoroMode,
-} from '@domain/entities/Pomodoro';
-import { useBigOne } from '@presentation/hooks/useBigOne';
-import { usePomodoro } from '@presentation/hooks/usePomodoro';
-import { useProfile } from '@presentation/hooks/useProfile';
-import { useTasks } from '@presentation/hooks/useTasks';
+} from '@features/halka/domain/entities/Pomodoro';
+import { useBigOne } from '@features/halka/presentation/hooks/useBigOne';
+import { usePomodoro } from '@features/halka/presentation/hooks/usePomodoro';
+import { useProfile } from '@features/halka/presentation/hooks/useProfile';
+import { useTasks } from '@features/halka/presentation/hooks/useTasks';
 
 const t = strings.focus;
 

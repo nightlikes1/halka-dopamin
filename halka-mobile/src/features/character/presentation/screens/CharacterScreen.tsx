@@ -33,7 +33,7 @@ import { ProgressBar } from '@presentation/components/common/ProgressBar';
 import { ScalePressable } from '@presentation/components/common/ScalePressable';
 import { Screen } from '@presentation/components/common/Screen';
 import { SectionTitle } from '@presentation/components/common/SectionTitle';
-import { useStreak } from '@presentation/hooks/useStreak';
+import { useStreak } from '@features/halka/presentation/hooks/useStreak';
 import { confirmAction, showMessage } from '@presentation/utils/dialogs';
 
 const t = strings.character;

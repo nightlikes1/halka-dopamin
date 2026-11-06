@@ -16,7 +16,7 @@ import { durations } from '@core/theme/motion';
 import { themedStyles, themed } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, radius, spacing } from '@core/theme/tokens';
-import type { PomodoroMode } from '@domain/entities/Pomodoro';
+import type { PomodoroMode } from '@features/halka/domain/entities/Pomodoro';
 import { formatTime, useFocusSession } from '@features/focus/presentation/useFocusSession';
 import { AppText } from '@presentation/components/common/AppText';
 import { IconButton } from '@presentation/components/common/IconButton';

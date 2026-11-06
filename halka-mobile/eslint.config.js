@@ -14,14 +14,22 @@ const domainForbidden = [
   '@react-navigation/*',
   'zustand',
   'zod',
-  '@data/*',
+  '@features/*/data/**',
+  '@features/*/presentation/**',
   '@presentation/*',
   '@core/di/*',
   '@core/theme/*',
 ];
 
 // Data katmanı presentation ve DI'ı bilmez
-const dataForbidden = ['react', 'react-native', '@presentation/*', '@core/di/*', '@core/theme/*'];
+const dataForbidden = [
+  'react',
+  'react-native',
+  '@features/*/presentation/**',
+  '@presentation/*',
+  '@core/di/*',
+  '@core/theme/*',
+];
 
 module.exports = defineConfig([
   expoConfig,
@@ -37,7 +45,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['src/domain/**/*.ts', 'src/features/*/domain/**/*.ts'],
+    files: ['src/features/*/domain/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -50,7 +58,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['src/data/**/*.ts', 'src/features/*/data/**/*.ts'],
+    files: ['src/features/*/data/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',

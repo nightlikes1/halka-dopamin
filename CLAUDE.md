@@ -80,24 +80,29 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 ## Mobil mimari (`halka-mobile/src`)
 
 ```
-core/          DI container (composition root), Failure/Result, api/ (axios + toFailure), i18n/tr.ts, theme/, utils/
-domain/ data/ presentation/   ← Halka panosu (katman bazlı Clean Architecture)
-  domain/ports.ts              repository sözleşmesi (`IEntityRepository<T>`, `Repositories`), AudioPort, ClipboardPort, Clock
+core/          DI container (composition root), Failure/Result, api/ (axios + toFailure), i18n/tr.ts, theme/, utils/ (date, clock, format, id)
+features/<ad>/{domain,data,presentation}   ← her özellik kendi klasöründe, içi katmanlı
+  auth/ activities/ focus/ halka/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
+presentation/  yalnızca ortak olanlar: components/common, navigation, particles, providers, utils, useNow, useColorTransition, usePreferencesStore
+
+features/halka/   ← Halka panosu ve eklentileri (veri cihazda)
+  domain/ports.ts              repository sözleşmesi (`IEntityRepository<T>`, `Repositories`), AudioPort, ClipboardPort
+  domain/usecases/             özellik başına tek dosya (`WaterUseCases.ts`...), ortak akış `updateEntity.ts`
+  domain/entities/, services/  tipler, sabitler, saf kurallar
   data/storage.ts              anahtar, JSON şeması (DTO), ayrıştırma, HalkaLocalDataSource
   data/mappers.ts              DTO ↔ Entity dönüşümleri (bozuk veriyi düzeltir), varsayılan DTO
   data/repositories.ts         tek `SliceRepository` + `createRepositories`
-features/<ad>/{domain,data,presentation}   ← yeni özellikler (özellik bazlı, içi katmanlı)
-  auth/ activities/ focus/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
+  presentation/                hooks, store, screens, components/{widgets,ring,layout,header}
+  __tests__/                   testler ve diğer özelliklerin de kullandığı `fakes/fakes.ts`
 ```
 
 - Dosya düzeni: birlikte değişen kısa kodlar tek dosyada durur (`features/*/domain/usecases/<Ad>UseCases.ts`, `ports.ts`);
   tek satırlık takma ad ya da gövdesiz sınıf için yeni dosya açılmaz.
 - Cihazdaki kayıt biçimi (`STORAGE_KEY`, alan adları) değişmez; değişirse kullanıcı verisi için geçiş yazılır.
-
-- Bağımlılık kuralı: `domain` (ve `features/*/domain`) React/RN/Expo/zod/`@data`/`@presentation` import edemez — ESLint zorlar.
+- Bağımlılık kuralı: `features/*/domain` React/RN/Expo/zod, `@presentation` ve başka özelliklerin `data`/`presentation` klasörlerini import edemez — ESLint zorlar.
 - try/catch yalnızca data katmanında; üst katmanlar `Result<T>` görür. HTTP hataları `toFailure()` ile `network | auth | validation | server`.
 - Ekranlar API'yi doğrudan çağırmaz: Screen → hook → UseCase.execute() → repository arayüzü → HTTP/AsyncStorage.
-- Alias'lar: `@core @domain @data @presentation @features @assets` (tsconfig `paths` + babel `module-resolver`).
+- Alias'lar: `@core @presentation @features @assets` (tsconfig `paths` + babel `module-resolver`).
 - Yeni özelliklerin tüm arayüz metinleri `core/i18n/tr.ts`'ten okunur.
 - Renkler yalnızca `core/theme/tokens.ts` (`colors`, `dopamineColors`) üzerinden.
 - İş mantığı (puan, yakınlık, seri, tasarruf, rehber eşleştirme) saf fonksiyonlarda + Jest testi.
@@ -180,7 +185,7 @@ düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)
   `timer` (64/700, tabular, −1 harf aralığı). Ekran başlığı `screenTitle` (serif). En küçük boyut 11; `fontWeight` yok.
 - **İkonlar:** yalnızca `Icon` (Feather, çizgi stili). Feather'da olmayanlar `Icon`'daki `EXTRA_ICONS` ile
   (ör. `flame` → Ionicons). Emoji ikon olarak kullanılmaz; yalnızca içerik (ruh hali, puan yüzleri).
-  Domain emojilerinin karşılıkları `presentation/components/common/iconMaps.ts`'te.
+  Domain emojilerinin karşılıkları `features/halka/presentation/components/iconMaps.ts`'te.
 - **Dokunma / erişilebilirlik:** her dokunulabilir öğe ≥ 44 px (`layout.touchTarget`, küçükse `hitSlopFor`);
   seçim durumu `aria-checked` (radio/checkbox) / `aria-selected` (tab) ile verilir — `accessibilityState` web'de DOM'a
   yazılmaz. Arka plandaki sekmeler `TabScene` ile gizlenir (web'de `inert`; klavye odağı görünmeyen butona gitmez);

@@ -28,12 +28,12 @@ Run lint and typecheck before declaring any task done.
 - **IMPORTANT:** This project uses **React Navigation** (`@react-navigation/native-stack`, `@react-navigation/bottom-tabs`), **NOT Expo Router**.
 - Do NOT install or use `expo-router`. Do NOT create `src/app/` or `_layout.tsx` files.
 - Navigators live in `src/presentation/navigation/` (e.g. `RootNavigator.tsx`).
-- Screens are located in `src/presentation/screens/` and `src/features/*/presentation/screens/`.
+- Screens are located in `src/features/*/presentation/screens/`.
 
 ## Architecture & Code Rules
 
-- Follow Clean Architecture: `src/{core, domain, data, presentation, features}`.
-- Dependency rule: `domain` (and `features/*/domain`) must NOT import React, React Native, Expo, zod, `@data`, or `@presentation`.
+- Follow Clean Architecture per feature: `src/features/<name>/{domain, data, presentation}`; shared code lives in `src/core` and `src/presentation`.
+- Dependency rule: `features/*/domain` must NOT import React, React Native, Expo, zod, `@presentation`, or any feature's `data`/`presentation`.
 - New UI strings go into `src/core/i18n/tr.ts`.
 - Colors and styling tokens go through `src/core/theme/tokens.ts` and `themedStyles`.
 - Refer to the root `CLAUDE.md` for complete product and architectural guidelines.

@@ -10,11 +10,11 @@ import { useSessionRestore } from '@features/auth/presentation/useAuth';
 import { useAuthStore } from '@features/auth/presentation/useAuthStore';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
-import { ChainRing } from '@presentation/components/ring/ChainRing';
-import { useBootstrap } from '@presentation/hooks/useBootstrap';
-import { usePomodoroCompletionWatcher } from '@presentation/hooks/usePomodoro';
+import { ChainRing } from '@features/halka/presentation/components/ring/ChainRing';
+import { useBootstrap } from '@features/halka/presentation/hooks/useBootstrap';
+import { usePomodoroCompletionWatcher } from '@features/halka/presentation/hooks/usePomodoro';
 import { RootNavigator } from '@presentation/navigation/RootNavigator';
-import { useHalkaStore } from '@presentation/store/useHalkaStore';
+import { useHalkaStore } from '@features/halka/presentation/store/useHalkaStore';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
 
 interface AppShellProps {

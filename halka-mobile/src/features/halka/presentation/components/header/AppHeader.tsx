@@ -1,0 +1,80 @@
+import { Image, View } from 'react-native';
+import logoBannerLight from '@assets/logo-banner-light.png';
+import logoBanner from '@assets/logo-banner.png';
+import { activeThemeMode, spacing } from '@core/theme/tokens';
+import { Chip } from '@presentation/components/common/Chip';
+import { IconButton } from '@presentation/components/common/IconButton';
+import { themedStyles } from '@core/theme/themed';
+import { useLayout } from '@features/halka/presentation/hooks/useLayout';
+import { useProfile } from '@features/halka/presentation/hooks/useProfile';
+import { useSoundEffect } from '@features/halka/presentation/hooks/useSoundEffect';
+import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
+import { useUiStore } from '@features/halka/presentation/store/useUiStore';
+
+interface AppHeaderProps {
+  readonly onAddPress: () => void;
+}
+
+export function AppHeader({ onAddPress }: AppHeaderProps) {
+  const { profile, toggleViewMode, toggleSound } = useProfile();
+  const { activeIds } = useLayout();
+  const themeMode = usePreferencesStore((s) => s.themeMode);
+  const isLight = themeMode === 'light' || activeThemeMode() === 'light';
+  const allCollapsed = useUiStore((s) => s.allCollapsed);
+  const setAllCollapsed = useUiStore((s) => s.setAllCollapsed);
+  const play = useSoundEffect();
+
+  const isGrid = profile.viewMode === 'grid';
+
+  const toggleCollapseAll = () => {
+    play('click');
+    setAllCollapsed(activeIds, !allCollapsed);
+  };
+
+  return (
+    <View style={styles.header}>
+      <View style={styles.brand}>
+        <Image
+          source={isLight ? logoBannerLight : logoBanner}
+          style={styles.logoBanner}
+          resizeMode="contain"
+          accessibilityLabel="Halka"
+        />
+      </View>
+
+      <View style={styles.controls}>
+        <Chip
+          label={isGrid ? 'Kokpit Modu' : 'Panel Modu'}
+          icon={isGrid ? 'crosshair' : 'grid'}
+          accessibilityLabel={isGrid ? 'Kokpit moduna geç' : 'Panel moduna geç'}
+          onPress={() => void toggleViewMode()}
+        />
+        <Chip
+          label={allCollapsed ? 'Genişlet' : 'Sadeleştir'}
+          icon={allCollapsed ? 'maximize' : 'minimize'}
+          accessibilityLabel="Tüm eklentileri küçült veya büyüt"
+          onPress={toggleCollapseAll}
+        />
+        <IconButton
+          icon={profile.soundEnabled ? 'volume-2' : 'volume-x'}
+          accessibilityLabel={profile.soundEnabled ? 'Sesi kapat' : 'Sesi aç'}
+          onPress={() => void toggleSound()}
+          variant="surface"
+          size={44}
+        />
+        <Chip label="Eklenti Ekle" icon="plus" variant="primary" onPress={onAddPress} />
+      </View>
+    </View>
+  );
+}
+
+const styles = themedStyles(() => ({
+  header: { gap: spacing.md, paddingBottom: spacing.md },
+  brand: { flexDirection: 'row', alignItems: 'center' },
+  logoBanner: {
+    width: 180,
+    height: 64,
+    marginLeft: -8,
+  },
+  controls: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm },
+}));

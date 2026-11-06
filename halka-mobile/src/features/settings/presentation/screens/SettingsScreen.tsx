@@ -2,7 +2,7 @@
 
 import { strings } from '@core/i18n/tr';
 import { colors, fontSizes, spacing } from '@core/theme/tokens';
-import type { ThemeModePreference, VisualStyle } from '@data/preferences/devicePreferences';
+import type { ThemeModePreference, VisualStyle } from '@features/settings/data/devicePreferences';
 import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { useThemeModeSetting } from '@features/settings/presentation/useThemeModeSetting';

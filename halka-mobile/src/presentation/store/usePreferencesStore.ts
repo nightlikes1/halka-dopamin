@@ -6,7 +6,7 @@ import {
   DEFAULT_THEME_MODE,
   DEFAULT_VISUAL_STYLE,
   markOnboardingSeen,
-} from '@data/preferences/devicePreferences';
+} from '@features/settings/data/devicePreferences';
 
 interface PreferencesState {
   readonly visualStyle: ColorScheme;

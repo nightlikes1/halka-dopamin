@@ -46,60 +46,67 @@ import {
   GetMonthHistoryUseCase,
   SaveDayNoteUseCase,
 } from '@features/history/domain/usecases/HistoryUseCases';
-import { createDefaultStorageDto } from '@data/mappers';
-import { createRepositories } from '@data/repositories';
-import { ExpoAudioService } from '@data/services/ExpoAudioService';
-import { ExpoClipboardService } from '@data/services/ExpoClipboardService';
-import { SystemClock } from '@data/services/SystemClock';
-import { HalkaLocalDataSource, type KeyValueStorage } from '@data/storage';
-import type { AudioPort, ClipboardPort, Clock } from '@domain/ports';
+import { createDefaultStorageDto } from '@features/halka/data/mappers';
+import { createRepositories } from '@features/halka/data/repositories';
+import { ExpoAudioService } from '@features/halka/data/services/ExpoAudioService';
+import { ExpoClipboardService } from '@features/halka/data/services/ExpoClipboardService';
+import { SystemClock } from '@core/utils/clock';
+import { HalkaLocalDataSource, type KeyValueStorage } from '@features/halka/data/storage';
+import type { Clock } from '@core/utils/clock';
+import type { AudioPort, ClipboardPort } from '@features/halka/domain/ports';
 import {
   InitializeAppUseCase,
   LoadSnapshotUseCase,
   RunDailyResetUseCase,
-} from '@domain/usecases/AppUseCases';
+} from '@features/halka/domain/usecases/AppUseCases';
 import {
   PlaySoundEffectUseCase,
   StopAmbientUseCase,
   ToggleAmbientUseCase,
-} from '@domain/usecases/AudioUseCases';
-import { ToggleBigOneUseCase, UpdateBigOneGoalUseCase } from '@domain/usecases/BigOneUseCases';
-import { GenerateDailyBriefingUseCase } from '@domain/usecases/BriefingUseCases';
-import { AddExpenseUseCase, DeleteExpenseUseCase } from '@domain/usecases/BudgetUseCases';
+} from '@features/halka/domain/usecases/AudioUseCases';
+import {
+  ToggleBigOneUseCase,
+  UpdateBigOneGoalUseCase,
+} from '@features/halka/domain/usecases/BigOneUseCases';
+import { GenerateDailyBriefingUseCase } from '@features/halka/domain/usecases/BriefingUseCases';
+import {
+  AddExpenseUseCase,
+  DeleteExpenseUseCase,
+} from '@features/halka/domain/usecases/BudgetUseCases';
 import {
   AddWidgetUseCase,
   GetWidgetCatalogUseCase,
   RemoveWidgetUseCase,
-} from '@domain/usecases/LayoutUseCases';
+} from '@features/halka/domain/usecases/LayoutUseCases';
 import {
   SetEnergyLevelUseCase,
   SetMoodUseCase,
   SetReflectionUseCase,
-} from '@domain/usecases/MoodUseCases';
+} from '@features/halka/domain/usecases/MoodUseCases';
 import {
   ClearNoteUseCase,
   CopyNoteUseCase,
   UpdateNoteUseCase,
-} from '@domain/usecases/NotesUseCases';
+} from '@features/halka/domain/usecases/NotesUseCases';
 import {
   ChangePomodoroModeUseCase,
   CompletePomodoroSessionUseCase,
   PausePomodoroUseCase,
   ResetPomodoroUseCase,
   StartPomodoroUseCase,
-} from '@domain/usecases/PomodoroUseCases';
+} from '@features/halka/domain/usecases/PomodoroUseCases';
 import {
   ChangeViewModeUseCase,
   ToggleSoundUseCase,
   UpdateUserNameUseCase,
-} from '@domain/usecases/ProfileUseCases';
-import { CheckInStreakUseCase } from '@domain/usecases/StreakUseCases';
+} from '@features/halka/domain/usecases/ProfileUseCases';
+import { CheckInStreakUseCase } from '@features/halka/domain/usecases/StreakUseCases';
 import {
   AddTaskUseCase,
   DeleteTaskUseCase,
   ToggleTaskUseCase,
-} from '@domain/usecases/TasksUseCases';
-import { AddWaterUseCase, ResetWaterUseCase } from '@domain/usecases/WaterUseCases';
+} from '@features/halka/domain/usecases/TasksUseCases';
+import { AddWaterUseCase, ResetWaterUseCase } from '@features/halka/domain/usecases/WaterUseCases';
 
 // Testlerde ya da farklı platformlarda değiştirilebilen dış bağımlılıklar
 export interface ContainerDependencies {
