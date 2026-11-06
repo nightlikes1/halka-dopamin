@@ -118,7 +118,6 @@ export const tr = {
     editTitle: 'Alışkanlığı düzenle',
     editRow: (title: string) => `${title}: düzenle`,
     saveCta: 'Kaydet',
-    removeCta: 'Alışkanlığı kaldır',
     kindChangeHint: 'Geçmiş işaretlerin de yeni türe çevrilir.',
     adding: 'Ekleniyor…',
     kindLabel: 'Alışkanlık türü',

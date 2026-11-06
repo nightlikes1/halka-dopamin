@@ -5,11 +5,8 @@ import { activeThemeMode, spacing } from '@core/theme/tokens';
 import { Chip } from '@presentation/components/common/Chip';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { themedStyles } from '@core/theme/themed';
-import { useLayout } from '@features/halka/presentation/hooks/useLayout';
 import { useProfile } from '@features/halka/presentation/hooks/useProfile';
-import { useSoundEffect } from '@features/halka/presentation/hooks/useSoundEffect';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
-import { useUiStore } from '@features/halka/presentation/store/useUiStore';
 
 interface AppHeaderProps {
   readonly onAddPress: () => void;
@@ -17,17 +14,8 @@ interface AppHeaderProps {
 
 export function AppHeader({ onAddPress }: AppHeaderProps) {
   const { profile, toggleSound } = useProfile();
-  const { activeIds } = useLayout();
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const isLight = themeMode === 'light' || activeThemeMode() === 'light';
-  const allCollapsed = useUiStore((s) => s.allCollapsed);
-  const setAllCollapsed = useUiStore((s) => s.setAllCollapsed);
-  const play = useSoundEffect();
-
-  const toggleCollapseAll = () => {
-    play('click');
-    setAllCollapsed(activeIds, !allCollapsed);
-  };
 
   return (
     <View style={styles.header}>
@@ -41,12 +29,6 @@ export function AppHeader({ onAddPress }: AppHeaderProps) {
       </View>
 
       <View style={styles.controls}>
-        <Chip
-          label={allCollapsed ? 'Genişlet' : 'Sadeleştir'}
-          icon={allCollapsed ? 'maximize' : 'minimize'}
-          accessibilityLabel="Tüm eklentileri küçült veya büyüt"
-          onPress={toggleCollapseAll}
-        />
         <IconButton
           icon={profile.soundEnabled ? 'volume-2' : 'volume-x'}
           accessibilityLabel={profile.soundEnabled ? 'Sesi kapat' : 'Sesi aç'}

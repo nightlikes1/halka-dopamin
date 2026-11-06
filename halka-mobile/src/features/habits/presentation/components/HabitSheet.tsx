@@ -1,4 +1,4 @@
-// Alttan açılan alışkanlık penceresi: bulunduğun ekrandan çıkmadan ekle ya da mevcut olanı düzenle/kaldır
+// Alttan açılan alışkanlık penceresi: bulunduğun ekrandan çıkmadan ekle ya da mevcut olanı düzenle
 import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
@@ -14,13 +14,11 @@ import {
   type HabitKind,
 } from '@features/habits/domain/entities';
 import { useHabits } from '@features/habits/presentation/useHabits';
-import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { PillButton } from '@presentation/components/common/PillButton';
 import { SegmentedControl } from '@presentation/components/common/SegmentedControl';
-import { confirmAction } from '@presentation/utils/dialogs';
 import { hapticLight } from '@presentation/utils/haptics';
 
 const t = strings.habits;
@@ -62,7 +60,7 @@ function SheetForm({
   readonly onClose: () => void;
 }) {
   const insets = useSafeAreaInsets();
-  const { allHabits, createHabit, updateHabit, archiveHabit } = useHabits();
+  const { allHabits, createHabit, updateHabit } = useHabits();
   const [kind, setKind] = useState<HabitKind>(habit?.kind ?? 'build');
   const [title, setTitle] = useState(habit?.title ?? '');
   const [error, setError] = useState<string | null>(null);
@@ -80,20 +78,6 @@ function SheetForm({
     if (!habit) void createHabit(input);
     else if (habit.title !== input.title || habit.kind !== kind) void updateHabit(habit.id, input);
     onClose();
-  };
-
-  const confirmRemove = (target: Habit) => {
-    confirmAction({
-      title: t.removeTitle,
-      message: t.removeBody(target.title),
-      confirmText: t.remove,
-      cancelText: strings.common.cancel,
-      destructive: true,
-      onConfirm: () => {
-        onClose();
-        void archiveHabit(target.id);
-      },
-    });
   };
 
   return (
@@ -161,14 +145,6 @@ function SheetForm({
           icon={habit ? 'check' : 'plus'}
           onPress={submit}
         />
-        {habit ? (
-          <ActionButton
-            label={t.removeCta}
-            icon="trash-2"
-            color={colors.danger}
-            onPress={() => confirmRemove(habit)}
-          />
-        ) : null}
       </Animated.View>
     </KeyboardAvoidingView>
   );

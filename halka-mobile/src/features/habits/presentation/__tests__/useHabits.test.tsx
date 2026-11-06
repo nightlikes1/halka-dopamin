@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { NetworkFailure } from '@core/errors/Failure';
-import { err, ok, type Result } from '@core/result/Result';
+import { err, ok, okVoid, type Result } from '@core/result/Result';
 import type { Habit } from '@features/habits/domain/entities';
 import { useHabits } from '@features/habits/presentation/useHabits';
 
@@ -15,6 +15,7 @@ const saved: Habit = {
 const mockCreate = jest.fn<Promise<Result<Habit>>, [unknown]>();
 const mockList = jest.fn<Promise<Result<readonly Habit[]>>, []>();
 const mockUpdate = jest.fn<Promise<Result<Habit>>, [string, unknown]>();
+const mockArchive = jest.fn<Promise<Result<void>>, [string]>();
 
 jest.mock('@presentation/providers/DIProvider', () => ({
   useDI: () => ({
@@ -22,7 +23,7 @@ jest.mock('@presentation/providers/DIProvider', () => ({
       list: { execute: () => mockList() },
       create: { execute: (input: unknown) => mockCreate(input) },
       update: { execute: (id: string, input: unknown) => mockUpdate(id, input) },
-      archive: { execute: jest.fn() },
+      archive: { execute: (id: string) => mockArchive(id) },
     },
   }),
 }));
@@ -78,6 +79,48 @@ describe('useHabits düzenleme', () => {
     });
 
     expect(result.current.habits).toEqual([saved]);
+    expect(mockShowMessage).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('useHabits silme', () => {
+  const older: Habit = { ...saved, id: 'h0', title: 'Spor', createdAt: '2026-11-01T10:00:00.000Z' };
+
+  beforeEach(async () => {
+    mockShowMessage.mockClear();
+    mockList.mockResolvedValue(ok([older, saved]));
+    const { result } = await renderHook(() => useHabits());
+    await act(() => result.current.reload());
+  });
+
+  it('sunucu cevabını beklemeden satırı kaldırır', async () => {
+    const server = deferred<Result<void>>();
+    mockArchive.mockReturnValue(server.promise);
+    const { result } = await renderHook(() => useHabits());
+
+    let removing: Promise<boolean> = Promise.resolve(false);
+    await act(async () => {
+      removing = result.current.archiveHabit(older.id);
+    });
+    expect(result.current.habits).toEqual([saved]);
+
+    await act(async () => {
+      server.resolve(okVoid());
+      await removing;
+    });
+    expect(result.current.habits).toEqual([saved]);
+    expect(mockShowMessage).not.toHaveBeenCalled();
+  });
+
+  it('sunucu hata verirse satırı eski yerine geri koyar ve uyarır', async () => {
+    mockArchive.mockResolvedValue(err(new NetworkFailure('Bağlantı yok')));
+    const { result } = await renderHook(() => useHabits());
+
+    await act(async () => {
+      await result.current.archiveHabit(older.id);
+    });
+
+    expect(result.current.habits).toEqual([older, saved]);
     expect(mockShowMessage).toHaveBeenCalledTimes(1);
   });
 });

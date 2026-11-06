@@ -1,6 +1,6 @@
 // Alışkanlık ViewModel'i: liste ekranlar arasında paylaşılır (Zustand).
 // Ekleme anında görünür (pendingHabits); sunucu kaydedince gerçek listeye geçer, hata olursa kalkar.
-// Düzenleme de anında görünür, hata olursa eski haline döner.
+// Düzenleme ve silme de anında görünür, hata olursa eski haline döner.
 import { useCallback, useMemo } from 'react';
 import { create } from 'zustand';
 import {
@@ -89,14 +89,23 @@ export function useHabits() {
   );
 
   const archiveHabit = useCallback(
-    async (id: string): Promise<boolean> =>
-      handleResult(await useCases.archive.execute(id), () => {
-        const latest = useHabitStore.getState();
-        setState({
-          habits: latest.habits.filter((habit) => habit.id !== id),
-          revision: latest.revision + 1,
-        });
-      }),
+    async (id: string): Promise<boolean> => {
+      const before = useHabitStore.getState();
+      const removed = before.habits.find((habit) => habit.id === id);
+      setState({
+        habits: before.habits.filter((habit) => habit.id !== id),
+        revision: before.revision + 1,
+      });
+      const result = await useCases.archive.execute(id);
+      const latest = useHabitStore.getState();
+      // Başarıda da sayaç artar: silme sürerken başlamış yenilemenin listesi satırı geri getirmesin
+      const habits =
+        !result.ok && removed
+          ? [...latest.habits, removed].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+          : latest.habits;
+      setState({ habits, revision: latest.revision + 1 });
+      return handleResult(result, () => undefined);
+    },
     [useCases, setState],
   );
 
