@@ -315,7 +315,11 @@ export interface TestContext {
 }
 
 export async function createTestApp(
-  options: { clock?: Clock; checkDatabase?: () => Promise<boolean> } = {},
+  options: {
+    clock?: Clock;
+    checkDatabase?: () => Promise<boolean>;
+    config?: Partial<AppConfig>;
+  } = {},
 ): Promise<TestContext> {
   const users = new InMemoryUserRepository();
   const resetTokens = new InMemoryPasswordResetTokenRepository();
@@ -326,7 +330,7 @@ export async function createTestApp(
   const notes = new InMemoryDayNoteRepository();
   const characters = new InMemoryCharacterRepository();
   const app = await buildApp({
-    config: testConfig,
+    config: { ...testConfig, ...options.config },
     userRepository: users,
     passwordResetTokenRepository: resetTokens,
     emailService,

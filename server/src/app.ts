@@ -23,6 +23,7 @@ import { habitRoutes } from './modules/habits/habits.routes.js';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { registerAuth } from './plugins/auth.js';
 import { registerErrorHandler } from './plugins/errorHandler.js';
+import { registerRateLimit } from './plugins/rateLimit.js';
 
 export interface AppDependencies {
   readonly config: AppConfig;
@@ -53,6 +54,7 @@ export async function buildApp(deps: AppDependencies): Promise<FastifyInstance> 
       methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     });
   }
+  await registerRateLimit(app, deps.config);
   await registerAuth(app, deps.config);
 
   const emailService = deps.emailService ?? new NodemailerEmailService(deps.config);
@@ -69,7 +71,12 @@ export async function buildApp(deps: AppDependencies): Promise<FastifyInstance> 
   const checkInService = new CheckInService(deps.habitRepository, deps.checkInRepository, clock);
 
   await app.register(healthRoutes, { checkDatabase: deps.checkDatabase });
-  await app.register(authRoutes, { authService, appUrl: deps.config.appUrl });
+  await app.register(authRoutes, {
+    authService,
+    appUrl: deps.config.appUrl,
+    isProduction: deps.config.isProduction,
+    clock,
+  });
   await app.register(habitRoutes, { habits: deps.habitRepository, clock });
   await app.register(checkInRoutes, { checkIns: deps.checkInRepository, service: checkInService });
   await app.register(habitEntryRoutes, {

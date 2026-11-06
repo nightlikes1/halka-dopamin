@@ -21,6 +21,9 @@ export function registerErrorHandler(app: FastifyInstance): void {
 
     if (error instanceof AppError) {
       const body: ErrorBody = { error: { code: error.code, message: error.message } };
+      if (error.retryAfterSeconds !== undefined) {
+        void reply.header('retry-after', error.retryAfterSeconds);
+      }
       return reply.status(error.statusCode).send(body);
     }
 

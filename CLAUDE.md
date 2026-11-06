@@ -126,6 +126,7 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
 - Prisma 7: istemci `src/generated/prisma`'ya üretilir (git'e girmez), bağlantı `@prisma/adapter-pg` ile.
   Veritabanı Tokyo'da (`ap-northeast-1`): yeni bağlantı ~2,6 sn, sorgu ~350 ms. Bu yüzden havuz bağlantıları boşta açık kalır (`db/prisma.ts`).
 - Her sorgu `userId` ile filtrelenir; kullanıcı yalnızca kendi verisine erişir.
+- İstek sınırları (bellekte, sunucu yeniden başlayınca sıfırlanır; `plugins/rateLimit.ts`, `modules/auth/attemptLimiter.ts`): giriş 5 başarısız/dk (IP ve e-posta ayrı ayrı; başarılı giriş sayılmaz) + 30 istek/dk, kayıt 10/saat, şifremi unuttum 3/saat (IP ve e-posta), sıfırlama 10/saat. Hata `429 RATE_LIMITED` + `Retry-After`. Üretimde istemci adresi `CF-Connecting-IP`'den okunur (`request.ip` herkes için Docker ağ geçididir); bu yüzden kaynak sunucu Cloudflare dışından erişilebilir olmamalı.
 - Hata gövdesi her zaman `{ error: { code, message, issues? } }`, mesajlar Türkçe.
 - `.env` git'e girmez (`DATABASE_URL`, `JWT_SECRET`); örnek: `.env.example`.
 - Şema değişince: `npm run db:migrate` (Prisma 7'de `migrate dev` istemciyi üretmez; script `prisma generate`'i de çalıştırır).
