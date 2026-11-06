@@ -6,7 +6,7 @@ import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/ThemeProvider';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
-import type { CatalogEntry } from '@domain/usecases/layout/GetWidgetCatalogUseCase';
+import type { CatalogEntry } from '@domain/usecases/LayoutUseCases';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon } from '@presentation/components/common/Icon';
 import { WIDGET_ICONS } from '@presentation/components/common/iconMaps';

@@ -1,8 +1,7 @@
 // Su use case testleri
 import { InMemoryRepository } from '../../fakes/fakes';
 import type { Water } from '@domain/entities/Water';
-import { AddWaterUseCase } from '@domain/usecases/water/AddWaterUseCase';
-import { ResetWaterUseCase } from '@domain/usecases/water/ResetWaterUseCase';
+import { AddWaterUseCase, ResetWaterUseCase } from '@domain/usecases/WaterUseCases';
 
 describe('AddWaterUseCase', () => {
   let repository: InMemoryRepository<Water>;

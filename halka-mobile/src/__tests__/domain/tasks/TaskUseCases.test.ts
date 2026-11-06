@@ -1,9 +1,11 @@
 // Görev use case testleri
 import { InMemoryRepository } from '../../fakes/fakes';
 import type { TaskList } from '@domain/entities/Task';
-import { AddTaskUseCase } from '@domain/usecases/tasks/AddTaskUseCase';
-import { DeleteTaskUseCase } from '@domain/usecases/tasks/DeleteTaskUseCase';
-import { ToggleTaskUseCase } from '@domain/usecases/tasks/ToggleTaskUseCase';
+import {
+  AddTaskUseCase,
+  DeleteTaskUseCase,
+  ToggleTaskUseCase,
+} from '@domain/usecases/TasksUseCases';
 
 const initialList = (): TaskList => ({
   items: [{ id: 't1', text: 'Mevcut görev', done: false, priority: 'normal' }],

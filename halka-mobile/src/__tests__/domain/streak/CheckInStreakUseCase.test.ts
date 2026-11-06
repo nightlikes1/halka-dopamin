@@ -1,7 +1,7 @@
 // Zincir (seri) use case testleri
 import { FakeClock, InMemoryRepository, TEST_NOW, TEST_TODAY } from '../../fakes/fakes';
 import { getCurrentStreak, getStreakHistory, type Streak } from '@domain/entities/Streak';
-import { CheckInStreakUseCase } from '@domain/usecases/streak/CheckInStreakUseCase';
+import { CheckInStreakUseCase } from '@domain/usecases/StreakUseCases';
 
 const streakWith = (checkedDates: string[], bestStreak = 0): Streak => ({
   habitName: 'Okuma',

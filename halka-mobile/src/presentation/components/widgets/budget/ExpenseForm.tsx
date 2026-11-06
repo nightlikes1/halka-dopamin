@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { spacing } from '@core/theme/tokens';
 import { EXPENSE_LABEL_MAX_LENGTH } from '@domain/entities/Budget';
-import type { AddExpenseInput } from '@domain/usecases/budget/AddExpenseUseCase';
+import type { AddExpenseInput } from '@domain/usecases/BudgetUseCases';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { Chip } from '@presentation/components/common/Chip';

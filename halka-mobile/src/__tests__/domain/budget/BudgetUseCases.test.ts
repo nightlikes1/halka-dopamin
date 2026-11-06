@@ -1,8 +1,7 @@
 // Bütçe use case testleri
 import { FakeClock, InMemoryRepository, TEST_NOW } from '../../fakes/fakes';
 import { getBudgetSummary, type Budget } from '@domain/entities/Budget';
-import { AddExpenseUseCase } from '@domain/usecases/budget/AddExpenseUseCase';
-import { DeleteExpenseUseCase } from '@domain/usecases/budget/DeleteExpenseUseCase';
+import { AddExpenseUseCase, DeleteExpenseUseCase } from '@domain/usecases/BudgetUseCases';
 
 describe('Bütçe use caseleri', () => {
   let repository: InMemoryRepository<Budget>;

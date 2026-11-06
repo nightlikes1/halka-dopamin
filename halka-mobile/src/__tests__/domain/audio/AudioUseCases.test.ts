@@ -1,9 +1,9 @@
 // Ses ve ilgili profil use case testleri
 import { createFakeRepositories, FakeAudioPort, TEST_TODAY } from '../../fakes/fakes';
 import { createDefaultSnapshot } from '@domain/entities/defaults';
-import { ToggleAmbientUseCase } from '@domain/usecases/audio/ToggleAmbientUseCase';
-import { RemoveWidgetUseCase } from '@domain/usecases/layout/RemoveWidgetUseCase';
-import { ToggleSoundUseCase } from '@domain/usecases/profile/ToggleSoundUseCase';
+import { ToggleAmbientUseCase } from '@domain/usecases/AudioUseCases';
+import { RemoveWidgetUseCase } from '@domain/usecases/LayoutUseCases';
+import { ToggleSoundUseCase } from '@domain/usecases/ProfileUseCases';
 
 describe('ToggleAmbientUseCase', () => {
   it('sesi başlatır, aynı ses tekrar seçilince durdurur', async () => {

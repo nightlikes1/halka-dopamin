@@ -6,9 +6,11 @@ import {
   type Pomodoro,
 } from '@domain/entities/Pomodoro';
 import { completePomodoroSession } from '@domain/services/pomodoroRules';
-import { CompletePomodoroSessionUseCase } from '@domain/usecases/pomodoro/CompletePomodoroSessionUseCase';
-import { PausePomodoroUseCase } from '@domain/usecases/pomodoro/PausePomodoroUseCase';
-import { StartPomodoroUseCase } from '@domain/usecases/pomodoro/StartPomodoroUseCase';
+import {
+  CompletePomodoroSessionUseCase,
+  PausePomodoroUseCase,
+  StartPomodoroUseCase,
+} from '@domain/usecases/PomodoroUseCases';
 
 const idle = (overrides: Partial<Pomodoro> = {}): Pomodoro => ({
   mode: 'work',

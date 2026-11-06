@@ -53,40 +53,53 @@ import { ExpoClipboardService } from '@data/services/ExpoClipboardService';
 import { SystemClock } from '@data/services/SystemClock';
 import { HalkaLocalDataSource, type KeyValueStorage } from '@data/storage';
 import type { AudioPort, ClipboardPort, Clock } from '@domain/ports';
-import { InitializeAppUseCase } from '@domain/usecases/app/InitializeAppUseCase';
-import { LoadSnapshotUseCase } from '@domain/usecases/app/LoadSnapshotUseCase';
-import { RunDailyResetUseCase } from '@domain/usecases/app/RunDailyResetUseCase';
-import { PlaySoundEffectUseCase } from '@domain/usecases/audio/PlaySoundEffectUseCase';
-import { StopAmbientUseCase } from '@domain/usecases/audio/StopAmbientUseCase';
-import { ToggleAmbientUseCase } from '@domain/usecases/audio/ToggleAmbientUseCase';
-import { ToggleBigOneUseCase } from '@domain/usecases/bigOne/ToggleBigOneUseCase';
-import { UpdateBigOneGoalUseCase } from '@domain/usecases/bigOne/UpdateBigOneGoalUseCase';
-import { GenerateDailyBriefingUseCase } from '@domain/usecases/briefing/GenerateDailyBriefingUseCase';
-import { AddExpenseUseCase } from '@domain/usecases/budget/AddExpenseUseCase';
-import { DeleteExpenseUseCase } from '@domain/usecases/budget/DeleteExpenseUseCase';
-import { AddWidgetUseCase } from '@domain/usecases/layout/AddWidgetUseCase';
-import { GetWidgetCatalogUseCase } from '@domain/usecases/layout/GetWidgetCatalogUseCase';
-import { RemoveWidgetUseCase } from '@domain/usecases/layout/RemoveWidgetUseCase';
-import { SetEnergyLevelUseCase } from '@domain/usecases/mood/SetEnergyLevelUseCase';
-import { SetMoodUseCase } from '@domain/usecases/mood/SetMoodUseCase';
-import { SetReflectionUseCase } from '@domain/usecases/mood/SetReflectionUseCase';
-import { ClearNoteUseCase } from '@domain/usecases/notes/ClearNoteUseCase';
-import { CopyNoteUseCase } from '@domain/usecases/notes/CopyNoteUseCase';
-import { UpdateNoteUseCase } from '@domain/usecases/notes/UpdateNoteUseCase';
-import { ChangePomodoroModeUseCase } from '@domain/usecases/pomodoro/ChangePomodoroModeUseCase';
-import { CompletePomodoroSessionUseCase } from '@domain/usecases/pomodoro/CompletePomodoroSessionUseCase';
-import { PausePomodoroUseCase } from '@domain/usecases/pomodoro/PausePomodoroUseCase';
-import { ResetPomodoroUseCase } from '@domain/usecases/pomodoro/ResetPomodoroUseCase';
-import { StartPomodoroUseCase } from '@domain/usecases/pomodoro/StartPomodoroUseCase';
-import { ChangeViewModeUseCase } from '@domain/usecases/profile/ChangeViewModeUseCase';
-import { ToggleSoundUseCase } from '@domain/usecases/profile/ToggleSoundUseCase';
-import { UpdateUserNameUseCase } from '@domain/usecases/profile/UpdateUserNameUseCase';
-import { CheckInStreakUseCase } from '@domain/usecases/streak/CheckInStreakUseCase';
-import { AddTaskUseCase } from '@domain/usecases/tasks/AddTaskUseCase';
-import { DeleteTaskUseCase } from '@domain/usecases/tasks/DeleteTaskUseCase';
-import { ToggleTaskUseCase } from '@domain/usecases/tasks/ToggleTaskUseCase';
-import { AddWaterUseCase } from '@domain/usecases/water/AddWaterUseCase';
-import { ResetWaterUseCase } from '@domain/usecases/water/ResetWaterUseCase';
+import {
+  InitializeAppUseCase,
+  LoadSnapshotUseCase,
+  RunDailyResetUseCase,
+} from '@domain/usecases/AppUseCases';
+import {
+  PlaySoundEffectUseCase,
+  StopAmbientUseCase,
+  ToggleAmbientUseCase,
+} from '@domain/usecases/AudioUseCases';
+import { ToggleBigOneUseCase, UpdateBigOneGoalUseCase } from '@domain/usecases/BigOneUseCases';
+import { GenerateDailyBriefingUseCase } from '@domain/usecases/BriefingUseCases';
+import { AddExpenseUseCase, DeleteExpenseUseCase } from '@domain/usecases/BudgetUseCases';
+import {
+  AddWidgetUseCase,
+  GetWidgetCatalogUseCase,
+  RemoveWidgetUseCase,
+} from '@domain/usecases/LayoutUseCases';
+import {
+  SetEnergyLevelUseCase,
+  SetMoodUseCase,
+  SetReflectionUseCase,
+} from '@domain/usecases/MoodUseCases';
+import {
+  ClearNoteUseCase,
+  CopyNoteUseCase,
+  UpdateNoteUseCase,
+} from '@domain/usecases/NotesUseCases';
+import {
+  ChangePomodoroModeUseCase,
+  CompletePomodoroSessionUseCase,
+  PausePomodoroUseCase,
+  ResetPomodoroUseCase,
+  StartPomodoroUseCase,
+} from '@domain/usecases/PomodoroUseCases';
+import {
+  ChangeViewModeUseCase,
+  ToggleSoundUseCase,
+  UpdateUserNameUseCase,
+} from '@domain/usecases/ProfileUseCases';
+import { CheckInStreakUseCase } from '@domain/usecases/StreakUseCases';
+import {
+  AddTaskUseCase,
+  DeleteTaskUseCase,
+  ToggleTaskUseCase,
+} from '@domain/usecases/TasksUseCases';
+import { AddWaterUseCase, ResetWaterUseCase } from '@domain/usecases/WaterUseCases';
 
 // Testlerde ya da farklı platformlarda değiştirilebilen dış bağımlılıklar
 export interface ContainerDependencies {

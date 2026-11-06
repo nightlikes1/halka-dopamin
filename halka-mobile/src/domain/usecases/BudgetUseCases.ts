@@ -1,17 +1,18 @@
-// Yeni harcama kaydı ekler
+// Harcama ekleme ve silme
 import { ValidationFailure } from '@core/errors/Failure';
-import { err, ok, type AsyncResult } from '@core/result/Result';
+import { type AsyncResult, err, ok } from '@core/result/Result';
 import { createId } from '@core/utils/id';
 import {
+  type Budget,
+  type Expense,
   EXPENSE_DEFAULT_LABEL,
   EXPENSE_LABEL_MAX_LENGTH,
   EXPENSE_MAX_AMOUNT,
-  type Budget,
-  type Expense,
 } from '@domain/entities/Budget';
 import type { Clock, IEntityRepository } from '@domain/ports';
-import { updateEntity } from '@domain/usecases/shared/updateEntity';
+import { updateEntity } from '@domain/usecases/updateEntity';
 
+// Yeni harcama kaydı ekler
 export interface AddExpenseInput {
   readonly amount: number;
   readonly label?: string;
@@ -36,6 +37,17 @@ export class AddExpenseUseCase {
     };
     return updateEntity(this.repository, (budget) =>
       ok({ ...budget, expenses: [expense, ...budget.expenses] }),
+    );
+  }
+}
+
+// Harcama kaydını siler
+export class DeleteExpenseUseCase {
+  constructor(private readonly repository: IEntityRepository<Budget>) {}
+
+  execute(expenseId: string): AsyncResult<Budget> {
+    return updateEntity(this.repository, (budget) =>
+      ok({ ...budget, expenses: budget.expenses.filter((expense) => expense.id !== expenseId) }),
     );
   }
 }

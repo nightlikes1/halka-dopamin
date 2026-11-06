@@ -1,7 +1,7 @@
 // Günlük harcama ViewModel'i
 import { useCallback, useMemo } from 'react';
 import { getBudgetSummary } from '@domain/entities/Budget';
-import type { AddExpenseInput } from '@domain/usecases/budget/AddExpenseUseCase';
+import type { AddExpenseInput } from '@domain/usecases/BudgetUseCases';
 import { useSoundEffect } from '@presentation/hooks/useSoundEffect';
 import { useDI } from '@presentation/providers/DIProvider';
 import { useHalkaStore, useSnapshotSlice } from '@presentation/store/useHalkaStore';

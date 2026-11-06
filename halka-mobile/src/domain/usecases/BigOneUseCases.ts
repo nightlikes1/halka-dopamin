@@ -1,10 +1,22 @@
-// Ana hedef metnini değiştirir; yeni hedef tamamlanmamış olarak başlar
+// Günün ana hedefi
 import { ValidationFailure } from '@core/errors/Failure';
-import { err, ok, type AsyncResult } from '@core/result/Result';
+import { type AsyncResult, err, ok } from '@core/result/Result';
 import { BIG_ONE_GOAL_MAX_LENGTH, type BigOne } from '@domain/entities/BigOne';
 import type { IEntityRepository } from '@domain/ports';
-import { updateEntity } from '@domain/usecases/shared/updateEntity';
+import { updateEntity } from '@domain/usecases/updateEntity';
 
+// Ana hedefin tamamlanma durumunu değiştirir
+export class ToggleBigOneUseCase {
+  constructor(private readonly repository: IEntityRepository<BigOne>) {}
+
+  execute(): AsyncResult<BigOne> {
+    return updateEntity(this.repository, (bigOne) =>
+      ok({ ...bigOne, isCompleted: !bigOne.isCompleted }),
+    );
+  }
+}
+
+// Ana hedef metnini değiştirir; yeni hedef tamamlanmamış olarak başlar
 export class UpdateBigOneGoalUseCase {
   constructor(private readonly repository: IEntityRepository<BigOne>) {}
 

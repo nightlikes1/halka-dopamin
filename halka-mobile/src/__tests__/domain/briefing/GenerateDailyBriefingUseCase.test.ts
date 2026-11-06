@@ -3,7 +3,7 @@ import { FakeClock, TEST_NOW, TEST_TODAY } from '../../fakes/fakes';
 import { createDefaultSnapshot } from '@domain/entities/defaults';
 import type { HalkaSnapshot } from '@domain/entities/HalkaSnapshot';
 import { getGreeting } from '@domain/services/briefingGenerator';
-import { GenerateDailyBriefingUseCase } from '@domain/usecases/briefing/GenerateDailyBriefingUseCase';
+import { GenerateDailyBriefingUseCase } from '@domain/usecases/BriefingUseCases';
 
 describe('GenerateDailyBriefingUseCase', () => {
   const useCase = new GenerateDailyBriefingUseCase(new FakeClock(TEST_NOW));

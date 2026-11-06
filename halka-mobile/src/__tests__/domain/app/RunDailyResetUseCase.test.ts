@@ -1,7 +1,7 @@
 // Günlük sıfırlama testleri
 import { createFakeRepositories, FakeClock, TEST_NOW, TEST_TODAY } from '../../fakes/fakes';
 import { createDefaultSnapshot } from '@domain/entities/defaults';
-import { RunDailyResetUseCase } from '@domain/usecases/app/RunDailyResetUseCase';
+import { RunDailyResetUseCase } from '@domain/usecases/AppUseCases';
 
 describe('RunDailyResetUseCase', () => {
   it('aynı gün içinde hiçbir şeyi değiştirmez', async () => {
