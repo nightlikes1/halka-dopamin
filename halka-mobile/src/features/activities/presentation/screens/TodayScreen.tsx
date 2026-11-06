@@ -16,7 +16,11 @@ import { useTodayHabits } from '@features/activities/presentation/useTodayHabits
 import { useAuth } from '@features/auth/presentation/useAuth';
 import { CheckInCard } from '@features/checkin/presentation/components/CheckInCard';
 import { useCheckInOverview } from '@features/checkin/presentation/useCheckInOverview';
-import type { Habit, HabitEntryStatus } from '@features/habits/domain/entities';
+import {
+  isPendingHabit,
+  type Habit,
+  type HabitEntryStatus,
+} from '@features/habits/domain/entities';
 import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
 import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import { Appear } from '@presentation/components/common/Appear';
@@ -46,6 +50,7 @@ const doneStatusFor = (habit: Habit): HabitEntryStatus =>
   habit.kind === 'build' ? 'done' : 'clean';
 
 function habitSubtitle(habit: Habit, status: HabitEntryStatus | undefined): string {
+  if (isPendingHabit(habit)) return strings.habits.adding;
   if (status === 'done') return t.habitDone;
   if (status === 'clean') return t.quitDone;
   if (status === 'missed') return t.habitMissed;
@@ -77,6 +82,7 @@ export function TodayScreen() {
   const name = resolveGreetingName(user?.displayName, profile.name);
 
   const toggleHabit = (habit: Habit) => {
+    if (isPendingHabit(habit)) return;
     const completed = isCompleted(statusOf(habit.id));
     if (!completed) hapticLight();
     void mark(habit, completed ? undefined : doneStatusFor(habit));

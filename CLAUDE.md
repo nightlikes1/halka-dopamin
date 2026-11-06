@@ -57,7 +57,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   Bugün'deki alışkanlık satırı **sağa kaydırınca** işaretlenir (buton da çalışır, ek paket yok).
 - Aynı adlı (büyük/küçük harf ve Türkçe karakter farkı gözetmeden) iki aktif alışkanlık olamaz: sunucu 409, istemci
   `sameHabitTitle` ile anında uyarır. Hitap adı tek kural: Halka'da değiştirilmiş ad > hesap adı (`resolveGreetingName`).
-- Alışkanlık ekleme (2026-11-06): Bugün başlığındaki "Ekle" ve Alışkanlıklarım sayfası aynı alttan pencereyi açar (`AddHabitSheet`: tür seç, adını yaz); ekleme için ekrandan çıkılmaz. Silme "Düzenle" (Alışkanlıklarım) sayfasında.
+- Alışkanlık ekleme (2026-11-06): Bugün başlığındaki "Ekle" ve Alışkanlıklarım sayfası aynı alttan pencereyi açar (`AddHabitSheet`: tür seç, adını yaz); ekleme için ekrandan çıkılmaz. Silme "Düzenle" (Alışkanlıklarım) sayfasında. Pencere sunucuyu beklemeden kapanır, satır "Ekleniyor…" ile görünür (`pendingHabits`; tik/silme kayıt bitene kadar kapalı, hata olursa satır kalkar + uyarı). Check-in ve karakter yalnızca kayıtlı `habits` listesini kullanır.
 - Alışkanlıklar gün içinde Bugün ekranından tek dokunuşla işaretlenir (`/habit-entries`); akşam check-in bu
   cevaplarla önceden dolar. Denge ve yakınlık hesapları değişmedi (yalnızca check-in olan günler).
 - Zaman tasarrufu referansı: toplam ucuz dopamin (zorunlu) + isteğe bağlı aktivite bazlı.
@@ -124,6 +124,7 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
 ```
 
 - Prisma 7: istemci `src/generated/prisma`'ya üretilir (git'e girmez), bağlantı `@prisma/adapter-pg` ile.
+  Veritabanı Tokyo'da (`ap-northeast-1`): yeni bağlantı ~2,6 sn, sorgu ~350 ms. Bu yüzden havuz bağlantıları boşta açık kalır (`db/prisma.ts`).
 - Her sorgu `userId` ile filtrelenir; kullanıcı yalnızca kendi verisine erişir.
 - Hata gövdesi her zaman `{ error: { code, message, issues? } }`, mesajlar Türkçe.
 - `.env` git'e girmez (`DATABASE_URL`, `JWT_SECRET`); örnek: `.env.example`.

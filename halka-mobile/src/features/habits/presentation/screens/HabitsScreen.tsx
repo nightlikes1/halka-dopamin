@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
 import { colors, dopamineColors, radius, spacing } from '@core/theme/tokens';
-import type { Habit, HabitKind } from '@features/habits/domain/entities';
+import { isPendingHabit, type Habit, type HabitKind } from '@features/habits/domain/entities';
 import { themedStyles } from '@core/theme/themed';
 import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
 import { useHabits } from '@features/habits/presentation/useHabits';
@@ -43,14 +43,20 @@ function HabitSection({ kind, habits, onRemove }: HabitSectionProps) {
       {habits.map((habit) => (
         <View key={habit.id} style={[styles.row, { borderLeftColor: tint }]}>
           <AppText style={styles.rowTitle}>{habit.title}</AppText>
-          <IconButton
-            icon="x"
-            tone="danger"
-            accessibilityLabel={`${habit.title} ${t.remove}`}
-            onPress={() => onRemove(habit)}
-            variant="ghost"
-            size={44}
-          />
+          {isPendingHabit(habit) ? (
+            <AppText variant="dim" style={styles.pending}>
+              {t.adding}
+            </AppText>
+          ) : (
+            <IconButton
+              icon="x"
+              tone="danger"
+              accessibilityLabel={`${habit.title} ${t.remove}`}
+              onPress={() => onRemove(habit)}
+              variant="ghost"
+              size={44}
+            />
+          )}
         </View>
       ))}
     </Card>
@@ -58,7 +64,7 @@ function HabitSection({ kind, habits, onRemove }: HabitSectionProps) {
 }
 
 export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
-  const { habits, status, errorMessage, reload, archiveHabit } = useHabits();
+  const { allHabits: habits, status, errorMessage, reload, archiveHabit } = useHabits();
   const [adding, setAdding] = useState(false);
 
   useFocusEffect(
@@ -121,6 +127,7 @@ const styles = themedStyles(() => ({
     backgroundColor: colors.bgCardPressed,
   },
   rowTitle: { flex: 1 },
+  pending: { paddingRight: spacing.md, paddingVertical: spacing.md },
   error: { color: colors.danger },
   errorBox: { gap: spacing.sm },
 }));

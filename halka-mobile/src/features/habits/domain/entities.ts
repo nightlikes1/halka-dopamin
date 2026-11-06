@@ -33,6 +33,20 @@ export const STATUSES_BY_KIND: Readonly<Record<HabitKind, readonly HabitEntrySta
 export const kindOfStatus = (status: HabitEntryStatus): HabitKind =>
   status === 'done' || status === 'missed' ? 'build' : 'quit';
 
+const PENDING_ID_PREFIX = 'pending:';
+
+// Sunucu cevabı gelene kadar listede gösterilen geçici kayıt (aynı ad iki kez eklenemediği için kimlik benzersiz)
+export const pendingHabit = (input: CreateHabitInput, createdAt: string): Habit => ({
+  id: `${PENDING_ID_PREFIX}${input.title}`,
+  kind: input.kind,
+  title: input.title,
+  target: { type: 'daily' },
+  createdAt,
+});
+
+export const isPendingHabit = (habit: Pick<Habit, 'id'>): boolean =>
+  habit.id.startsWith(PENDING_ID_PREFIX);
+
 export const HABIT_TITLE_MAX_LENGTH = 80;
 
 // Aynı ad (büyük/küçük harf ve kenar boşluğu farkı gözetmeden) ikinci kez eklenemez

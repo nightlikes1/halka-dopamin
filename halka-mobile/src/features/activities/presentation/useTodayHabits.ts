@@ -9,7 +9,7 @@ import { useDI } from '@presentation/providers/DIProvider';
 
 export function useTodayHabits() {
   const { checkIn } = useDI();
-  const { habits, status, reload: reloadHabits } = useHabits();
+  const { allHabits: habits, status, reload: reloadHabits } = useHabits();
   const [date, setDate] = useState<string | null>(null);
   const [entries, setEntries] = useState<readonly HabitCheck[]>([]);
   const [error, setError] = useState<string | null>(null);

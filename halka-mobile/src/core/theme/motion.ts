@@ -7,6 +7,7 @@ export const easeOut = Easing.bezier(0.2, 0.8, 0.2, 1);
 export const durations = {
   press: 120,
   colorChange: 250,
+  keyboardSlide: 280,
   enter: 500,
   ringFill: 1400,
   levelFill: 1600,

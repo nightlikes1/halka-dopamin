@@ -1,8 +1,10 @@
 // Alttan açılan "Yeni alışkanlık" penceresi: bulunduğun ekrandan çıkmadan tür seç, adını yaz, ekle
 import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { strings } from '@core/i18n/tr';
+import { durations, easeOut } from '@core/theme/motion';
 import { themedStyles } from '@core/theme/themed';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import {
@@ -26,6 +28,13 @@ const ERROR_TEXT = {
   duplicate: t.titleDuplicate,
 } as const;
 
+// Android klavye açılınca pencereyi tek karede küçültür; pencere yeni yerine kayarak gider.
+// iOS'ta KeyboardAvoidingView klavyeyle birlikte kendisi kaydırır
+const KEYBOARD_SLIDE =
+  Platform.OS === 'android'
+    ? LinearTransition.duration(durations.keyboardSlide).easing(easeOut)
+    : undefined;
+
 interface AddHabitSheetProps {
   readonly visible: boolean;
   readonly onClose: () => void;
@@ -42,32 +51,26 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
 function SheetForm({ onClose }: { readonly onClose: () => void }) {
   const insets = useSafeAreaInsets();
-  const { habits, createHabit } = useHabits();
+  const { allHabits, createHabit } = useHabits();
   const [kind, setKind] = useState<HabitKind>('build');
   const [title, setTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
 
-  const submit = async () => {
-    if (saving) return;
-    const problem = habitTitleError(title, habits);
+  // Pencere sunucuyu beklemeden kapanır: kayıt listede "Ekleniyor…" olarak görünür, hata olursa uyarı çıkar
+  const submit = () => {
+    const problem = habitTitleError(title, allHabits);
     if (problem) {
       setError(ERROR_TEXT[problem]);
       return;
     }
-    setError(null);
-    setSaving(true);
-    const created = await createHabit({ kind, title: title.trim() });
-    setSaving(false);
-    if (created) {
-      hapticLight();
-      onClose();
-    }
+    hapticLight();
+    void createHabit({ kind, title: title.trim() });
+    onClose();
   };
 
   return (
     <KeyboardAvoidingView
-      style={styles.flex}
+      style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Pressable
@@ -76,7 +79,10 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
         accessibilityRole="button"
         accessibilityLabel={strings.common.cancel}
       />
-      <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, spacing.lg) }]}>
+      <Animated.View
+        layout={KEYBOARD_SLIDE}
+        style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, spacing.lg) }]}
+      >
         <View style={styles.header}>
           <AppText variant="section" accessibilityRole="header" style={styles.flex}>
             {t.addTitle}
@@ -110,7 +116,7 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
           maxLength={HABIT_TITLE_MAX_LENGTH}
           autoFocus
           returnKeyType="done"
-          onSubmitEditing={() => void submit()}
+          onSubmitEditing={submit}
           accessibilityLabel={t.titleLabel}
         />
         {error ? (
@@ -119,20 +125,24 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
           </AppText>
         ) : null}
 
-        <PillButton
-          label={saving ? t.adding : t.addCta}
-          icon="plus"
-          disabled={saving}
-          onPress={() => void submit()}
-        />
-      </View>
+        <PillButton label={t.addCta} icon="plus" onPress={submit} />
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = themedStyles(() => ({
+  root: { flex: 1, justifyContent: 'flex-end' },
   flex: { flex: 1 },
-  backdrop: { flex: 1, backgroundColor: colors.overlay },
+  // Tam kaplar: pencere kayarken arkasında karartılmamış şerit kalmaz
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: colors.overlay,
+  },
   sheet: {
     gap: spacing.md,
     paddingTop: spacing.md,
