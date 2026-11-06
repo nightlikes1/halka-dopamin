@@ -1,6 +1,5 @@
 // Halkanın ortasındaki cam çekirdek: aktif eklenti sayısı, saat, tarih, selamlama
 import { Pressable, View } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/useTheme';
@@ -9,7 +8,6 @@ import type { DailyBriefing } from '@features/halka/domain/entities/Briefing';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon } from '@presentation/components/common/Icon';
 import { LiveClock } from '@features/halka/presentation/components/ring/LiveClock';
-import { useLoopValue } from '@presentation/hooks/useLoopValue';
 
 interface CoreHubProps {
   readonly diameter: number;
@@ -19,9 +17,6 @@ interface CoreHubProps {
 
 export function CoreHub({ diameter, briefing, onEditName }: CoreHubProps) {
   const { palette } = useTheme();
-  const pulse = useLoopValue(0.4, 1, 1000);
-
-  const dotStyle = useAnimatedStyle(() => ({ opacity: pulse.value }));
   const scale = diameter / 300;
 
   return (
@@ -38,7 +33,7 @@ export function CoreHub({ diameter, briefing, onEditName }: CoreHubProps) {
       ]}
     >
       <View style={styles.emblem}>
-        <Animated.View style={[styles.dot, { backgroundColor: palette.accent }, dotStyle]} />
+        <View style={[styles.dot, { backgroundColor: palette.accent }]} />
         <AppText style={[styles.emblemText, { color: colors.textSecondary }]}>
           {briefing.activeCount} Halka Eklentisi
         </AppText>

@@ -14,7 +14,6 @@ import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
 import type { MainTabScreenProps } from '@presentation/navigation/types';
 import { useSnapshotSlice } from '@features/halka/presentation/store/useHalkaStore';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
-import { ParticleDust } from '@presentation/particles/components/ParticleDust';
 
 const MAX_RING_SIZE = 440;
 
@@ -51,8 +50,6 @@ export function HomeScreen({ navigation }: MainTabScreenProps<'Halka'>) {
 
   return (
     <View style={styles.root}>
-      {/* Ortam tozu: tüm ekranın arkasında, dokunuş almaz */}
-      <ParticleDust />
       <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
         <ScrollView
           contentContainerStyle={[styles.content, bottom]}

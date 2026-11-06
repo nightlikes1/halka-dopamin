@@ -33,6 +33,15 @@ describe('paceFrame', () => {
     expect(renderedPerSecond(40)).toBe(40);
   });
 
+  it('düşük güç hedefinde 60 Hz ekranda 30 kare çizilir', () => {
+    const pace = createPace();
+    let rendered = 0;
+    for (let i = 0; i < 60; i++) {
+      if (paceFrame(pace, 1 / 60, 1 / 30) > 0) rendered += 1;
+    }
+    expect(rendered).toBe(30);
+  });
+
   it('atlanan karelerin süresi çizilen kareye eklenir', () => {
     const pace = createPace();
     expect(paceFrame(pace, 1 / 120)).toBe(0);

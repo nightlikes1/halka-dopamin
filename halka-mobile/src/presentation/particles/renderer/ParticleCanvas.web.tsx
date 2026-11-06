@@ -1,12 +1,13 @@
 // Web çizici: düz HTML <canvas> 2D + requestAnimationFrame, toplamsal karışım ("lighter"; açık temada normal).
 // Skia'nın web modülü (CanvasKit ~3 MB) yüklenmez. Renkli yumuşak noktalar bir kez sprite
 // sayfasına çizilir; her karede yalnızca drawImage çağrılır, nesne yaratılmaz.
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import {
   FPS_SAMPLE_FRAMES,
   LOW_POWER_FRACTION,
+  LOW_POWER_FRAME,
   MAX_FRAME_DT,
   MAX_PIXEL_RATIO,
   MIN_TARGET_FPS,
@@ -31,7 +32,7 @@ import {
   CHANNEL_SIZE,
   createPointerBuffer,
 } from '@presentation/particles/engine/interaction';
-import { createPace, paceFrame } from '@presentation/particles/renderer/pacing';
+import { createPace, paceFrame, TARGET_FRAME } from '@presentation/particles/renderer/pacing';
 import type { ParticleCanvasProps } from '@presentation/particles/renderer/types';
 import { themedStyles } from '@core/theme/themed';
 import { useLoopActive } from '@presentation/particles/renderer/useLoopActive';
@@ -67,7 +68,7 @@ function buildSpriteSheet(lut: Float32Array): HTMLCanvasElement {
   return sheet;
 }
 
-export function ParticleCanvas<S extends ParticleOutput>({
+function ParticleCanvasInner<S extends ParticleOutput>({
   sim,
   inputs,
   lut,
@@ -149,19 +150,22 @@ export function ParticleCanvas<S extends ParticleOutput>({
       frameId = requestAnimationFrame(loop);
       const raw = last === 0 ? 1 / 60 : (now - last) / 1000;
       last = now;
-      // Yüksek tazeleme hızında fazla kareler atlanır (en fazla ~60 fps)
-      const elapsed = paceFrame(pace, raw);
+      // Yüksek tazeleme hızında fazla kareler atlanır (en fazla ~60 fps; düşük güçte 30)
+      const elapsed = paceFrame(pace, raw, fraction < 1 ? LOW_POWER_FRAME : TARGET_FRAME);
       if (elapsed === 0) return;
       // Ölçüm gerçek süreyle, simülasyon sınırlı adımla
       const dt = Math.min(MAX_FRAME_DT, elapsed);
       advancePointer(pointerState, pointer?.value ?? IDLE_CHANNEL, dt);
       sim.step(state, dt, inputsRef.current, fraction, pointerState);
       draw();
-      if (sampled < FPS_SAMPLE_FRAMES) {
+      // Ölçüm sürekli: açılışta iyi olup sonradan düşen cihazlar da yakalanır
+      if (fraction === 1) {
         sampled += 1;
         sampledTime += elapsed;
-        if (sampled === FPS_SAMPLE_FRAMES && FPS_SAMPLE_FRAMES / sampledTime < MIN_TARGET_FPS) {
-          fraction = LOW_POWER_FRACTION;
+        if (sampled === FPS_SAMPLE_FRAMES) {
+          if (FPS_SAMPLE_FRAMES / sampledTime < MIN_TARGET_FPS) fraction = LOW_POWER_FRACTION;
+          sampled = 0;
+          sampledTime = 0;
         }
       }
       fpsFrames += 1;
@@ -207,6 +211,9 @@ export function ParticleCanvas<S extends ParticleOutput>({
     </View>
   );
 }
+
+// Üst bileşen yeniden çizilince simülasyon ve sprite sayfası boşuna elden geçmesin
+export const ParticleCanvas = memo(ParticleCanvasInner) as typeof ParticleCanvasInner;
 
 const canvasStyle = { width: '100%', height: '100%', display: 'block' } as const;
 

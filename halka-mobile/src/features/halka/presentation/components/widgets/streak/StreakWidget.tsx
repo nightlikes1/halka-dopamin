@@ -1,6 +1,5 @@
 // Zinciri Kırma
 import { View } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
@@ -12,19 +11,12 @@ import { Icon } from '@presentation/components/common/Icon';
 import type { WidgetBodyProps } from '@features/halka/presentation/components/widgets/types';
 import { widgetStyles } from '@features/halka/presentation/components/widgets/widgetStyles';
 import { useStreak } from '@features/halka/presentation/hooks/useStreak';
-import { useLoopValue } from '@presentation/hooks/useLoopValue';
 import { widgetAccentColor } from '@features/halka/presentation/components/widgets/widgetAccent';
 
 const accent = () => widgetAccentColor(getCatalogItem('streak').accent);
 
 function Flame({ size }: { readonly size: number }) {
-  const scale = useLoopValue(1, 1.12, 1500);
-  const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  return (
-    <Animated.View style={style}>
-      <Icon name="zap" size={size} color={accent()} />
-    </Animated.View>
-  );
+  return <Icon name="zap" size={size} color={accent()} />;
 }
 
 export function StreakWidget({ variant }: WidgetBodyProps) {

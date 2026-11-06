@@ -12,14 +12,21 @@ import {
   useTexture,
   vec,
 } from '@shopify/react-native-skia';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
-import { useFrameCallback, useReducedMotion, useSharedValue } from 'react-native-reanimated';
+import {
+  useAnimatedReaction,
+  useFrameCallback,
+  useReducedMotion,
+  useSharedValue,
+  type SharedValue,
+} from 'react-native-reanimated';
 import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 import { colors, fonts } from '@core/theme/tokens';
 import {
   FPS_SAMPLE_FRAMES,
   LOW_POWER_FRACTION,
+  LOW_POWER_FRAME,
   MAX_FRAME_DT,
   MIN_TARGET_FPS,
   PARTICLE_INTENSITY,
@@ -42,7 +49,7 @@ import {
   CHANNEL_SIZE,
   createPointerBuffer,
 } from '@presentation/particles/engine/interaction';
-import { createPace, paceFrame } from '@presentation/particles/renderer/pacing';
+import { createPace, paceFrame, TARGET_FRAME } from '@presentation/particles/renderer/pacing';
 import type { ParticleCanvasProps } from '@presentation/particles/renderer/types';
 import { themedStyles } from '@core/theme/themed';
 import { useLoopActive } from '@presentation/particles/renderer/useLoopActive';
@@ -54,7 +61,30 @@ const SPRITE_RECT = Skia.XYWHRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
 const SHOW_FPS = __DEV__;
 const IDLE_CHANNEL: readonly number[] = new Array<number>(CHANNEL_SIZE).fill(0);
 
-export function ParticleCanvas<S extends ParticleOutput>({
+// Kendi durumunu tutar: fps yazısı değişince tuval yeniden çizilmez. Skia tamponları her çizimde
+// güncelleyicilerini baştan kurduğu için saniyelik yeniden çizim telefonda zamanla kare hızını düşürüyordu.
+function FpsLabel({
+  name,
+  fps,
+  fraction,
+}: {
+  readonly name: string;
+  readonly fps: SharedValue<number>;
+  readonly fraction: SharedValue<number>;
+}) {
+  const [label, setLabel] = useState<string | null>(null);
+  useAnimatedReaction(
+    () => fps.value,
+    (value) => {
+      if (value > 0) {
+        scheduleOnRN(setLabel, `${name} ${value} fps${fraction.value < 1 ? ' · kısık' : ''}`);
+      }
+    },
+  );
+  return label ? <Text style={styles.fps}>{label}</Text> : null;
+}
+
+function ParticleCanvasInner<S extends ParticleOutput>({
   sim,
   inputs,
   lut,
@@ -65,7 +95,6 @@ export function ParticleCanvas<S extends ParticleOutput>({
   const reduced = useReducedMotion();
   const active = useLoopActive();
   const [width, setWidth] = useState(0);
-  const [fps, setFps] = useState<number | null>(null);
 
   // Simülasyon durumu JS'te bir kez oluşturulur, UI runtime'a bir kez kopyalanır
   const initial = useMemo(() => sim.create(), [sim]);
@@ -78,6 +107,7 @@ export function ParticleCanvas<S extends ParticleOutput>({
   const scale = useSharedValue(1);
   const tick = useSharedValue(0);
   const fraction = useSharedValue(1);
+  const fpsValue = useSharedValue(0);
   // [ölçülen kare, toplam süre, saniyelik kare, saniyelik süre]
   const meter = useSharedValue([0, 0, 0, 0]);
   // 90/120 Hz ekranlarda fazla kareler atlanır: iş yükü 60 Hz ile aynı kalır
@@ -103,11 +133,13 @@ export function ParticleCanvas<S extends ParticleOutput>({
     scale.set(width / referenceWidth);
   }, [width, referenceWidth, scale]);
 
-  const reportFps = (value: number) => setFps(value);
-
   const frame = useFrameCallback((info) => {
     'worklet';
-    const elapsed = paceFrame(pace.value, (info.timeSincePreviousFrame ?? 16) / 1000);
+    const elapsed = paceFrame(
+      pace.value,
+      (info.timeSincePreviousFrame ?? 16) / 1000,
+      fraction.value < 1 ? LOW_POWER_FRAME : TARGET_FRAME,
+    );
     if (elapsed === 0) return;
     // Ölçüm gerçek süreyle, simülasyon sınırlı adımla
     const dt = Math.min(MAX_FRAME_DT, elapsed);
@@ -115,20 +147,23 @@ export function ParticleCanvas<S extends ParticleOutput>({
     step(state.value, dt, input.value, fraction.value, pointerState.value);
     tick.value += 1;
 
-    // İlk karelerde kare hızını ölç; düşükse parçacık sayısını azalt
+    // Kare hızı sürekli ölçülür: açılışta iyi olup sonradan düşen cihazlar da yakalanır.
+    // Düşükse parçacık azalır ve çizim 30 fps'e iner
     const m = meter.value;
-    if ((m[0] ?? 0) < FPS_SAMPLE_FRAMES) {
+    if (fraction.value === 1) {
       m[0] = (m[0] ?? 0) + 1;
       m[1] = (m[1] ?? 0) + elapsed;
-      if (m[0] === FPS_SAMPLE_FRAMES && FPS_SAMPLE_FRAMES / (m[1] ?? 1) < MIN_TARGET_FPS) {
-        fraction.value = LOW_POWER_FRACTION;
+      if (m[0] === FPS_SAMPLE_FRAMES) {
+        if (FPS_SAMPLE_FRAMES / (m[1] ?? 1) < MIN_TARGET_FPS) fraction.value = LOW_POWER_FRACTION;
+        m[0] = 0;
+        m[1] = 0;
       }
     }
     if (SHOW_FPS) {
       m[2] = (m[2] ?? 0) + 1;
       m[3] = (m[3] ?? 0) + elapsed;
       if ((m[3] ?? 0) >= 1) {
-        scheduleOnRN(reportFps, Math.round((m[2] ?? 0) / (m[3] ?? 1)));
+        fpsValue.value = Math.round((m[2] ?? 0) / (m[3] ?? 1));
         m[2] = 0;
         m[3] = 0;
       }
@@ -158,7 +193,9 @@ export function ParticleCanvas<S extends ParticleOutput>({
     const out = state.value.out;
     const o = i * OUT_STRIDE;
     const s = scale.value;
-    const k = ((out[o + OUT_SIZE] ?? 0) * SPRITE_SPREAD * s) / SPRITE_SIZE;
+    // Görünmeyen parçacık sıfır boyutla çizilir: düşük güçte GPU gerçekten rahatlar
+    const visible = (out[o + OUT_ALPHA] ?? 0) > 0;
+    const k = visible ? ((out[o + OUT_SIZE] ?? 0) * SPRITE_SPREAD * s) / SPRITE_SIZE : 0;
     xf.set(k, 0, (out[o + OUT_X] ?? 0) * s - HALF * k, (out[o + OUT_Y] ?? 0) * s - HALF * k);
   });
 
@@ -207,14 +244,13 @@ export function ParticleCanvas<S extends ParticleOutput>({
           blendMode={particleOnLight() ? 'srcOver' : 'plus'}
         />
       </Canvas>
-      {SHOW_FPS && fps !== null ? (
-        <Text style={styles.fps}>
-          {name} {fps} fps
-        </Text>
-      ) : null}
+      {SHOW_FPS ? <FpsLabel name={name} fps={fpsValue} fraction={fraction} /> : null}
     </View>
   );
 }
+
+// Üst bileşen yeniden çizilince Skia tamponları ve kare döngüsü boşuna baştan kurulmasın
+export const ParticleCanvas = memo(ParticleCanvasInner) as typeof ParticleCanvasInner;
 
 const styles = themedStyles(() => ({
   fill: { flex: 1 },

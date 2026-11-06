@@ -193,7 +193,7 @@ düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)
 - **Animasyon** (`motion.ts`): eğri `easeOut` = bezier(0.2, 0.8, 0.2, 1). Basınca 0,92 (`ScalePressable`).
   Belirme için `Appear` (`up` 14 px / `pop` yaylı) kullan; Reanimated `entering` düzen animasyonunu yeni ekranlarda
   kullanma (web'de sonradan eklenen öğeyi akıştan çıkarıyor). Eski Halka bileşenlerinde `entering/exiting/layout`
-  yalnızca `nativeOnly(...)` ile (web'de kapalı). Sürekli döngüler `useLoopValue` ile yazılır (ekran odakta değilse ve `useReducedMotion()` açıksa durur); döngü stili yerleşim özelliğiyle (`height`, `width`) aynı `useAnimatedStyle` içine konmaz, her karede yerleşim hesaplatır.
+  yalnızca `nativeOnly(...)` ile (web'de kapalı). Sürekli döngüler `useReducedMotion()` açıksa çalışmaz. Çok öğeli ekranlarda (Halka sekmesi) sürekli stil döngüsü yazılmaz: her kare ekran ağacını güncelletir, telefonda kasar.
   Reanimated shared value'ları JSX/olay içinde `.set()`/`.get()` ile değiştir (React Compiler kuralı).
   Titreşim yalnızca `presentation/utils/haptics.ts` (`expo-haptics`, web'de sessiz).
 - **Diyaloglar:** `Alert.alert` doğrudan kullanılmaz (react-native-web'de boş fonksiyon; web'de onaylar hiç açılmaz).
@@ -245,9 +245,10 @@ config.ts   zemin #0B0B0D, DPR ≤ 2, 50 fps eşiği, düşük güç oranı 0,6,
 - **Çizim:** toplamsal karışım (Skia `plus`, web `lighter`); tek beyaz yumuşak nokta dokusu × parçacık rengi (mobil
   Atlas `colors` + `modulate`) / renkli sprite sayfası (web `drawImage`). Boyut yarıçaptır; çap = boyut × `SPRITE_SPREAD`.
 - **Performans:** karelerde nesne yaratma yok (Float32Array durum, önceden ayrılmış Skia tamponları). Hedef 60 fps.
+  `ParticleCanvas` `memo`'lu ve dışarıdan gereksiz yeniden çizilmemeli: Skia `useRSXformBuffer`/`useColorBuffer` her çizimde güncelleyicisini baştan kurar.
   Yüksek tazeleme hızlı ekranlarda (90/120/144 Hz) fazla kareler atlanır (`renderer/pacing.ts`, en fazla ~60 fps);
   Android'de `filter: blur` kullanılmaz (orta segment telefonlarda pahalı; yalnızca web).
-  İlk 90 karede gerçek süreyle kare hızı ölçülür; 50'nin altındaysa parçacıklar %60'a iner (dalgada yüzeye eşit
+  Kare hızı 90 karelik pencerelerle sürekli ölçülür; 50'nin altındaysa parçacıklar %60'a iner ve çizim 30 fps'e sınırlanır (dalgada yüzeye eşit
   seyreltme). Web'de ölçüm `globalThis.__halkaParticleFps` (ad ve adFraction); mobilde geliştirme modunda köşede fps.
   Ölçülen: masaüstü 144 fps; işlemci 6× yavaşlatılınca düşük güç modunda halka ~58, dalga ~64 fps.
 - **Etkileşim:** `step(state, dt, inputs, activeFraction, pointer)`; motorlar `pointerField` ile itme/parlama alır.

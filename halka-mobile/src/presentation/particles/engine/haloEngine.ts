@@ -1,7 +1,13 @@
 // Zincir halka arkasındaki parçacık hale (Halka sekmesi): Bugün'deki halka motoru (ringEngine) kare bir
 // pencereye alınır. Halka pencerenin ortasında; pencere kenarına yaklaşan toz yumuşakça söner, kenar çizgisi
 // oluşmaz. İşaretçi pencere koordinatında gelir, motorun koordinatına çevrilip geri alınır.
-import { P_PULSE_X, P_PULSE_Y, P_X, P_Y } from '@presentation/particles/engine/interaction';
+import {
+  P_PULSE_X,
+  P_PULSE_Y,
+  P_STRENGTH,
+  P_X,
+  P_Y,
+} from '@presentation/particles/engine/interaction';
 import {
   RING_CX,
   RING_CY,
@@ -27,6 +33,8 @@ export const HALO_RING = 900;
 export const HALO_DUST = 240;
 // Daha küçük noktalar: üst üste binme azalır, halka daha net görünür ve GPU daha az yorulur
 export const HALO_SIZE_SCALE = 0.72;
+// Parmağın altındaki itme ve parlama yumuşatılır (yanıp sönen parlak leke olmasın)
+export const HALO_TOUCH_STRENGTH = 0.45;
 
 // Motor koordinatı = pencere koordinatı + kaydırma
 const SHIFT_X = RING_CX - HALO_EXTENT;
@@ -75,8 +83,15 @@ export function stepHalo(
   pointer?: Float32Array,
 ): void {
   'worklet';
-  if (pointer) shiftPointer(pointer, 1);
-  stepRing(state, dt, target, activeFraction, pointer);
-  if (pointer) shiftPointer(pointer, -1);
+  if (pointer) {
+    const strength = pointer[P_STRENGTH] ?? 0;
+    shiftPointer(pointer, 1);
+    pointer[P_STRENGTH] = strength * HALO_TOUCH_STRENGTH;
+    stepRing(state, dt, target, activeFraction, pointer);
+    pointer[P_STRENGTH] = strength;
+    shiftPointer(pointer, -1);
+  } else {
+    stepRing(state, dt, target, activeFraction);
+  }
   frameHalo(state);
 }

@@ -14,17 +14,21 @@ export function createPace(): number[] {
 }
 
 // Bu karede çizilecekse son çizimden beri geçen süreyi (sn), atlanacaksa 0 döndürür
-export function paceFrame(pace: number[], elapsed: number): number {
+export function paceFrame(
+  pace: number[],
+  elapsed: number,
+  targetFrame: number = TARGET_FRAME,
+): number {
   'worklet';
   const accumulated = (pace[0] ?? 0) + elapsed;
   const since = (pace[1] ?? 0) + elapsed;
-  if (accumulated < TARGET_FRAME * TOLERANCE) {
+  if (accumulated < targetFrame * TOLERANCE) {
     pace[0] = accumulated;
     pace[1] = since;
     return 0;
   }
   // Fazlası bir sonraki kareye taşınır (en fazla bir kare kadar)
-  pace[0] = Math.min(TARGET_FRAME, Math.max(0, accumulated - TARGET_FRAME));
+  pace[0] = Math.min(targetFrame, Math.max(0, accumulated - targetFrame));
   pace[1] = 0;
   return since;
 }

@@ -1,7 +1,13 @@
 // Halka + çekirdek + altında günlük özet, metrikler ve "Eklenti Ekle" butonu.
 // Telefonda okunabilirlik için durum metni halkanın içine değil altına alındı.
-import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useRef, useState } from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  type GestureResponderEvent,
+  type ViewInstance,
+} from 'react-native';
 import { layout } from '@core/theme/layout';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import {
@@ -16,6 +22,7 @@ import { metricIcon } from '@features/halka/presentation/components/iconMaps';
 import { TextInputDialog } from '@features/halka/presentation/components/TextInputDialog';
 import { CoreHub } from '@features/halka/presentation/components/ring/CoreHub';
 import { MetricPill } from '@features/halka/presentation/components/ring/MetricPill';
+import { TapRipple } from '@features/halka/presentation/components/ring/TapRipple';
 import { ParticleHalo } from '@presentation/particles/components/ParticleHalo';
 import { HALO_REFERENCE_WIDTH } from '@presentation/particles/engine/haloEngine';
 import { useParticlePointer } from '@presentation/particles/renderer/useParticlePointer';
@@ -33,23 +40,32 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
   const briefing = useBriefing();
   const { user } = useAuth();
   const { profile, rename } = useProfile();
+  // Kıvılcım yalnızca eklenti eklenince/çıkarılınca; dokunuşta su damlası (TapRipple)
   const pulseKey = useUiStore((s) => s.ringPulseKey);
-  const pulseRing = useUiStore((s) => s.pulseRing);
   const play = useSoundEffect();
   const [editingName, setEditingName] = useState(false);
+  const [ripple, setRipple] = useState<{ id: number; x: number; y: number } | null>(null);
+  const ringBox = useRef<ViewInstance | null>(null);
   // Halka alanındaki dokunuş/sürükleme hale parçacıklarını iter (olaylar yalnızca izlenir)
   const { channel, targetRef, handlers } = useParticlePointer(HALO_REFERENCE_WIDTH);
 
-  const onRingPress = () => {
+  const onRingPress = (event: GestureResponderEvent) => {
     play('chainPulse');
-    pulseRing();
+    // Konum ekrana göre alınıp kutuya çevrilir (kaydırılan listede de doğru yerde çıkar)
+    const { pageX, pageY } = event.nativeEvent;
+    ringBox.current?.measureInWindow((boxX, boxY) => {
+      setRipple((previous) => ({
+        id: (previous?.id ?? 0) + 1,
+        x: pageX - boxX,
+        y: pageY - boxY,
+      }));
+    });
   };
 
   return (
     <View style={styles.container}>
       {/* Halka butonu ile isim butonu kardeş: iç içe buton olmaz; çekirdeğin boş alanı dokunuşu halkaya geçirir */}
-      <View style={{ width: size, height: size }} {...handlers}>
-        {/* Parçacık hale; halkaya dokununca (pulseKey) kıvılcım */}
+      <View ref={ringBox} style={{ width: size, height: size }} {...handlers}>
         <ParticleHalo size={size} burstKey={pulseKey} pointer={channel} targetRef={targetRef} />
         <Pressable
           onPress={onRingPress}
@@ -57,6 +73,7 @@ export function RingSection({ size, onAddPress }: RingSectionProps) {
           accessibilityRole="button"
           accessibilityLabel="Halka"
         />
+        {ripple ? <TapRipple key={ripple.id} x={ripple.x} y={ripple.y} /> : null}
         <View style={styles.hubWrapper} pointerEvents="box-none">
           <CoreHub
             diameter={size * 0.66}

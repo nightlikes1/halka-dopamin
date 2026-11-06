@@ -11,8 +11,10 @@ export const MAX_PIXEL_RATIO = 2;
 export const MIN_TARGET_FPS = 50;
 // Düşük güç modunda kalan parçacık oranı
 export const LOW_POWER_FRACTION = 0.6;
-// Kare hızı ilk kaç karede ölçülür
+// Kare hızı kaç karelik pencerelerle ölçülür (ölçüm sürekli; düşük güce geçince durur)
 export const FPS_SAMPLE_FRAMES = 90;
+// Düşük güç modunda hedef kare süresi (30 fps): takılan 15 fps yerine düzgün 30 fps
+export const LOW_POWER_FRAME = 1 / 30;
 // Bir kare en fazla bu kadar ilerler (sekme dönüşünde sıçramayı önler)
 export const MAX_FRAME_DT = 0.05;
 // Yumuşak nokta dokusunun piksel boyutu. Parçacık boyutu yarıçap kabul edilir; çizilen çap

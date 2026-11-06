@@ -13,7 +13,6 @@ import { IconButton } from '@presentation/components/common/IconButton';
 import type { WidgetBodyProps } from '@features/halka/presentation/components/widgets/types';
 import { widgetStyles } from '@features/halka/presentation/components/widgets/widgetStyles';
 import { useWater } from '@features/halka/presentation/hooks/useWater';
-import { useLoopValue } from '@presentation/hooks/useLoopValue';
 import { widgetAccentColor } from '@features/halka/presentation/components/widgets/widgetAccent';
 
 const accent = () => widgetAccentColor(getCatalogItem('water').accent);
@@ -29,15 +28,13 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
     : `${progress.remaining} ml kaldı`;
 
   const fill = useSharedValue(progress.pct);
-  const shimmer = useLoopValue(0.75, 1, 1800);
 
   useEffect(() => {
     fill.value = withTiming(progress.pct, { duration: 600 });
   }, [progress.pct, fill]);
 
-  // Ayrı stiller: yükseklik yalnız doluluk değişince yazılır, sürekli parıltı her karede yerleşim hesaplatmaz
-  const fillHeightStyle = useAnimatedStyle(() => ({ height: `${fill.value}%` }));
-  const fillOpacityStyle = useAnimatedStyle(() => ({ opacity: shimmer.value }));
+  // Yalnız doluluk değişince oynar; sürekli parıltı telefonda her karede ekran ağacını güncelletiyordu
+  const fillStyle = useAnimatedStyle(() => ({ height: `${fill.value}%` }));
 
   const gauge = (
     <View
@@ -45,7 +42,7 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: 100, now: progress.pct }}
     >
-      <Animated.View style={[styles.fill, fillHeightStyle, fillOpacityStyle]} />
+      <Animated.View style={[styles.fill, fillStyle]} />
       <View style={styles.gaugeText}>
         {focused ? (
           <>
