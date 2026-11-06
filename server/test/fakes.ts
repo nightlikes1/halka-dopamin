@@ -88,6 +88,21 @@ export class InMemoryHabitRepository implements HabitRepository {
     return habit;
   }
 
+  async update(
+    userId: string,
+    habitId: string,
+    input: { kind: HabitKind; title: string },
+  ): Promise<HabitDto | null> {
+    const index = this.habits.findIndex(
+      (habit) => habit.id === habitId && habit.userId === userId && !habit.archived,
+    );
+    const habit = this.habits[index];
+    if (!habit) return null;
+    const updated = { ...habit, ...input };
+    this.habits[index] = updated;
+    return updated;
+  }
+
   async archive(userId: string, habitId: string): Promise<boolean> {
     const index = this.habits.findIndex(
       (habit) => habit.id === habitId && habit.userId === userId && !habit.archived,
@@ -324,7 +339,17 @@ export async function createTestApp(
     checkDatabase: options.checkDatabase ?? (async () => true),
     clock: options.clock,
   });
-  return { app, users, habits, checkIns, habitEntries, notes, characters, resetTokens, emailService };
+  return {
+    app,
+    users,
+    habits,
+    checkIns,
+    habitEntries,
+    notes,
+    characters,
+    resetTokens,
+    emailService,
+  };
 }
 
 // Kayıt olup Authorization başlığını döndürür

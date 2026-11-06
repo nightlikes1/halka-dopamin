@@ -81,6 +81,49 @@ describe('Alışkanlıklar, check-in ve gün notları', () => {
       expect(response.statusCode).toBe(400);
     });
 
+    describe('düzenleme', () => {
+      const put = (id: string, payload: unknown, auth = headers) =>
+        app.inject({
+          method: 'PUT',
+          url: `/habits/${id}`,
+          headers: auth,
+          payload: payload as object,
+        });
+
+      it('adı ve türü değiştirir', async () => {
+        const id = await createHabit('build', 'Kitap oku');
+        const response = await put(id, { kind: 'quit', title: '  Gece telefon ' });
+        expect(response.statusCode).toBe(200);
+        expect(response.json()).toMatchObject({
+          habit: { id, kind: 'quit', title: 'Gece telefon' },
+        });
+        const list = await app.inject({ url: '/habits', headers });
+        expect(list.json()).toMatchObject({
+          habits: [{ id, kind: 'quit', title: 'Gece telefon' }],
+        });
+      });
+
+      it('kendi adının yazımını değiştirebilir, başka alışkanlığın adını alamaz', async () => {
+        const id = await createHabit('build', 'Kitap oku');
+        await createHabit('build', 'Spor');
+        expect((await put(id, { kind: 'build', title: 'KİTAP OKU' })).statusCode).toBe(200);
+        expect((await put(id, { kind: 'build', title: ' spor ' })).statusCode).toBe(409);
+      });
+
+      it('boş adı reddeder', async () => {
+        const id = await createHabit('build', 'Kitap oku');
+        expect((await put(id, { kind: 'build', title: '   ' })).statusCode).toBe(400);
+      });
+
+      it('başka kullanıcının ve arşivlenmiş alışkanlığı düzenleyemez', async () => {
+        const id = await createHabit('build', 'Spor');
+        const other = await registerAndAuth(app, 'baska3@ornek.com');
+        expect((await put(id, { kind: 'build', title: 'Yeni' }, other)).statusCode).toBe(404);
+        await app.inject({ method: 'DELETE', url: `/habits/${id}`, headers });
+        expect((await put(id, { kind: 'build', title: 'Yeni' })).statusCode).toBe(404);
+      });
+    });
+
     it('başka kullanıcının alışkanlığını arşivleyemez', async () => {
       const id = await createHabit('build', 'Spor');
       const other = await registerAndAuth(app, 'baska@ornek.com');

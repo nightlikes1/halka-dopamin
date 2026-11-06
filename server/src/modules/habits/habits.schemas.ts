@@ -17,16 +17,21 @@ export const habitTargetSchema = z.discriminatedUnion('type', [
 ]);
 export type HabitTarget = z.infer<typeof habitTargetSchema>;
 
+const habitTitleSchema = z
+  .string()
+  .trim()
+  .min(1, 'Alışkanlık adı boş olamaz.')
+  .max(HABIT_TITLE_MAX_LENGTH, `En fazla ${HABIT_TITLE_MAX_LENGTH} karakter.`);
+
 export const createHabitBodySchema = z.object({
   kind: habitKindSchema,
-  title: z
-    .string()
-    .trim()
-    .min(1, 'Alışkanlık adı boş olamaz.')
-    .max(HABIT_TITLE_MAX_LENGTH, `En fazla ${HABIT_TITLE_MAX_LENGTH} karakter.`),
+  title: habitTitleSchema,
   target: habitTargetSchema.default({ type: 'daily' }),
 });
 export type CreateHabitInput = z.infer<typeof createHabitBodySchema>;
+
+export const updateHabitBodySchema = z.object({ kind: habitKindSchema, title: habitTitleSchema });
+export type UpdateHabitInput = z.infer<typeof updateHabitBodySchema>;
 
 export const habitIdParamsSchema = z.object({ id: z.uuid('Geçersiz alışkanlık kimliği.') });
 
