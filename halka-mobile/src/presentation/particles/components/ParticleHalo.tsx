@@ -7,6 +7,7 @@ import { themedStyles } from '@core/theme/themed';
 import {
   HALO_DUST,
   HALO_REFERENCE_WIDTH,
+  HALO_RING,
   HALO_RING_RATIO,
   stepHalo,
 } from '@presentation/particles/engine/haloEngine';
@@ -14,7 +15,6 @@ import { buildLut, type ParticlePaletteName } from '@presentation/particles/engi
 import {
   consumeBurst,
   createRing,
-  RING_COUNT,
   setRingProgress,
   syncBurst,
   type RingState,
@@ -24,7 +24,7 @@ import type { ParticleSim, PointerChannel } from '@presentation/particles/render
 
 const haloSim: ParticleSim<RingState> = {
   referenceWidth: HALO_REFERENCE_WIDTH,
-  create: () => createRing(RING_COUNT, HALO_DUST),
+  create: () => createRing(HALO_RING, HALO_DUST),
   step: (state, dt, inputs, fraction, pointer) => {
     'worklet';
     consumeBurst(state, inputs[1] ?? 0);

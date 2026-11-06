@@ -1,12 +1,6 @@
 // Zinciri Kırma
-import { useEffect } from 'react';
 import { View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
@@ -18,15 +12,13 @@ import { Icon } from '@presentation/components/common/Icon';
 import type { WidgetBodyProps } from '@features/halka/presentation/components/widgets/types';
 import { widgetStyles } from '@features/halka/presentation/components/widgets/widgetStyles';
 import { useStreak } from '@features/halka/presentation/hooks/useStreak';
+import { useLoopValue } from '@presentation/hooks/useLoopValue';
 import { widgetAccentColor } from '@features/halka/presentation/components/widgets/widgetAccent';
 
 const accent = () => widgetAccentColor(getCatalogItem('streak').accent);
 
 function Flame({ size }: { readonly size: number }) {
-  const scale = useSharedValue(1);
-  useEffect(() => {
-    scale.value = withRepeat(withTiming(1.12, { duration: 1500 }), -1, true);
-  }, [scale]);
+  const scale = useLoopValue(1, 1.12, 1500);
   const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
     <Animated.View style={style}>

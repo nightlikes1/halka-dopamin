@@ -1,12 +1,7 @@
 // 💧 Su Takibi
 import { useEffect } from 'react';
 import { View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
@@ -18,6 +13,7 @@ import { IconButton } from '@presentation/components/common/IconButton';
 import type { WidgetBodyProps } from '@features/halka/presentation/components/widgets/types';
 import { widgetStyles } from '@features/halka/presentation/components/widgets/widgetStyles';
 import { useWater } from '@features/halka/presentation/hooks/useWater';
+import { useLoopValue } from '@presentation/hooks/useLoopValue';
 import { widgetAccentColor } from '@features/halka/presentation/components/widgets/widgetAccent';
 
 const accent = () => widgetAccentColor(getCatalogItem('water').accent);
@@ -33,17 +29,15 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
     : `${progress.remaining} ml kaldı`;
 
   const fill = useSharedValue(progress.pct);
-  const shimmer = useSharedValue(0.75);
+  const shimmer = useLoopValue(0.75, 1, 1800);
 
   useEffect(() => {
     fill.value = withTiming(progress.pct, { duration: 600 });
   }, [progress.pct, fill]);
 
-  useEffect(() => {
-    shimmer.value = withRepeat(withTiming(1, { duration: 1800 }), -1, true);
-  }, [shimmer]);
-
-  const fillStyle = useAnimatedStyle(() => ({ height: `${fill.value}%`, opacity: shimmer.value }));
+  // Ayrı stiller: yükseklik yalnız doluluk değişince yazılır, sürekli parıltı her karede yerleşim hesaplatmaz
+  const fillHeightStyle = useAnimatedStyle(() => ({ height: `${fill.value}%` }));
+  const fillOpacityStyle = useAnimatedStyle(() => ({ opacity: shimmer.value }));
 
   const gauge = (
     <View
@@ -51,7 +45,7 @@ export function WaterWidget({ variant }: WidgetBodyProps) {
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: 100, now: progress.pct }}
     >
-      <Animated.View style={[styles.fill, fillStyle]} />
+      <Animated.View style={[styles.fill, fillHeightStyle, fillOpacityStyle]} />
       <View style={styles.gaugeText}>
         {focused ? (
           <>

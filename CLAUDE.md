@@ -193,7 +193,7 @@ düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)
 - **Animasyon** (`motion.ts`): eğri `easeOut` = bezier(0.2, 0.8, 0.2, 1). Basınca 0,92 (`ScalePressable`).
   Belirme için `Appear` (`up` 14 px / `pop` yaylı) kullan; Reanimated `entering` düzen animasyonunu yeni ekranlarda
   kullanma (web'de sonradan eklenen öğeyi akıştan çıkarıyor). Eski Halka bileşenlerinde `entering/exiting/layout`
-  yalnızca `nativeOnly(...)` ile (web'de kapalı). Sürekli döngüler `useReducedMotion()` açıksa çalışmaz.
+  yalnızca `nativeOnly(...)` ile (web'de kapalı). Sürekli döngüler `useLoopValue` ile yazılır (ekran odakta değilse ve `useReducedMotion()` açıksa durur); döngü stili yerleşim özelliğiyle (`height`, `width`) aynı `useAnimatedStyle` içine konmaz, her karede yerleşim hesaplatır.
   Reanimated shared value'ları JSX/olay içinde `.set()`/`.get()` ile değiştir (React Compiler kuralı).
   Titreşim yalnızca `presentation/utils/haptics.ts` (`expo-haptics`, web'de sessiz).
 - **Diyaloglar:** `Alert.alert` doğrudan kullanılmaz (react-native-web'de boş fonksiyon; web'de onaylar hiç açılmaz).

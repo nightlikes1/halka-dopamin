@@ -9,15 +9,24 @@ import {
   stepRing,
   type RingState,
 } from '@presentation/particles/engine/ringEngine';
-import { OUT_ALPHA, OUT_STRIDE, OUT_X, OUT_Y } from '@presentation/particles/engine/types';
+import {
+  OUT_ALPHA,
+  OUT_SIZE,
+  OUT_STRIDE,
+  OUT_X,
+  OUT_Y,
+} from '@presentation/particles/engine/types';
 
 // Pencerenin yarı kenarı (motor px); referans genişlik = 2 × HALO_EXTENT
 export const HALO_EXTENT = 180;
 export const HALO_REFERENCE_WIDTH = HALO_EXTENT * 2;
 // Bu yarıçaptan sonra alfa HALO_EXTENT'te sıfıra iner
 export const HALO_FADE_START = 120;
-// Hale tozu Bugün'dekinden seyrek (zincirin arkasında sakin bir aura)
-export const HALO_DUST = 360;
+// Hale Bugün'dekinden seyrek: telefonda bu sekme eklentilerle birlikte çizildiği için yük hafif tutulur
+export const HALO_RING = 900;
+export const HALO_DUST = 240;
+// Daha küçük noktalar: üst üste binme azalır, halka daha net görünür ve GPU daha az yorulur
+export const HALO_SIZE_SCALE = 0.72;
 
 // Motor koordinatı = pencere koordinatı + kaydırma
 const SHIFT_X = RING_CX - HALO_EXTENT;
@@ -46,6 +55,7 @@ export function frameHalo(state: RingState): void {
     const y = (out[o + OUT_Y] ?? 0) - SHIFT_Y;
     out[o + OUT_X] = x;
     out[o + OUT_Y] = y;
+    out[o + OUT_SIZE] = (out[o + OUT_SIZE] ?? 0) * HALO_SIZE_SCALE;
     const dx = x - HALO_EXTENT;
     const dy = y - HALO_EXTENT;
     const d = Math.sqrt(dx * dx + dy * dy);

@@ -1,12 +1,6 @@
 // Halkanın ortasındaki cam çekirdek: aktif eklenti sayısı, saat, tarih, selamlama
-import { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
 import { useTheme } from '@core/theme/useTheme';
@@ -15,6 +9,7 @@ import type { DailyBriefing } from '@features/halka/domain/entities/Briefing';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon } from '@presentation/components/common/Icon';
 import { LiveClock } from '@features/halka/presentation/components/ring/LiveClock';
+import { useLoopValue } from '@presentation/hooks/useLoopValue';
 
 interface CoreHubProps {
   readonly diameter: number;
@@ -24,11 +19,7 @@ interface CoreHubProps {
 
 export function CoreHub({ diameter, briefing, onEditName }: CoreHubProps) {
   const { palette } = useTheme();
-  const pulse = useSharedValue(0.4);
-
-  useEffect(() => {
-    pulse.value = withRepeat(withTiming(1, { duration: 1000 }), -1, true);
-  }, [pulse]);
+  const pulse = useLoopValue(0.4, 1, 1000);
 
   const dotStyle = useAnimatedStyle(() => ({ opacity: pulse.value }));
   const scale = diameter / 300;
