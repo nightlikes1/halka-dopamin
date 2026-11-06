@@ -57,7 +57,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   Bugün'deki alışkanlık satırı **sağa kaydırınca** işaretlenir (buton da çalışır, ek paket yok).
 - Aynı adlı (büyük/küçük harf ve Türkçe karakter farkı gözetmeden) iki aktif alışkanlık olamaz: sunucu 409, istemci
   `sameHabitTitle` ile anında uyarır. Hitap adı tek kural: Halka'da değiştirilmiş ad > hesap adı (`resolveGreetingName`).
-- Alışkanlık ekleme (2026-11-06): Bugün başlığındaki "Ekle" ve Alışkanlıklarım sayfası aynı alttan pencereyi açar (`AddHabitSheet`: tür seç, adını yaz); ekleme için ekrandan çıkılmaz. Silme "Düzenle" (Alışkanlıklarım) sayfasında. Pencere sunucuyu beklemeden kapanır, satır "Ekleniyor…" ile görünür (`pendingHabits`; tik/silme kayıt bitene kadar kapalı, hata olursa satır kalkar + uyarı). Check-in ve karakter yalnızca kayıtlı `habits` listesini kullanır.
+- Alışkanlık ekleme (2026-11-06): Bugün başlığındaki "Ekle" ve Alışkanlıklarım sayfası aynı alttan pencereyi açar (`HabitSheet`: tür seç, adını yaz); ekleme için ekrandan çıkılmaz. Bugün'deki "Düzenle" Alışkanlıklarım sayfasına gider; orada satıra dokununca aynı pencere ad/tür düzenleme ve kaldırma için açılır. Tür değişirse geçmiş cevaplar da çevrilir (`done`↔`clean`, `missed`↔`slip`). Pencere sunucuyu beklemeden kapanır, satır "Ekleniyor…" ile görünür (`pendingHabits`; tik/silme kayıt bitene kadar kapalı, hata olursa satır kalkar + uyarı). Check-in ve karakter yalnızca kayıtlı `habits` listesini kullanır.
 - Alışkanlıklar gün içinde Bugün ekranından tek dokunuşla işaretlenir (`/habit-entries`); akşam check-in bu
   cevaplarla önceden dolar. Denge ve yakınlık hesapları değişmedi (yalnızca check-in olan günler).
 - Zaman tasarrufu referansı: toplam ucuz dopamin (zorunlu) + isteğe bağlı aktivite bazlı.
@@ -131,7 +131,7 @@ test/                       Vitest; DB gerektirmez (fastify.inject + bellek içi
 - Şema değişince: `npm run db:migrate` (Prisma 7'de `migrate dev` istemciyi üretmez; script `prisma generate`'i de çalıştırır).
 - Günler `YYYY-MM-DD` (kullanıcının yerel günü) olarak istemciden gelir; `@db.Date` alanlarına UTC gece yarısı yazılır.
   Kesin "bugün/dün" kuralı istemcide; sunucu yalnızca saat dilimi farkını tolere eden geniş bir pencereyle korur.
-- Uç noktalar: `/auth/*`, `/me`, `/habits` (GET/POST/DELETE=arşiv), `/checkins` (GET ?from&to, GET/PUT /:date),
+- Uç noktalar: `/auth/*`, `/me`, `/habits` (GET/POST/PUT/DELETE=arşiv), `/checkins` (GET ?from&to, GET/PUT /:date),
   `/habit-entries` (GET ?from&to, PUT/DELETE /:date/:habitId — bugün/dün, check-in'den bağımsız),
   `/day-notes` (GET ?from&to, PUT/DELETE /:date), `/character` (GET/PUT/DELETE; PUT'ta `avatar`/`look`/`dicebear` yoksa mevcut korunur,
   `null` otomatiğe döner). Aralık en fazla 62 gün.

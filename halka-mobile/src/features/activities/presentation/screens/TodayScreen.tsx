@@ -21,7 +21,7 @@ import {
   type Habit,
   type HabitEntryStatus,
 } from '@features/habits/domain/entities';
-import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
+import { HabitSheet } from '@features/habits/presentation/components/HabitSheet';
 import { ThemeToggleButton } from '@features/settings/presentation/components/ThemeToggleButton';
 import { Appear } from '@presentation/components/common/Appear';
 import { AppText } from '@presentation/components/common/AppText';
@@ -250,7 +250,7 @@ export function TodayScreen() {
           />
         ) : null}
       </Appear>
-      <AddHabitSheet visible={adding} onClose={() => setAdding(false)} />
+      <HabitSheet visible={adding} onClose={() => setAdding(false)} />
     </Screen>
   );
 }

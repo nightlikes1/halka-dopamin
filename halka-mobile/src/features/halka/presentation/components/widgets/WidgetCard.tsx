@@ -38,10 +38,9 @@ interface WidgetCardProps {
   readonly id: WidgetId;
   readonly index?: number;
   readonly style?: StyleProp<ViewStyle>;
-  readonly onLayoutChange?: (id: WidgetId, layout: { y: number; height: number }) => void;
 }
 
-export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardProps) {
+export function WidgetCard({ id, index = 0, style }: WidgetCardProps) {
   const item = getCatalogItem(id);
   const accent = widgetAccentColor(item.accent);
   const navigation = useNavigation();
@@ -62,12 +61,6 @@ export function WidgetCard({ id, index = 0, style, onLayoutChange }: WidgetCardP
       entering={nativeOnly(FadeInDown.duration(450).delay(index * 50))}
       exiting={nativeOnly(ZoomOut.duration(240))}
       layout={nativeOnly(LinearTransition.springify().damping(18))}
-      onLayout={(event) =>
-        onLayoutChange?.(id, {
-          y: event.nativeEvent.layout.y,
-          height: event.nativeEvent.layout.height,
-        })
-      }
       style={[styles.card, { borderColor: withAlpha(accent, '33') }, style]}
     >
       <View style={[styles.accentLine, { backgroundColor: accent }]} />

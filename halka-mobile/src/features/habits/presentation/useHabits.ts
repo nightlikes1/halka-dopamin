@@ -1,8 +1,14 @@
 // Alışkanlık ViewModel'i: liste ekranlar arasında paylaşılır (Zustand).
 // Ekleme anında görünür (pendingHabits); sunucu kaydedince gerçek listeye geçer, hata olursa kalkar.
+// Düzenleme de anında görünür, hata olursa eski haline döner.
 import { useCallback, useMemo } from 'react';
 import { create } from 'zustand';
-import { pendingHabit, type CreateHabitInput, type Habit } from '@features/habits/domain/entities';
+import {
+  pendingHabit,
+  type CreateHabitInput,
+  type Habit,
+  type UpdateHabitInput,
+} from '@features/habits/domain/entities';
 import { useDI } from '@presentation/providers/DIProvider';
 import { handleResult } from '@presentation/utils/handleResult';
 
@@ -13,7 +19,7 @@ interface HabitStoreState {
   readonly pendingHabits: readonly Habit[];
   readonly status: LoadState;
   readonly errorMessage: string | null;
-  // Ekleme/silme sayacı: bu sırada başlamış yenilemenin eski listesi değişikliği ezmesin
+  // Ekleme/düzenleme/silme sayacı: bu sırada başlamış yenilemenin eski listesi değişikliği ezmesin
   readonly revision: number;
   set(partial: Partial<Omit<HabitStoreState, 'set'>>): void;
 }
@@ -64,6 +70,24 @@ export function useHabits() {
     [useCases, setState],
   );
 
+  const updateHabit = useCallback(
+    async (id: string, input: UpdateHabitInput): Promise<boolean> => {
+      const original = useHabitStore.getState().habits.find((habit) => habit.id === id);
+      const replace = (habit: Habit) => {
+        const latest = useHabitStore.getState();
+        setState({
+          habits: latest.habits.map((item) => (item.id === id ? habit : item)),
+          revision: latest.revision + 1,
+        });
+      };
+      if (original) replace({ ...original, ...input });
+      const result = await useCases.update.execute(id, input);
+      if (!result.ok && original) replace(original);
+      return handleResult(result, replace);
+    },
+    [useCases, setState],
+  );
+
   const archiveHabit = useCallback(
     async (id: string): Promise<boolean> =>
       handleResult(await useCases.archive.execute(id), () => {
@@ -87,6 +111,7 @@ export function useHabits() {
     errorMessage,
     reload,
     createHabit,
+    updateHabit,
     archiveHabit,
   };
 }

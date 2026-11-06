@@ -38,6 +38,7 @@ import {
   ArchiveHabitUseCase,
   CreateHabitUseCase,
   ListHabitsUseCase,
+  UpdateHabitUseCase,
 } from '@features/habits/domain/usecases/HabitUseCases';
 import { HttpDayNoteRepository } from '@features/history/data/HttpDayNoteRepository';
 import {
@@ -96,7 +97,6 @@ import {
   StartPomodoroUseCase,
 } from '@features/halka/domain/usecases/PomodoroUseCases';
 import {
-  ChangeViewModeUseCase,
   ToggleSoundUseCase,
   UpdateUserNameUseCase,
 } from '@features/halka/domain/usecases/ProfileUseCases';
@@ -169,6 +169,7 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
     habits: {
       list: new ListHabitsUseCase(habitRepository),
       create: new CreateHabitUseCase(habitRepository),
+      update: new UpdateHabitUseCase(habitRepository),
       archive: new ArchiveHabitUseCase(habitRepository),
     },
     checkIn: {
@@ -201,7 +202,6 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
     },
     profile: {
       updateName: new UpdateUserNameUseCase(repos.profile),
-      changeViewMode: new ChangeViewModeUseCase(repos.profile),
       toggleSound: new ToggleSoundUseCase(repos.profile, audio),
     },
     layout: {

@@ -1,22 +1,9 @@
-// Profil ve görünüm tercihleri
+// Profil tercihleri
 import { ValidationFailure } from '@core/errors/Failure';
 import { type AsyncResult, err, ok } from '@core/result/Result';
-import {
-  PROFILE_NAME_MAX_LENGTH,
-  type Profile,
-  type ViewMode,
-} from '@features/halka/domain/entities/Profile';
+import { PROFILE_NAME_MAX_LENGTH, type Profile } from '@features/halka/domain/entities/Profile';
 import type { AudioPort, IEntityRepository } from '@features/halka/domain/ports';
 import { updateEntity } from '@features/halka/domain/usecases/updateEntity';
-
-// Kokpit / Panel görünüm modunu değiştirir
-export class ChangeViewModeUseCase {
-  constructor(private readonly repository: IEntityRepository<Profile>) {}
-
-  execute(viewMode: ViewMode): AsyncResult<Profile> {
-    return updateEntity(this.repository, (profile) => ok({ ...profile, viewMode }));
-  }
-}
 
 // Sesleri açar/kapatır; tercih kalıcı olarak saklanır
 export class ToggleSoundUseCase {

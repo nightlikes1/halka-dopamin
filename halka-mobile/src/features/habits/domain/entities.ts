@@ -21,6 +21,9 @@ export interface CreateHabitInput {
   readonly title: string;
 }
 
+// Düzenlenebilen alanlar eklemeyle aynı
+export type UpdateHabitInput = CreateHabitInput;
+
 // done/missed: edinilecek alışkanlık · clean/slip: bırakılacak alışkanlık
 export type HabitEntryStatus = 'done' | 'missed' | 'clean' | 'slip';
 

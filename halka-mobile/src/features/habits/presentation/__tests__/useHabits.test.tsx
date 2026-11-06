@@ -14,12 +14,14 @@ const saved: Habit = {
 
 const mockCreate = jest.fn<Promise<Result<Habit>>, [unknown]>();
 const mockList = jest.fn<Promise<Result<readonly Habit[]>>, []>();
+const mockUpdate = jest.fn<Promise<Result<Habit>>, [string, unknown]>();
 
 jest.mock('@presentation/providers/DIProvider', () => ({
   useDI: () => ({
     habits: {
       list: { execute: () => mockList() },
       create: { execute: (input: unknown) => mockCreate(input) },
+      update: { execute: (id: string, input: unknown) => mockUpdate(id, input) },
       archive: { execute: jest.fn() },
     },
   }),
@@ -37,6 +39,48 @@ function deferred<T>() {
   });
   return { promise, resolve };
 }
+
+describe('useHabits düzenleme', () => {
+  const renamed: Habit = { ...saved, title: 'Roman oku', kind: 'quit' };
+
+  beforeEach(async () => {
+    mockShowMessage.mockClear();
+    mockList.mockResolvedValue(ok([saved]));
+    const { result } = await renderHook(() => useHabits());
+    await act(() => result.current.reload());
+  });
+
+  it('sunucu cevabını beklemeden yeni adı gösterir', async () => {
+    const server = deferred<Result<Habit>>();
+    mockUpdate.mockReturnValue(server.promise);
+    const { result } = await renderHook(() => useHabits());
+
+    let updating: Promise<boolean> = Promise.resolve(false);
+    await act(async () => {
+      updating = result.current.updateHabit(saved.id, { kind: 'quit', title: 'Roman oku' });
+    });
+    expect(result.current.habits).toEqual([renamed]);
+
+    await act(async () => {
+      server.resolve(ok(renamed));
+      await updating;
+    });
+    expect(result.current.habits).toEqual([renamed]);
+    expect(mockShowMessage).not.toHaveBeenCalled();
+  });
+
+  it('sunucu hata verirse eski haline döner ve uyarır', async () => {
+    mockUpdate.mockResolvedValue(err(new NetworkFailure('Bağlantı yok')));
+    const { result } = await renderHook(() => useHabits());
+
+    await act(async () => {
+      await result.current.updateHabit(saved.id, { kind: 'quit', title: 'Roman oku' });
+    });
+
+    expect(result.current.habits).toEqual([saved]);
+    expect(mockShowMessage).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('useHabits ekleme', () => {
   beforeEach(async () => {

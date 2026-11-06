@@ -11,7 +11,6 @@ export function createDefaultSnapshot(today: string): HalkaSnapshot {
     profile: {
       name: PROFILE_DEFAULT_NAME,
       title: 'Kişisel Hayat Yöneticisi',
-      viewMode: 'cockpit',
       soundEnabled: true,
       lastActiveDate: today,
     },

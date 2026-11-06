@@ -1,12 +1,8 @@
-// Kullanıcı profili ve görünüm tercihleri
-
-export const VIEW_MODES = ['cockpit', 'grid'] as const;
-export type ViewMode = (typeof VIEW_MODES)[number];
+// Kullanıcı profili ve tercihleri
 
 export interface Profile {
   readonly name: string;
   readonly title: string;
-  readonly viewMode: ViewMode;
   readonly soundEnabled: boolean;
   // Günlük sıfırlamanın en son çalıştığı gün (YYYY-MM-DD)
   readonly lastActiveDate: string;

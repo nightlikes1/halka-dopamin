@@ -26,7 +26,7 @@ import {
   POMODORO_MODES,
   type PomodoroMode,
 } from '@features/halka/domain/entities/Pomodoro';
-import type { Profile, ViewMode } from '@features/halka/domain/entities/Profile';
+import type { Profile } from '@features/halka/domain/entities/Profile';
 import type { Streak } from '@features/halka/domain/entities/Streak';
 import type { TaskList, TaskPriority } from '@features/halka/domain/entities/Task';
 import { type Water, WATER_DEFAULT_TARGET } from '@features/halka/domain/entities/Water';
@@ -41,21 +41,20 @@ export interface Mapper<TDto, TEntity> {
 
 // Profil DTO <-> Entity
 
-// Web sürümündeki 'orbital' değeri 'cockpit' olarak yorumlanır
-const toViewMode = (value: string): ViewMode => (value === 'grid' ? 'grid' : 'cockpit');
+// Görünüm modu kalktı, alan kayıt biçiminde durur: eski sürüme dönülürse profil sıfırlanmasın
+const LEGACY_VIEW_MODE = 'cockpit';
 
 export const profileMapper: Mapper<ProfileDto, Profile> = {
   toEntity: (dto) => ({
     name: dto.name,
     title: dto.title,
-    viewMode: toViewMode(dto.viewMode),
     soundEnabled: dto.soundEnabled,
     lastActiveDate: dto.lastActiveDate,
   }),
   toDto: (entity) => ({
     name: entity.name,
     title: entity.title,
-    viewMode: entity.viewMode,
+    viewMode: LEGACY_VIEW_MODE,
     soundEnabled: entity.soundEnabled,
     lastActiveDate: entity.lastActiveDate,
   }),

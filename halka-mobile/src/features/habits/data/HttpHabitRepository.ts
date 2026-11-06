@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { toFailure } from '@core/api/httpClient';
 import { ServerFailure } from '@core/errors/Failure';
 import { err, ok, okVoid, type AsyncResult } from '@core/result/Result';
-import type { CreateHabitInput, Habit } from '@features/habits/domain/entities';
+import type { CreateHabitInput, Habit, UpdateHabitInput } from '@features/habits/domain/entities';
 import type { HabitRepository } from '@features/habits/domain/ports';
 
 const targetDtoSchema = z.discriminatedUnion('type', [
@@ -51,6 +51,18 @@ export class HttpHabitRepository implements HabitRepository {
   async create(input: CreateHabitInput): AsyncResult<Habit> {
     try {
       const response = await this.http.post<unknown>('/habits', input);
+      const parsed = z.object({ habit: habitDtoSchema }).safeParse(response.data);
+      return parsed.success
+        ? ok(toHabit(parsed.data.habit))
+        : err(new ServerFailure(INVALID_RESPONSE));
+    } catch (error) {
+      return err(toFailure(error));
+    }
+  }
+
+  async update(id: string, input: UpdateHabitInput): AsyncResult<Habit> {
+    try {
+      const response = await this.http.put<unknown>(`/habits/${encodeURIComponent(id)}`, input);
       const parsed = z.object({ habit: habitDtoSchema }).safeParse(response.data);
       return parsed.success
         ? ok(toHabit(parsed.data.habit))

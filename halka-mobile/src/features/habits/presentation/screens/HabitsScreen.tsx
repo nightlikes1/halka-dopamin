@@ -1,33 +1,34 @@
-// "Alışkanlıklarım": yapmak ve azaltmak istediklerini gör, kaldır; ekleme tek pencereden (AddHabitSheet)
+// "Alışkanlıklarım": yapmak ve azaltmak istediklerin. Satıra dokununca aynı pencere düzenleme için açılır (HabitSheet)
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { strings } from '@core/i18n/tr';
+import { layout } from '@core/theme/layout';
 import { colors, dopamineColors, radius, spacing } from '@core/theme/tokens';
 import { isPendingHabit, type Habit, type HabitKind } from '@features/habits/domain/entities';
 import { themedStyles } from '@core/theme/themed';
-import { AddHabitSheet } from '@features/habits/presentation/components/AddHabitSheet';
+import { HabitSheet } from '@features/habits/presentation/components/HabitSheet';
 import { useHabits } from '@features/habits/presentation/useHabits';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { Card } from '@presentation/components/common/Card';
-import { IconButton } from '@presentation/components/common/IconButton';
+import { Icon } from '@presentation/components/common/Icon';
 import { PillButton } from '@presentation/components/common/PillButton';
+import { ScalePressable } from '@presentation/components/common/ScalePressable';
 import { Screen } from '@presentation/components/common/Screen';
 import { ScreenHeader } from '@presentation/components/common/ScreenHeader';
 import { SectionTitle } from '@presentation/components/common/SectionTitle';
 import type { RootStackScreenProps } from '@presentation/navigation/types';
-import { confirmAction } from '@presentation/utils/dialogs';
 
 const t = strings.habits;
 
 interface HabitSectionProps {
   readonly kind: HabitKind;
   readonly habits: readonly Habit[];
-  readonly onRemove: (habit: Habit) => void;
+  readonly onEdit: (habit: Habit) => void;
 }
 
-function HabitSection({ kind, habits, onRemove }: HabitSectionProps) {
+function HabitSection({ kind, habits, onEdit }: HabitSectionProps) {
   const isBuild = kind === 'build';
   const tint = isBuild ? dopamineColors.quality : dopamineColors.cheap;
 
@@ -40,32 +41,33 @@ function HabitSection({ kind, habits, onRemove }: HabitSectionProps) {
       />
 
       {habits.length === 0 ? <AppText variant="dim">{t.empty}</AppText> : null}
-      {habits.map((habit) => (
-        <View key={habit.id} style={[styles.row, { borderLeftColor: tint }]}>
-          <AppText style={styles.rowTitle}>{habit.title}</AppText>
-          {isPendingHabit(habit) ? (
-            <AppText variant="dim" style={styles.pending}>
-              {t.adding}
-            </AppText>
-          ) : (
-            <IconButton
-              icon="x"
-              tone="danger"
-              accessibilityLabel={`${habit.title} ${t.remove}`}
-              onPress={() => onRemove(habit)}
-              variant="ghost"
-              size={44}
-            />
-          )}
-        </View>
-      ))}
+      {habits.map((habit) => {
+        const pending = isPendingHabit(habit);
+        return (
+          <ScalePressable
+            key={habit.id}
+            disabled={pending}
+            onPress={() => onEdit(habit)}
+            accessibilityLabel={pending ? `${habit.title}: ${t.adding}` : t.editRow(habit.title)}
+            style={[styles.row, { borderLeftColor: tint }]}
+          >
+            <AppText style={styles.rowTitle}>{habit.title}</AppText>
+            {pending ? (
+              <AppText variant="dim">{t.adding}</AppText>
+            ) : (
+              <Icon name="edit-2" size={18} color={colors.textSecondary} />
+            )}
+          </ScalePressable>
+        );
+      })}
     </Card>
   );
 }
 
 export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
-  const { allHabits: habits, status, errorMessage, reload, archiveHabit } = useHabits();
-  const [adding, setAdding] = useState(false);
+  const { allHabits: habits, status, errorMessage, reload } = useHabits();
+  // null: pencere kapalı · habit null: yeni ekleme · habit dolu: düzenleme
+  const [sheet, setSheet] = useState<{ readonly habit: Habit | null } | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -73,16 +75,7 @@ export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
     }, [reload]),
   );
 
-  const confirmRemove = (habit: Habit) => {
-    confirmAction({
-      title: t.removeTitle,
-      message: t.removeBody(habit.title),
-      confirmText: t.remove,
-      cancelText: strings.common.cancel,
-      destructive: true,
-      onConfirm: () => void archiveHabit(habit.id),
-    });
-  };
+  const edit = (habit: Habit) => setSheet({ habit });
 
   return (
     <Screen
@@ -100,18 +93,18 @@ export function HabitsScreen({ navigation }: RootStackScreenProps<'Habits'>) {
           <ActionButton label={strings.common.retry} onPress={() => void reload()} />
         </View>
       ) : null}
-      <PillButton label={t.addCta} icon="plus" onPress={() => setAdding(true)} />
       <HabitSection
         kind="build"
         habits={habits.filter((habit) => habit.kind === 'build')}
-        onRemove={confirmRemove}
+        onEdit={edit}
       />
       <HabitSection
         kind="quit"
         habits={habits.filter((habit) => habit.kind === 'quit')}
-        onRemove={confirmRemove}
+        onEdit={edit}
       />
-      <AddHabitSheet visible={adding} onClose={() => setAdding(false)} />
+      <PillButton label={t.addCta} icon="plus" onPress={() => setSheet({ habit: null })} />
+      <HabitSheet visible={sheet !== null} habit={sheet?.habit} onClose={() => setSheet(null)} />
     </Screen>
   );
 }
@@ -121,13 +114,14 @@ const styles = themedStyles(() => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    paddingLeft: spacing.md,
+    minHeight: layout.touchTarget,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
     borderLeftWidth: 3,
     borderRadius: radius.sm,
     backgroundColor: colors.bgCardPressed,
   },
   rowTitle: { flex: 1 },
-  pending: { paddingRight: spacing.md, paddingVertical: spacing.md },
   error: { color: colors.danger },
   errorBox: { gap: spacing.sm },
 }));

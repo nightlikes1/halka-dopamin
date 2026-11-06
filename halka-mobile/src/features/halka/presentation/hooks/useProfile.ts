@@ -1,4 +1,4 @@
-// Profil: isim, görünüm modu ve ses tercihi
+// Profil: isim ve ses tercihi
 import { useCallback } from 'react';
 import { useSoundEffect } from '@features/halka/presentation/hooks/useSoundEffect';
 import { useDI } from '@presentation/providers/DIProvider';
@@ -22,12 +22,6 @@ export function useProfile() {
     [useCases, patch, play],
   );
 
-  const toggleViewMode = useCallback(async () => {
-    play('click');
-    const next = profile.viewMode === 'grid' ? 'cockpit' : 'grid';
-    handleResult(await useCases.changeViewMode.execute(next), (value) => patch('profile', value));
-  }, [useCases, patch, play, profile.viewMode]);
-
   const toggleSound = useCallback(async () => {
     handleResult(await useCases.toggleSound.execute(), (value) => {
       patch('profile', value);
@@ -35,5 +29,5 @@ export function useProfile() {
     });
   }, [useCases, patch, setCurrentAmbient]);
 
-  return { profile, rename, toggleViewMode, toggleSound };
+  return { profile, rename, toggleSound };
 }

@@ -12,16 +12,18 @@ import {
 } from '@features/halka/domain/entities/Pomodoro';
 
 describe('profileMapper', () => {
-  it("web'deki 'orbital' görünümünü 'cockpit' e çevirir", () => {
+  it('eski kayıttaki görünüm alanını okumaz ama kayıt biçiminde korur', () => {
     const profile = profileMapper.toEntity({
       name: 'Ada',
       title: '',
-      viewMode: 'orbital',
+      viewMode: 'grid',
       soundEnabled: true,
       lastActiveDate: '2026-10-14',
     });
 
-    expect(profile).toMatchObject({ viewMode: 'cockpit' });
+    expect(profile).not.toHaveProperty('viewMode');
+    expect(profile.name).toBe('Ada');
+    expect(profileMapper.toDto(profile).viewMode).toBe('cockpit');
   });
 });
 

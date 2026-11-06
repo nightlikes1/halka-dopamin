@@ -1,4 +1,4 @@
-// Alttan açılan "Yeni alışkanlık" penceresi: bulunduğun ekrandan çıkmadan tür seç, adını yaz, ekle
+// Alttan açılan alışkanlık penceresi: bulunduğun ekrandan çıkmadan ekle ya da mevcut olanı düzenle/kaldır
 import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
@@ -10,14 +10,17 @@ import { colors, radius, spacing } from '@core/theme/tokens';
 import {
   HABIT_TITLE_MAX_LENGTH,
   habitTitleError,
+  type Habit,
   type HabitKind,
 } from '@features/habits/domain/entities';
 import { useHabits } from '@features/habits/presentation/useHabits';
+import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { IconButton } from '@presentation/components/common/IconButton';
 import { PillButton } from '@presentation/components/common/PillButton';
 import { SegmentedControl } from '@presentation/components/common/SegmentedControl';
+import { confirmAction } from '@presentation/utils/dialogs';
 import { hapticLight } from '@presentation/utils/haptics';
 
 const t = strings.habits;
@@ -35,37 +38,62 @@ const KEYBOARD_SLIDE =
     ? LinearTransition.duration(durations.keyboardSlide).easing(easeOut)
     : undefined;
 
-interface AddHabitSheetProps {
+interface HabitSheetProps {
   readonly visible: boolean;
   readonly onClose: () => void;
+  // Verilirse düzenleme, verilmezse ekleme
+  readonly habit?: Habit | null;
 }
 
 // Modal kapalıyken içeriği çizmez: form her açılışta temiz başlar
-export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
+export function HabitSheet({ visible, onClose, habit = null }: HabitSheetProps) {
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <SheetForm onClose={onClose} />
+      <SheetForm habit={habit} onClose={onClose} />
     </Modal>
   );
 }
 
-function SheetForm({ onClose }: { readonly onClose: () => void }) {
+function SheetForm({
+  habit,
+  onClose,
+}: {
+  readonly habit: Habit | null;
+  readonly onClose: () => void;
+}) {
   const insets = useSafeAreaInsets();
-  const { allHabits, createHabit } = useHabits();
-  const [kind, setKind] = useState<HabitKind>('build');
-  const [title, setTitle] = useState('');
+  const { allHabits, createHabit, updateHabit, archiveHabit } = useHabits();
+  const [kind, setKind] = useState<HabitKind>(habit?.kind ?? 'build');
+  const [title, setTitle] = useState(habit?.title ?? '');
   const [error, setError] = useState<string | null>(null);
 
-  // Pencere sunucuyu beklemeden kapanır: kayıt listede "Ekleniyor…" olarak görünür, hata olursa uyarı çıkar
+  // Pencere sunucuyu beklemeden kapanır: değişiklik listede hemen görünür, hata olursa geri alınıp uyarı çıkar
   const submit = () => {
-    const problem = habitTitleError(title, allHabits);
+    const others = allHabits.filter((item) => item.id !== habit?.id);
+    const problem = habitTitleError(title, others);
     if (problem) {
       setError(ERROR_TEXT[problem]);
       return;
     }
+    const input = { kind, title: title.trim() };
     hapticLight();
-    void createHabit({ kind, title: title.trim() });
+    if (!habit) void createHabit(input);
+    else if (habit.title !== input.title || habit.kind !== kind) void updateHabit(habit.id, input);
     onClose();
+  };
+
+  const confirmRemove = (target: Habit) => {
+    confirmAction({
+      title: t.removeTitle,
+      message: t.removeBody(target.title),
+      confirmText: t.remove,
+      cancelText: strings.common.cancel,
+      destructive: true,
+      onConfirm: () => {
+        onClose();
+        void archiveHabit(target.id);
+      },
+    });
   };
 
   return (
@@ -85,7 +113,7 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
       >
         <View style={styles.header}>
           <AppText variant="section" accessibilityRole="header" style={styles.flex}>
-            {t.addTitle}
+            {habit ? t.editTitle : t.addTitle}
           </AppText>
           <IconButton
             icon="x"
@@ -105,6 +133,9 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
             { value: 'quit', label: t.kindQuit, color: colors.textPrimary },
           ]}
         />
+        {habit && habit.kind !== kind ? (
+          <AppText variant="muted">{t.kindChangeHint}</AppText>
+        ) : null}
 
         <AppTextInput
           value={title}
@@ -114,7 +145,7 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
           }}
           placeholder={kind === 'build' ? t.buildPlaceholder : t.quitPlaceholder}
           maxLength={HABIT_TITLE_MAX_LENGTH}
-          autoFocus
+          autoFocus={!habit}
           returnKeyType="done"
           onSubmitEditing={submit}
           accessibilityLabel={t.titleLabel}
@@ -125,7 +156,19 @@ function SheetForm({ onClose }: { readonly onClose: () => void }) {
           </AppText>
         ) : null}
 
-        <PillButton label={t.addCta} icon="plus" onPress={submit} />
+        <PillButton
+          label={habit ? t.saveCta : t.addCta}
+          icon={habit ? 'check' : 'plus'}
+          onPress={submit}
+        />
+        {habit ? (
+          <ActionButton
+            label={t.removeCta}
+            icon="trash-2"
+            color={colors.danger}
+            onPress={() => confirmRemove(habit)}
+          />
+        ) : null}
       </Animated.View>
     </KeyboardAvoidingView>
   );

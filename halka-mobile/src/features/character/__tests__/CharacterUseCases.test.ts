@@ -58,6 +58,9 @@ class FakeHabitRepository implements HabitRepository {
   async create(_input: CreateHabitInput): AsyncResult<Habit> {
     throw new Error('kullanılmaz');
   }
+  async update(): AsyncResult<Habit> {
+    throw new Error('kullanılmıyor');
+  }
   async archive(): AsyncResult<void> {
     return okVoid();
   }

@@ -16,15 +16,13 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ onAddPress }: AppHeaderProps) {
-  const { profile, toggleViewMode, toggleSound } = useProfile();
+  const { profile, toggleSound } = useProfile();
   const { activeIds } = useLayout();
   const themeMode = usePreferencesStore((s) => s.themeMode);
   const isLight = themeMode === 'light' || activeThemeMode() === 'light';
   const allCollapsed = useUiStore((s) => s.allCollapsed);
   const setAllCollapsed = useUiStore((s) => s.setAllCollapsed);
   const play = useSoundEffect();
-
-  const isGrid = profile.viewMode === 'grid';
 
   const toggleCollapseAll = () => {
     play('click');
@@ -43,12 +41,6 @@ export function AppHeader({ onAddPress }: AppHeaderProps) {
       </View>
 
       <View style={styles.controls}>
-        <Chip
-          label={isGrid ? 'Kokpit Modu' : 'Panel Modu'}
-          icon={isGrid ? 'crosshair' : 'grid'}
-          accessibilityLabel={isGrid ? 'Kokpit moduna geç' : 'Panel moduna geç'}
-          onPress={() => void toggleViewMode()}
-        />
         <Chip
           label={allCollapsed ? 'Genişlet' : 'Sadeleştir'}
           icon={allCollapsed ? 'maximize' : 'minimize'}
