@@ -2,7 +2,7 @@
 // Web'deki getBoundingClientRect yerine onLayout ölçümleri kullanılır.
 import { StyleSheet } from 'react-native';
 import Svg, { Circle, Line } from 'react-native-svg';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 
 export interface Point {
   readonly x: number;

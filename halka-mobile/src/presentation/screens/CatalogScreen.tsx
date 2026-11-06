@@ -4,7 +4,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 import { colors, fonts, fontSizes, radius, spacing } from '@core/theme/tokens';
 import type { CatalogEntry } from '@domain/usecases/LayoutUseCases';
 import { AppText } from '@presentation/components/common/AppText';

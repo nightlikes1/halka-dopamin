@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { TextInput, type TextInputInstance, type TextInputProps } from 'react-native';
 import { layout } from '@core/theme/layout';
 import { themedStyles } from '@core/theme/themed';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { typography } from '@core/theme/typography';
 

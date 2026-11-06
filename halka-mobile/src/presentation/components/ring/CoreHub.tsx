@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 import { colors, fonts, fontSizes, spacing } from '@core/theme/tokens';
 import type { DailyBriefing } from '@domain/entities/Briefing';
 import { AppText } from '@presentation/components/common/AppText';

@@ -14,7 +14,7 @@ import Animated, {
 import { durations, easeOut } from '@core/theme/motion';
 import { themedStyles } from '@core/theme/themed';
 import { withAlpha } from '@core/theme/palettes';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 import { colors, radius } from '@core/theme/tokens';
 
 interface ProgressBarProps {

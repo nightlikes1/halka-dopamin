@@ -1,4 +1,4 @@
-// Tema erişimi: uygulama tek (siyah-gri) temaya sahiptir; bileşenler paleti buradan alır
+// Halka zincir paletine erişim: renkler aktif temadan okunur (provider gerekmez)
 import { RING_PALETTE, type RingPalette } from '@core/theme/palettes';
 
 interface ThemeValue {

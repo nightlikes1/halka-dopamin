@@ -2,7 +2,7 @@
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import { layout } from '@core/theme/layout';
 import { themedStyles } from '@core/theme/themed';
-import { useTheme } from '@core/theme/ThemeProvider';
+import { useTheme } from '@core/theme/useTheme';
 import { colors, radius, spacing } from '@core/theme/tokens';
 import { AppText } from '@presentation/components/common/AppText';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
