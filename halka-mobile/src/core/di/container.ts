@@ -54,6 +54,11 @@ import { ExpoClipboardService } from '@features/halka/data/services/ExpoClipboar
 import { SystemClock } from '@core/utils/clock';
 import { HalkaLocalDataSource, type KeyValueStorage } from '@features/halka/data/storage';
 import { LocalTodayRepository } from '@features/today/data/LocalTodayRepository';
+import { LocalDailyLogRepository } from '@features/stats/data/LocalDailyLogRepository';
+import {
+  GetInsightsUseCase,
+  RecordDailyLogUseCase,
+} from '@features/stats/domain/usecases/StatsUseCases';
 import { SampleCircleRepository } from '@features/today/data/SampleCircleRepository';
 import {
   GetCircleUseCase,
@@ -157,6 +162,7 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
   const dayNoteRepository = new HttpDayNoteRepository(http);
   const characterRepository = new HttpCharacterRepository(http);
   const todayRepository = new LocalTodayRepository(storage);
+  const dailyLogRepository = new LocalDailyLogRepository(storage);
 
   const dataSource = new HalkaLocalDataSource(storage, () => createDefaultStorageDto(clock));
   const repos = createRepositories(dataSource);
@@ -200,6 +206,16 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
       saveSelfNote: new SaveSelfNoteUseCase(todayRepository),
       markCelebrated: new MarkCelebratedUseCase(todayRepository, clock),
       circle: new GetCircleUseCase(new SampleCircleRepository()),
+    },
+    stats: {
+      insights: new GetInsightsUseCase(
+        checkInRepository,
+        habitEntryRepository,
+        todayRepository,
+        dailyLogRepository,
+        clock,
+      ),
+      recordDay: new RecordDailyLogUseCase(dailyLogRepository, clock),
     },
     history: {
       month: new GetMonthHistoryUseCase(checkInRepository, dayNoteRepository, clock),

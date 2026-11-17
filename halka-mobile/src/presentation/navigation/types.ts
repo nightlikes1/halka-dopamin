@@ -24,6 +24,8 @@ export type RootStackParamList = {
   Settings: undefined;
   Urge: undefined;
   Calm: undefined;
+  WeekReview: undefined;
+  MonthMirror: undefined;
   Character: undefined;
   Habits: undefined;
   CheckIn: { date: string };

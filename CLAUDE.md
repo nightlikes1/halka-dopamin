@@ -34,13 +34,21 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 - Yazı ölçeği (iki modda aynı): `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
   `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40. Ölçüler:
   `radius.card` 24 / `field` 14, `iconBoxRadius` (%30); `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
-  Sıradaki adımlar: Odak ekranının yeni düzeni, 90 sn dürtü akışı, Gelişim'in ayrıntılı istatistikleri (Faz 4).
+  Sıradaki adımlar: Odak ekranının yeni düzeni, 90 sn dürtü akışı.
 - **Araçlar** (`features/tools`): Canım çekiyor, Sakin saat (`Calm` modalı, 15/30/60 dk, kayıt yok) ve Halka'nın 10
   eklentisinin tümü **eşit kartlar** (2 sütun; modül rengi ikon kutusu + canlı özet). Kart eklentinin geniş görünümünü
   açar (`WidgetFocus`, modal). Halka panosu (halka + eklenti ızgarası, `HomeScreen`) kaldırıldı; eklenti verisi cihazda aynı.
-- **Gelişim** (`features/stats`, `GrowthScreen`): hafta aralığı, ortalama cümlesi, karakter kartı (yakınlık %; dokununca
-  `Character` yığın ekranı), "Bu haftanın özeti" (7 gün çubuk = o gün yapılan / bugünkü aktif alışkanlık, tamamlanan,
-  seri, geçirilen dürtü; `domain/weekSummary.ts`), Geçmiş ve Alışkanlıklarım bağlantıları.
+- **Gelişim** (`features/stats`, `GrowthScreen`, Faz 4): hafta aralığı, özet cümlesi (kalıcı dopamin % + halka ort.),
+  karakter kartı (yakınlık %; dokununca `Character`), günlük skor (check-in denge skoru + su/görev/odak/ruh hali çubukları;
+  odak hedefi günde 4 seans), "Bu haftanın özeti" (7 gün çubuk = o gün yapılan / bugünkü aktif alışkanlık, tamamlanan,
+  seri, geçirilen dürtü), **Haftalık bakış** (`WeekReview` modal: ort. + geçen haftaya fark, en iyi gün, ort. skor, örüntü,
+  denge, su/odak ortalaması) ve **Ay aynası** (`MonthMirror` modal: geçirilen dürtü, %100 gün, en uzun seri, check-in
+  sayısı, gün halkalı takvim) bağlantıları, dopamin dengesi (kalıcı = yapılan alışkanlık + geçirilen dürtü, anlık =
+  "yaptım" denen dürtü; 7 gün), dürtü saat örüntüsü (sabah 5–11 · öğle 12–16 · akşam 17–21 · gece; 30 gün), ruh hali
+  ilişkisi (puan ≥4 / ≤2 günlerde yapılma oranı; iki grupta ≥2 gün ve ≥15 puan fark yoksa iddia yok; 30 gün), Geçmiş ve
+  Alışkanlıklarım. Hesaplar saf: `domain/insights.ts`; veri `GetInsightsUseCase` (sunucu 62 gün + cihaz). Zaman tasarrufu
+  tahmini şimdilik gösterilmez. **Günlük özet cihazda** (`halka.dailyLogs.v1`, 62 gün; su, görev, odak seansı):
+  `useDailyLogSync` (AppShell) Halka deposu değişince 1,5 sn gecikmeyle bugünü yazar; sunucu şeması değişmedi.
 - **Bugün ekranı (yeni düzen, 2026-11-17, `features/today`)**: iki stilde tek ekran. Üstte tarih + "Bugün", "Canım çekiyor"
   kapsülü (→ `Urge` modalı) ve baş harf avatarı (→ Ayarlar); odak ve tema düğmesi yok, su yok. Canlı halka kartı
   (`LiveRing`: gradyan halka, sakin/hareketli nefes; "hareketli" = "yaptım" denen dürtü > tamamlanan + geçirilen), seri
@@ -304,7 +312,7 @@ config.ts   zemin #0B0B0D, DPR ≤ 2, 50 fps eşiği, düşük güç oranı 0,6,
 - [ ] Faz 1: aktivite takibi + günlük özet (açılış sekmesi "Bugün" olacak; aktivite süreleri denge skoruna eklenecek)
 - [x] Faz 2: Potansiyel Karakterim (kimlik, özellikler, alışkanlık bağları, yakınlık)
 - [ ] Faz 3: eğitim rehberleri (14 rehber, JSON içerik, Türkçe-dayanıklı eşleştirme)
-- [ ] Faz 4: istatistikler ve içgörüler
+- [x] Faz 4: istatistikler ve içgörüler (Gelişim, Haftalık bakış, Ay aynası; günlük özet cihazda)
 - [ ] Faz 5: ek özellikler (kullanıcı seçecek)
 
 ## Çalıştırma

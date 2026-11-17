@@ -13,6 +13,7 @@ import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
 import { ChainRing } from '@features/halka/presentation/components/ring/ChainRing';
 import { useBootstrap } from '@features/halka/presentation/hooks/useBootstrap';
+import { useDailyLogSync } from '@features/stats/presentation/useDailyLogSync';
 import { usePomodoroCompletionWatcher } from '@features/halka/presentation/hooks/usePomodoro';
 import { RootNavigator } from '@presentation/navigation/RootNavigator';
 import { useHalkaStore } from '@features/halka/presentation/store/useHalkaStore';
@@ -65,6 +66,7 @@ export function AppShell({ fontsReady }: AppShellProps) {
   useSessionRestore();
   usePomodoroCompletionWatcher();
   useSystemThemeSync();
+  useDailyLogSync();
   const status = useHalkaStore((s) => s.status);
   const errorMessage = useHalkaStore((s) => s.errorMessage);
   const authStatus = useAuthStore((s) => s.status);

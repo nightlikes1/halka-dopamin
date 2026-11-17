@@ -24,6 +24,8 @@ import { HistoryScreen } from '@features/history/presentation/screens/HistoryScr
 import { SettingsScreen } from '@features/settings/presentation/screens/SettingsScreen';
 import { UrgeScreen } from '@features/today/presentation/screens/UrgeScreen';
 import { CalmScreen } from '@features/tools/presentation/screens/CalmScreen';
+import { MonthMirrorScreen } from '@features/stats/presentation/screens/MonthMirrorScreen';
+import { WeekReviewScreen } from '@features/stats/presentation/screens/WeekReviewScreen';
 import { CharacterScreen } from '@features/character/presentation/screens/CharacterScreen';
 import { MainTabs } from '@presentation/navigation/MainTabs';
 import type { RootStackParamList } from '@presentation/navigation/types';
@@ -99,6 +101,16 @@ export function RootNavigator() {
             <Stack.Screen
               name="Calm"
               component={CalmScreen}
+              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+            />
+            <Stack.Screen
+              name="WeekReview"
+              component={WeekReviewScreen}
+              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+            />
+            <Stack.Screen
+              name="MonthMirror"
+              component={MonthMirrorScreen}
               options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
             />
             <Stack.Screen name="Character" component={CharacterScreen} />

@@ -1,6 +1,50 @@
 // Arayüz metinleri (Türkçe). Yeni özelliklerin tüm metinleri buradan okunur;
 // çoklu dil gerektiğinde aynı şekle sahip bir sözlük eklemek yeterli olur.
 
+// Ay adları ve ünlü uyumuna göre ekli halleri (0 = Ocak)
+const MONTH_NAMES = [
+  'Ocak',
+  'Şubat',
+  'Mart',
+  'Nisan',
+  'Mayıs',
+  'Haziran',
+  'Temmuz',
+  'Ağustos',
+  'Eylül',
+  'Ekim',
+  'Kasım',
+  'Aralık',
+];
+const MONTH_GENITIVE = [
+  "Ocak'ın",
+  "Şubat'ın",
+  "Mart'ın",
+  "Nisan'ın",
+  "Mayıs'ın",
+  "Haziran'ın",
+  "Temmuz'un",
+  "Ağustos'un",
+  "Eylül'ün",
+  "Ekim'in",
+  "Kasım'ın",
+  "Aralık'ın",
+];
+const MONTH_DATIVE = [
+  "Ocak'a",
+  "Şubat'a",
+  "Mart'a",
+  "Nisan'a",
+  "Mayıs'a",
+  "Haziran'a",
+  "Temmuz'a",
+  "Ağustos'a",
+  "Eylül'e",
+  "Ekim'e",
+  "Kasım'a",
+  "Aralık'a",
+];
+
 export const tr = {
   common: {
     appName: 'Halka',
@@ -168,14 +212,92 @@ export const tr = {
     completed: 'tamamlanan',
     streak: 'gün seri',
     urgesPassed: 'geçirilen dürtü',
-    summary: (pct: number) =>
-      pct === 0
-        ? 'Bu hafta henüz kayıt yok. Küçük bir adım yeter.'
-        : `Bu hafta halkalarının ortalaması %${pct}.`,
+    // Özet cümlesi: dopamin dengesi varsa onu, yoksa halka ortalamasını söyler
+    summary: (lastingPct: number | null, averagePct: number) =>
+      lastingPct !== null
+        ? `Bu hafta dürtülerinin ve alışkanlıklarının %${lastingPct}'ini kalıcı tarafa çevirdin.`
+        : averagePct > 0
+          ? `Bu hafta halkalarının ortalaması %${averagePct}.`
+          : 'Bu hafta henüz kayıt yok. Küçük bir adım yeter.',
     history: 'Geçmiş takvimi',
     habits: 'Alışkanlıklarım',
-    detailsSoon: 'Ayrıntılı istatistikler yakında.',
+    weekReviewRow: 'Haftalık bakış',
+    weekReviewHint: (pct: number) => `Halka ortalaması %${pct}`,
+    mirrorRow: (monthIndex: number) => `${MONTH_GENITIVE[monthIndex] ?? ''} aynası`,
+    mirrorHint: 'Ayın başından bugüne',
+    // Günlük skor
+    scoreTitle: 'Günlük skor',
+    scoreA11y: (score: number | null) =>
+      score === null ? 'Bugün için skor yok' : `Bugünkü denge skoru ${score}`,
+    scoreEmpty: 'Akşam kapanışından sonra',
+    scoreHint: 'Check-in denge skoru',
+    bars: { water: 'Su', tasks: 'Görevler', focus: 'Odak', mood: 'Ruh hali' },
+    barA11y: (label: string, pct: number | null) =>
+      pct === null ? `${label}: kayıt yok` : `${label}: yüzde ${pct}`,
+    noValue: '—',
+    // Dopamin dengesi
+    balanceTitle: 'Dopamin dengesi',
+    balanceLasting: (count: number) => `${count} kalıcı`,
+    balanceInstant: (count: number) => `${count} anlık`,
+    balancePct: (pct: number | null) => (pct === null ? '—' : `%${pct} kalıcı`),
+    balanceHint:
+      'Kalıcı: yaptığın alışkanlıklar ve geçirdiğin dürtüler. Anlık: "yaptım" dediğin dürtüler.',
+    balanceA11y: (lasting: number, instant: number) => `${lasting} kalıcı, ${instant} anlık kayıt`,
+    // Örüntü
+    patternTitle: 'Örüntü',
+    last30: 'Son 30 gün',
+    slots: { morning: 'Sabah', afternoon: 'Öğle', evening: 'Akşam', late: '22:00+' },
+    patternA11y: (slot: string, count: number) => `${slot}: ${count} dürtü`,
+    patternPeak: (slot: string) =>
+      `Dürtülerin en çok ${slot.toLocaleLowerCase('tr-TR')} geliyor. O saatlere küçük bir plan koy.`,
+    patternEven: 'Dürtülerin gün içine dağılmış; belirgin bir saat yok.',
+    patternEmpty: 'Canım çekiyor ile kaydettiğin dürtüler burada saatlere göre görünecek.',
+    // Ruh hali ilişkisi
+    moodTitle: 'Ruh hali ve alışkanlıklar',
+    moodLift: (good: number, hard: number) =>
+      `İyi hissettiğin günlerde alışkanlıklarının %${good}'ini, zor günlerde %${hard}'ini yaptın.`,
+    moodNoLink: 'Ruh halin ile alışkanlıkların arasında belirgin bir fark görünmüyor.',
+    moodNotEnough:
+      'Birkaç akşam kapanışı daha yapınca ruh halinle alışkanlıkların arasındaki bağ görünecek.',
   },
+  weekReview: {
+    title: 'Haftalık bakış',
+    close: 'Kapat',
+    average: 'halka ortalaması',
+    delta: (delta: number) =>
+      delta === 0
+        ? 'geçen haftayla aynı'
+        : delta > 0
+          ? `geçen haftadan +${delta}`
+          : `geçen haftadan ${delta}`,
+    dayA11y: (day: string, pct: number) => `${day}: yüzde ${pct}`,
+    bestTitle: 'En iyi günün',
+    bestBody: (day: string, pct: number) => `${day} · halkanın %${pct}'i doldu`,
+    bestScore: (score: number) => `Denge skoru ${score}`,
+    bestEmpty: 'Bu hafta henüz tamamlanan alışkanlık yok.',
+    scoreTitle: 'Ortalama denge skoru',
+    logsTitle: 'Eklentilerden',
+    waterAvg: (pct: number | null) =>
+      pct === null ? 'Su: kayıt yok' : `Su: günde ortalama %${pct}`,
+    focusAvg: (sessions: number | null) =>
+      sessions === null ? 'Odak: kayıt yok' : `Odak: günde ortalama ${sessions} seans`,
+    finish: 'Haftayı kapat',
+  },
+  mirror: {
+    title: (monthIndex: number) => `${MONTH_GENITIVE[monthIndex] ?? ''} aynası`,
+    close: 'Kapat',
+    headline: (passed: number) =>
+      passed > 0 ? `${passed} dürtüyü geçirdin.` : 'Bu ay her gün biraz daha yakından baktın.',
+    fullDays: 'halkası dolan gün',
+    bestStreak: 'en uzun seri',
+    checkIns: 'akşam kapanışı',
+    calendarTitle: (monthIndex: number, count: number) =>
+      `${(MONTH_NAMES[monthIndex] ?? '').toLocaleUpperCase('tr-TR')} · ${count} HALKA`,
+    dayA11y: (day: number, pct: number) => `${day}. gün: yüzde ${pct}`,
+    // Ayın sonraki ayına (0-11)
+    continue: (monthIndex: number) => `${MONTH_DATIVE[(monthIndex + 1) % 12] ?? ''} devam`,
+  },
+
   onboarding: {
     brand: 'HALKA',
     skip: 'Atla',
