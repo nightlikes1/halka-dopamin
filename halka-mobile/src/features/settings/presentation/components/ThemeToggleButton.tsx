@@ -11,7 +11,7 @@ interface ThemeToggleButtonProps {
 
 export function ThemeToggleButton({ variant }: ThemeToggleButtonProps) {
   const theme = useThemeModeSetting();
-  const dark = theme.selected === 'dark';
+  const dark = theme.resolved === 'dark';
   return (
     <IconButton
       icon={dark ? 'sun' : 'moon'}

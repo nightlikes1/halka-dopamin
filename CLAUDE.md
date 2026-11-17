@@ -30,6 +30,20 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   durumu `RootNavigator`'da saklanır). Bu yüzden modül düzeyindeki renkli değerler `themedStyles`/`themed`
   (`core/theme/themed.ts`, tema başına önbellekli Proxy) ile yazılır. Açık temada parçacıklar normal karışım +
   koyulaştırılmış palet (`particleOnLight()`). Eklenti vurgusu domain'de anlam (`reward | neutral`), renk `widgetAccentColor`.
+- **Tema ailesi "Halka" (yeni tasarım, 2026-11-17)**: Obsidyen'in yanında ek, ücretsiz "VIP" tema. Üç eksen:
+  aile (`obsidian | halka`, `halka.themeFamily`), mod (`system | dark | light`, `halka.themeMode`; iki ailede de),
+  yüzey (`particles | classic`; Halka'da Liquid Glass renk lekeleri / düz). **iPhone'da varsayılan** Halka + Liquid Glass
+  + Sistem; diğer cihazlarda Obsidyen koyu. Uygulama: `applyTheme(family, mode)` (`applyThemeMode`/`applyThemeFamily`
+  sarmalar), `themed` önbelleği `activeThemeKey()` (`aile-mod`), AppShell `key={aile-mod}`, "Sistem" seçiliyse
+  `useSystemThemeSync` telefonun ayarını izler. Halka paleti: koyu `#000000`/`#1C1C1E`/`#2C2C2E`, aydınlık
+  `#F2F2F7`/`#FFFFFF`, metin beyaz / lacivert `#1B1F3B`; `gold*` adları Halka'da **turuncu ödül** (`#FF9F0A` / `#C93400`).
+  Modül anlamları `moduleColors` (dolgu) + `moduleInk` (metin), gradyanlar `gradients`, lekeler `backdropBlobs`,
+  davranış farkları `themeTraits` (ana buton gradyan/çizgi, başlık fontu: Halka kalın Inter, Obsidyen serif).
+  **Halka ailesinde "gradyan/ışıma yok" ve "altın yalnız ödülde" kuralları geçersiz**; Obsidyen'de geçerli.
+  Yeni ölçek iki ailede aynı: `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
+  `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40;
+  `radius.card` 24 / `field` 14, `iconBoxRadius`; `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
+  Sıradaki adımlar: tüm uygulama yeni düzene (4 sekme Bugün · Odak · Araçlar · Gelişim, Profil avatardan), önce Bugün.
 - Görsel stil (2026-10-17): **"particles" varsayılan** (cam yüzeyler, parçacık
   karşılama/Bugün/Odak ekranları, yüzen cam sekme çubuğu) ve **"classic"** (opak kartlar); ikisi aynı paleti kullanır.
   Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
@@ -292,3 +306,14 @@ cd server && npm run dev                                           # http://0.0.
 # 2) Mobil
 cd halka-mobile && npm start                                      # Expo Go ile QR
 ```
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- When graphify-out/graph.json exists, run `graphify query "<question>"` before your first grep, search or source-file read for a codebase question, and put this rule in every subagent prompt that explores code. Read raw files only for lines the graph or an earlier read already located. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. When the answer is under a Markdown heading, `graphify section "<heading>"` prints that section's text, so the .md need not be opened. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- A committed graphify-out/graph.json is rewritten whole on every build, so a large diff to it in a pull request is expected. Do not flag it as churn or suggest skipping the graph rebuild or its hooks.

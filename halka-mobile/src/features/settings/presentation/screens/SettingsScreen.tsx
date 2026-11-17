@@ -1,11 +1,14 @@
 // Ayarlar: hesap bilgisi, tema, görsel stil, sunucu adresi, çıkış (bildirim/dışa aktarma sonraki fazlarda)
 
 import { strings } from '@core/i18n/tr';
-import { colors, fontSizes, spacing } from '@core/theme/tokens';
+import { colors, fontSizes, spacing, type ThemeFamily } from '@core/theme/tokens';
 import type { ThemeModePreference, VisualStyle } from '@features/settings/data/devicePreferences';
 import { themedStyles } from '@core/theme/themed';
 import { useAuth } from '@features/auth/presentation/useAuth';
-import { useThemeModeSetting } from '@features/settings/presentation/useThemeModeSetting';
+import {
+  useThemeFamilySetting,
+  useThemeModeSetting,
+} from '@features/settings/presentation/useThemeModeSetting';
 import { useVisualStyleSetting } from '@features/settings/presentation/useVisualStyleSetting';
 import { ActionButton } from '@presentation/components/common/ActionButton';
 import { AppText } from '@presentation/components/common/AppText';
@@ -25,6 +28,8 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
   const { apiBaseUrl } = useDI();
   const visual = useVisualStyleSetting();
   const theme = useThemeModeSetting();
+  const family = useThemeFamilySetting();
+  const halka = family.selected === 'halka';
 
   const confirmLogout = () => {
     confirmAction({
@@ -50,12 +55,26 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
         </AppText>
       </Card>
       <Card style={styles.card}>
-        <SectionTitle title={t.theme} icon={theme.selected === 'dark' ? 'moon' : 'sun'} />
+        <SectionTitle title={t.themeFamily} icon="droplet" />
+        <SegmentedControl<ThemeFamily>
+          selected={family.selected}
+          onChange={(value) => void family.choose(value)}
+          accessibilityLabel={t.themeFamily}
+          options={[
+            { value: 'halka', label: t.themeFamilyHalka, color: colors.textPrimary },
+            { value: 'obsidian', label: t.themeFamilyObsidian, color: colors.textPrimary },
+          ]}
+        />
+        <AppText variant="dim">{t.themeFamilyHint}</AppText>
+      </Card>
+      <Card style={styles.card}>
+        <SectionTitle title={t.theme} icon={theme.resolved === 'dark' ? 'moon' : 'sun'} />
         <SegmentedControl<ThemeModePreference>
           selected={theme.selected}
           onChange={(mode) => void theme.choose(mode)}
           accessibilityLabel={t.theme}
           options={[
+            { value: 'system', label: t.themeSystem, color: colors.textPrimary },
             { value: 'dark', label: t.themeDark, color: colors.textPrimary },
             { value: 'light', label: t.themeLight, color: colors.textPrimary },
           ]}
@@ -69,8 +88,16 @@ export function SettingsScreen({ navigation }: RootStackScreenProps<'Settings'>)
           onChange={(style) => void visual.choose(style)}
           accessibilityLabel={t.visualStyle}
           options={[
-            { value: 'particles', label: t.visualParticles, color: colors.textPrimary },
-            { value: 'classic', label: t.visualClassic, color: colors.textPrimary },
+            {
+              value: 'particles',
+              label: halka ? t.visualGlass : t.visualParticles,
+              color: colors.textPrimary,
+            },
+            {
+              value: 'classic',
+              label: halka ? t.visualFlat : t.visualClassic,
+              color: colors.textPrimary,
+            },
           ]}
         />
         <AppText variant="dim">{t.visualStyleHint}</AppText>

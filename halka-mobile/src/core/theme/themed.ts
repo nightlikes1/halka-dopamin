@@ -1,17 +1,17 @@
 // Temaya bağlı modül sabitleri: değer ilk erişimde aktif temayla üretilir ve tema başına önbelleğe
-// alınır. Tema değişince (applyThemeMode) sonraki erişim yeni temanın değerini döndürür; çağrı yerleri
+// alınır (aile + mod). Tema değişince (applyTheme) sonraki erişim yeni temanın değerini döndürür; çağrı yerleri
 // `styles.card`, `typography.body` biçiminde aynı kalır. Uygulama yeniden yüklenmeden tema değişir.
 import { StyleSheet, type ViewStyle, type TextStyle, type ImageStyle } from 'react-native';
-import { activeThemeMode, type ThemeMode } from '@core/theme/tokens';
+import { activeThemeKey } from '@core/theme/tokens';
 
 export function themed<T extends object>(factory: () => T): T {
-  const cache: Partial<Record<ThemeMode, T>> = {};
+  const cache = new Map<string, T>();
   const current = (): T => {
-    const mode = activeThemeMode();
-    const cached = cache[mode];
+    const key = activeThemeKey();
+    const cached = cache.get(key);
     if (cached) return cached;
     const value = factory();
-    cache[mode] = value;
+    cache.set(key, value);
     return value;
   };
   return new Proxy({} as T, {

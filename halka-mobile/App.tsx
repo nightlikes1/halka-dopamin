@@ -11,10 +11,10 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { useFonts } from 'expo-font';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Appearance, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createContainer } from '@core/di/container';
-import { applyColorScheme, applyThemeMode, colors } from '@core/theme/tokens';
+import { applyColorScheme, applyTheme, colors, resolveThemeMode } from '@core/theme/tokens';
 import { loadDevicePreferences } from '@features/settings/data/devicePreferences';
 import { DIProvider } from '@presentation/providers/DIProvider';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
@@ -38,12 +38,21 @@ export default function App() {
   const [themeReady, setThemeReady] = useState(false);
 
   useEffect(() => {
-    void loadDevicePreferences().then((prefs) => {
+    // iPhone'da varsayılan tema yeni tasarım (Halka)
+    const isIphone = Platform.OS === 'ios' && !Platform.isPad;
+    void loadDevicePreferences(isIphone).then((prefs) => {
       applyColorScheme(prefs.visualStyle);
-      applyThemeMode(prefs.themeMode);
+      const mode = resolveThemeMode(prefs.themeMode, Appearance.getColorScheme());
+      applyTheme(prefs.themeFamily, mode);
       // Web'de otomatik doldurma ve sayfa zemini için global CSS (mobilde etkisiz)
       injectWebGlobalStyles();
-      usePreferencesStore.getState().init(prefs.visualStyle, prefs.themeMode, prefs.onboardingSeen);
+      usePreferencesStore
+        .getState()
+        .init(
+          prefs.visualStyle,
+          { themeFamily: prefs.themeFamily, themePreference: prefs.themeMode, themeMode: mode },
+          prefs.onboardingSeen,
+        );
       setThemeReady(true);
     });
   }, []);

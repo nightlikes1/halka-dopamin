@@ -1,0 +1,7 @@
+# Ses efektleri ve uygulama simgeleri graf için anlamsız
+halka-mobile/assets/sounds/
+halka-mobile/assets/*.png
+# Kökteki yerel dosyalar
+.mcp.json
+package-lock.json
+**/package-lock.json

@@ -19,6 +19,13 @@ export const layout = {
   screenBottomPadding: spacing.xxxl,
   // Erişilebilir en küçük dokunma alanı (WCAG / platform yönergeleri)
   touchTarget: 44,
+  // Yeni düzen: ekran kenarı 16 · kartlar arası 10 · başlık tepeden 56 · bölüm başlığı–kart 8
+  edge: spacing.lg,
+  cardGap: spacing.smd,
+  titleTop: 56,
+  sectionToCard: spacing.sm,
+  // Ana buton yüksekliği (kapsül)
+  primaryButtonHeight: 56,
 } as const;
 
 // Görünen boyutu küçük olan dokunmatik öğeyi 44 px'e tamamlayan hitSlop

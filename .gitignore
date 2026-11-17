@@ -25,3 +25,7 @@ Thumbs.db
 
 # Playwright önizleme görüntüleri ve logları (yerel)
 .playwright-mcp/
+
+# Yerel araç çıktıları (graphify grafiği, Claude Code yerel ayarları; mutlak yol içerir)
+graphify-out/
+.claude/

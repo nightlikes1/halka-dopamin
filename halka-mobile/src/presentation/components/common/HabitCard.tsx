@@ -88,7 +88,7 @@ export function HabitCard({
   return (
     <View style={styles.card}>
       <View style={[styles.iconBox, { backgroundColor: tint }]}>
-        <Icon name={icon} size={22} color={colors.textPrimary} />
+        <Icon name={icon} size={22} color={colors.iconOnTint} />
       </View>
 
       <View style={styles.body}>

@@ -576,6 +576,14 @@ export const tr = {
     themeLight: 'Açık',
     themeHint: 'Bugün ekranındaki güneş/ay butonuyla da geçiş yapabilirsin.',
     themeFailed: 'Tema kaydedilemedi.',
+    themeSystem: 'Sistem',
+    themeFamily: 'Tema ailesi',
+    themeFamilyObsidian: 'Obsidyen',
+    themeFamilyHalka: 'Halka',
+    themeFamilyHint:
+      'Halka yeni tasarım: canlı renkler ve gradyanlar. Obsidyen sade, altın vurgulu.',
+    visualGlass: 'Liquid Glass',
+    visualFlat: 'Düz',
   },
   errors: {
     network:
