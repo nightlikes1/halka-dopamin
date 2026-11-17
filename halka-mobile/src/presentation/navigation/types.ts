@@ -24,6 +24,7 @@ export type RootStackParamList = {
   WidgetFocus: { widgetId: WidgetId };
   Catalog: undefined;
   Settings: undefined;
+  Urge: undefined;
   Habits: undefined;
   CheckIn: { date: string };
   History: { date?: string } | undefined;

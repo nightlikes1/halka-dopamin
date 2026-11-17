@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { layout } from '@core/theme/layout';
 import { colors, spacing } from '@core/theme/tokens';
 import { themedStyles } from '@core/theme/themed';
+import { GlassBackdrop } from '@presentation/components/common/GlassBackdrop';
 import { useTabBarClearance } from '@presentation/navigation/GlassTabBar';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
 
@@ -27,6 +28,10 @@ interface ScreenProps {
   readonly keyboard?: boolean;
   readonly maxWidth?: number;
   readonly contentStyle?: StyleProp<ViewStyle>;
+  // Liquid Glass stilinde zemine renk lekeleri (yeni düzen ekranları)
+  readonly backdrop?: boolean;
+  // İçeriğin üstünde sabit duran katman (geri al bildirimi gibi)
+  readonly overlay?: ReactNode;
 }
 
 export function Screen({
@@ -37,6 +42,8 @@ export function Screen({
   keyboard = false,
   maxWidth = layout.contentMaxWidth,
   contentStyle,
+  backdrop = false,
+  overlay,
 }: ScreenProps) {
   const particles = useParticleStyle();
   const clearance = useTabBarClearance();
@@ -60,6 +67,7 @@ export function Screen({
       style={styles.safe}
       edges={modal ? ['top', 'left', 'right', 'bottom'] : ['top', 'left', 'right']}
     >
+      {backdrop && particles ? <GlassBackdrop /> : null}
       {header}
       {keyboard ? (
         <KeyboardAvoidingView
@@ -71,6 +79,7 @@ export function Screen({
       ) : (
         content
       )}
+      {overlay}
     </SafeAreaView>
   );
 }

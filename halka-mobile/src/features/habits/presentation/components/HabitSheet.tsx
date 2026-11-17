@@ -10,6 +10,7 @@ import { colors, radius, spacing } from '@core/theme/tokens';
 import {
   HABIT_TITLE_MAX_LENGTH,
   habitTitleError,
+  type CreateHabitInput,
   type Habit,
   type HabitKind,
 } from '@features/habits/domain/entities';
@@ -41,28 +42,32 @@ interface HabitSheetProps {
   readonly onClose: () => void;
   // Verilirse düzenleme, verilmezse ekleme
   readonly habit?: Habit | null;
+  // Eklemede önceden doldurulan değerler (öneri)
+  readonly initial?: CreateHabitInput | null;
 }
 
 // Modal kapalıyken içeriği çizmez: form her açılışta temiz başlar
-export function HabitSheet({ visible, onClose, habit = null }: HabitSheetProps) {
+export function HabitSheet({ visible, onClose, habit = null, initial = null }: HabitSheetProps) {
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <SheetForm habit={habit} onClose={onClose} />
+      <SheetForm habit={habit} initial={initial} onClose={onClose} />
     </Modal>
   );
 }
 
 function SheetForm({
   habit,
+  initial,
   onClose,
 }: {
   readonly habit: Habit | null;
+  readonly initial: CreateHabitInput | null;
   readonly onClose: () => void;
 }) {
   const insets = useSafeAreaInsets();
   const { allHabits, createHabit, updateHabit } = useHabits();
-  const [kind, setKind] = useState<HabitKind>(habit?.kind ?? 'build');
-  const [title, setTitle] = useState(habit?.title ?? '');
+  const [kind, setKind] = useState<HabitKind>(habit?.kind ?? initial?.kind ?? 'build');
+  const [title, setTitle] = useState(habit?.title ?? initial?.title ?? '');
   const [error, setError] = useState<string | null>(null);
 
   // Pencere sunucuyu beklemeden kapanır: değişiklik listede hemen görünür, hata olursa geri alınıp uyarı çıkar

@@ -59,5 +59,5 @@ export function useTodayHabits() {
   // Yüklenirken "henüz eklemedin" denmesin: boş liste yalnızca sunucu cevabından sonra gerçektir
   const isEmpty = status === 'ready' && habits.length === 0;
 
-  return { habits, entries, statusOf, mark, error, reload, isEmpty };
+  return { habits, entries, date, statusOf, mark, error, reload, isEmpty };
 }

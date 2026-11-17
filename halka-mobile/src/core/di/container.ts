@@ -53,6 +53,18 @@ import { ExpoAudioService } from '@features/halka/data/services/ExpoAudioService
 import { ExpoClipboardService } from '@features/halka/data/services/ExpoClipboardService';
 import { SystemClock } from '@core/utils/clock';
 import { HalkaLocalDataSource, type KeyValueStorage } from '@features/halka/data/storage';
+import { LocalTodayRepository } from '@features/today/data/LocalTodayRepository';
+import { SampleCircleRepository } from '@features/today/data/SampleCircleRepository';
+import {
+  GetCircleUseCase,
+  GetEntryHistoryUseCase,
+  GetTodayLocalUseCase,
+  LogUrgeUseCase,
+  MarkCelebratedUseCase,
+  SaveSelfNoteUseCase,
+  SetMiniUseCase,
+} from '@features/today/domain/usecases/TodayUseCases';
+import { createId } from '@core/utils/id';
 import type { Clock } from '@core/utils/clock';
 import type { AudioPort, ClipboardPort } from '@features/halka/domain/ports';
 import {
@@ -144,6 +156,7 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
   const habitEntryRepository = new HttpHabitEntryRepository(http);
   const dayNoteRepository = new HttpDayNoteRepository(http);
   const characterRepository = new HttpCharacterRepository(http);
+  const todayRepository = new LocalTodayRepository(storage);
 
   const dataSource = new HalkaLocalDataSource(storage, () => createDefaultStorageDto(clock));
   const repos = createRepositories(dataSource);
@@ -178,6 +191,15 @@ export function createContainer(overrides: Partial<ContainerDependencies> = {}) 
       save: new SaveCheckInUseCase(checkInRepository, clock),
       entries: new GetHabitEntriesUseCase(habitEntryRepository, clock),
       mark: new MarkHabitUseCase(habitEntryRepository, clock),
+    },
+    today: {
+      history: new GetEntryHistoryUseCase(habitEntryRepository, clock),
+      local: new GetTodayLocalUseCase(todayRepository),
+      logUrge: new LogUrgeUseCase(todayRepository, clock, () => createId('urge')),
+      setMini: new SetMiniUseCase(todayRepository, clock),
+      saveSelfNote: new SaveSelfNoteUseCase(todayRepository),
+      markCelebrated: new MarkCelebratedUseCase(todayRepository, clock),
+      circle: new GetCircleUseCase(new SampleCircleRepository()),
     },
     history: {
       month: new GetMonthHistoryUseCase(checkInRepository, dayNoteRepository, clock),

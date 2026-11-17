@@ -22,6 +22,7 @@ import { HabitsScreen } from '@features/habits/presentation/screens/HabitsScreen
 import { OnboardingScreen } from '@features/onboarding/presentation/screens/OnboardingScreen';
 import { HistoryScreen } from '@features/history/presentation/screens/HistoryScreen';
 import { SettingsScreen } from '@features/settings/presentation/screens/SettingsScreen';
+import { UrgeScreen } from '@features/today/presentation/screens/UrgeScreen';
 import { MainTabs } from '@presentation/navigation/MainTabs';
 import type { RootStackParamList } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
@@ -92,6 +93,11 @@ export function RootNavigator() {
             <Stack.Screen
               name="Catalog"
               component={CatalogScreen}
+              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+            />
+            <Stack.Screen
+              name="Urge"
+              component={UrgeScreen}
               options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
             />
             <Stack.Screen

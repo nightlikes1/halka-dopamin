@@ -34,7 +34,17 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 - Yazı ölçeği (iki modda aynı): `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
   `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40. Ölçüler:
   `radius.card` 24 / `field` 14, `iconBoxRadius` (%30); `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
-  Sıradaki adımlar: tüm uygulama yeni düzene (4 sekme Bugün · Odak · Araçlar · Gelişim, Profil avatardan), önce Bugün.
+  Sıradaki adımlar: tüm uygulama yeni düzene (4 sekme Bugün · Odak · Araçlar · Gelişim, Profil avatardan). Bugün bitti;
+  Halka sekmesi kalkıp yerine **Araçlar** gelecek, su takibi oraya taşınacak.
+- **Bugün ekranı (yeni düzen, 2026-11-17, `features/today`)**: iki stilde tek ekran. Üstte tarih + "Bugün", "Canım çekiyor"
+  kapsülü (→ `Urge` modalı) ve baş harf avatarı (→ Ayarlar); odak ve tema düğmesi yok, su yok. Canlı halka kartı
+  (`LiveRing`: gradyan halka, sakin/hareketli nefes; "hareketli" = "yaptım" denen dürtü > tamamlanan + geçirilen), seri
+  (en az bir `done`/`clean` olan ardışık günler, sunucu geçmişinden; bugün yapılmadıysa dünden sayılır) ve Çember şeridi.
+  Liste: bekleyenler, sonra "Tamamlandı · N"; satırda ⋯ menü (`ActionSheet`: mini hal · düzenle · arşivle). Tamamlama,
+  mini hal ve arşiv 4 sn geri alınabilir (`useUndo`, `UndoToast`; arşiv süre dolunca sunucuya gider). Mini hal = sunucuda
+  `done` + cihazda mini işareti. Gün %100 → günde bir kez "Gün tamam". Akşam kapanışı (check-in kartı) 19:00 sonrası.
+  Cihazda `halka.today.v1`: dürtüler (62 gün), mini haller (7 gün), kendine not (≤160), kutlama günü.
+  **Örnek veri:** Çember (`SampleCircleRepository`) ve boş durum önerileri; dürtü akışı kısa (tür → sonuç), tam 90 sn akış sonra.
 - Görsel stil: **"particles" = Liquid Glass, varsayılan** (cam yüzeyler + arka plan renk lekeleri `backdropBlobs`;
   yeni ekranlar gelene kadar mevcut parçacık efektleri de bu stilde) ve **"classic" = Düz** (opak kartlar); ikisi aynı
   paleti kullanır. Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
@@ -88,7 +98,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 ```
 core/          DI container (composition root), Failure/Result, api/ (axios + toFailure), i18n/tr.ts, theme/, utils/ (date, clock, format, id)
 features/<ad>/{domain,data,presentation}   ← her özellik kendi klasöründe, içi katmanlı
-  auth/ activities/ focus/ halka/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
+  auth/ activities/ today/ focus/ halka/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
 presentation/  yalnızca ortak olanlar: components/common, navigation, particles, providers, utils, useNow, useColorTransition, usePreferencesStore
 
 features/halka/   ← Halka panosu ve eklentileri (veri cihazda)

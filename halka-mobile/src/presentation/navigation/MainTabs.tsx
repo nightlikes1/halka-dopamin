@@ -1,18 +1,17 @@
 // Alt sekme çubuğu: Bugün · Odak · Karakter · Halka · İstatistik
-// (Rehberler Faz 3'te Bugün/Karakter içinden açılacak).
-// Parçacık stilinde yüzen cam çubuk ve parçacık Bugün/Odak ekranları kullanılır.
+// (yeni düzende 4 sekme: Bugün · Odak · Araçlar · Gelişim; Halka sekmesi Araçlar'a dönüşecek).
+// Bugün iki stilde aynı ekran; parçacık stilinde yüzen cam çubuk ve parçacık Odak ekranı kullanılır.
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { colors, fonts, fontSizes, spacing } from '@core/theme/tokens';
-import { ParticleTodayScreen } from '@features/activities/presentation/screens/ParticleTodayScreen';
-import { TodayScreen } from '@features/activities/presentation/screens/TodayScreen';
 import { CharacterScreen } from '@features/character/presentation/screens/CharacterScreen';
 import { FocusScreen } from '@features/focus/presentation/screens/FocusScreen';
 import { ParticleFocusScreen } from '@features/focus/presentation/screens/ParticleFocusScreen';
 import { StatsScreen } from '@features/stats/presentation/screens/StatsScreen';
+import { TodayScreen } from '@features/today/presentation/screens/TodayScreen';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { GlassTabBar } from '@presentation/navigation/GlassTabBar';
 import { TabScene } from '@presentation/navigation/TabScene';
@@ -53,11 +52,7 @@ export function MainTabs() {
         tabBarItemStyle: styles.item,
       })}
     >
-      <Tab.Screen
-        name="Today"
-        component={particles ? ParticleTodayScreen : TodayScreen}
-        options={{ title: strings.tabs.today }}
-      />
+      <Tab.Screen name="Today" component={TodayScreen} options={{ title: strings.tabs.today }} />
       <Tab.Screen
         name="Focus"
         component={particles ? ParticleFocusScreen : FocusScreen}
