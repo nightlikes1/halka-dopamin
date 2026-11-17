@@ -28,7 +28,6 @@ import { CharacterScreen } from '@features/character/presentation/screens/Charac
 import { MainTabs } from '@presentation/navigation/MainTabs';
 import type { RootStackParamList } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
-import { CatalogScreen } from '@features/halka/presentation/screens/CatalogScreen';
 import { WidgetFocusScreen } from '@features/halka/presentation/screens/WidgetFocusScreen';
 import { themed } from '@core/theme/themed';
 
@@ -90,11 +89,6 @@ export function RootNavigator() {
             <Stack.Screen
               name="WidgetFocus"
               component={WidgetFocusScreen}
-              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
-            />
-            <Stack.Screen
-              name="Catalog"
-              component={CatalogScreen}
               options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
             />
             <Stack.Screen

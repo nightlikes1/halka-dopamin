@@ -25,8 +25,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   (imza: turuncu → pembe → mor; odak mavi → çivit) serbest; her ekranda tek vurgu rengi. Kategori renkleri
   `accentColors`, ikon kutusu `accentTints` (aynı renk) + beyaz ikon `colors.iconOnTint`. Dopamin: ucuz = pembe,
   kaliteli = yeşil. Eksik gün/bozulan seri asla kırmızı değil `textSecondary`.
-- Mod: **Sistem (varsayılan) / Koyu / Aydınlık** (`halka.themeMode`). Geçiş: Bugün üst barındaki güneş/ay
-  (`ThemeToggleButton`) ve Ayarlar → Tema. Renkler **yeniden yükleme olmadan** değişir: `applyThemeMode` (nesneler
+- Mod: **Sistem (varsayılan) / Koyu / Aydınlık** (`halka.themeMode`). Geçiş: Ayarlar → Tema. Renkler **yeniden yükleme olmadan** değişir: `applyThemeMode` (nesneler
   yerinde güncellenir) → `AppShell` ağacı `key={themeMode}` ile yeniden kurar (veri, oturum, fontlar korunur; navigasyon
   `RootNavigator`'da saklanır). "Sistem" seçiliyse `useSystemThemeSync` telefonun ayarını izler (`resolveThemeMode`).
   Modül düzeyindeki renkli değerler `themedStyles`/`themed` (mod başına önbellekli Proxy, `activeThemeKey`) ile yazılır.
@@ -236,7 +235,10 @@ Ortak bileşenler (`presentation/components/common/`), yenisini yazmadan önce b
 | `ScreenHeader` | Modal/alt ekran başlığı (`onClose` ile ✕, `bordered`). Sekme ekranları kendi üst barını kurar |
 | `Card` / `SectionTitle` | Gruplanmış içerik ve kart başlığı |
 | `ProgressRing` | Tek ya da iç içe halka (viewBox 200, 12 yönünden, yuvarlak uç, animasyonlu dolum ve renk geçişi) |
-| `HabitCard` | Alışkanlık satırı: ikon kutusu · başlık + alt satır/çubuk · 44 px yuvarlak aksiyon (tik zıplaması + süzülen yazı) |
+| `Panel` | Yeni düzen kartı (cam ya da düz, köşe 24; `compact`) |
+| `CapsuleButton` | Kapsül buton: `primary` gradyan (varsayılan ödül; `gradient` ile değişir), `secondary` koyu |
+| `ActionSheet` / `UndoToast` (+ `useUndo`) | ⋯ menüsü (en fazla 4 seçenek) / 4 sn geri al bildirimi |
+| `LiveRing` / `InitialAvatar` / `GlassBackdrop` | Nefes alan gradyan halka / baş harf avatarı / Liquid Glass renk lekeleri (`Screen backdrop`) |
 | `StatCard` | Küçük istatistik kartı (sayı + etiket) |
 | `PillButton` | 56 px dolu renkli ana buton (`rounded` 18 / `pill`) |
 | `IconButton` | İkon butonu: `surface` (üst bar, yuvarlak), `ring` (boş daire), `solid`, `outline`, `ghost` |
@@ -260,8 +262,8 @@ engine/     saf TypeScript, React yok: palette.ts (64 adımlık LUT + nötr), vo
 renderer/   ParticleCanvas.tsx (iOS/Android: Skia Atlas + useFrameCallback, UI thread)
             ParticleCanvas.web.tsx (HTML canvas 2D + requestAnimationFrame; Skia/CanvasKit web'e yüklenmez)
             useParticlePointer (dokunma/fare → kanal; olayları yalnızca izler, kaydırmayı engellemez)
-components/ ParticleVortex · ParticleRing (progress, burstKey) · ParticleWave (intensity, palette) · ParticleAvatar
-            + BlinkDot, BottomFade, GlassCard
+components/ ParticleVortex · ParticleWave (intensity, palette) · ParticleAvatar · ParticleHalo · ParticleDust
+            + BlinkDot, BottomFade
 config.ts   zemin #0B0B0D, DPR ≤ 2, 50 fps eşiği, düşük güç oranı 0,6, parlaklık 0,75, sprite boyutu
 ```
 

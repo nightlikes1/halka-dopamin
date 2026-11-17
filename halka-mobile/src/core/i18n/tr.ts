@@ -18,8 +18,6 @@ export const tr = {
     title: 'Bugün',
     history: 'Geçmiş',
     minutes: (minutes: number) => `${minutes} dk`,
-    toLightTheme: 'Açık temaya geç',
-    toDarkTheme: 'Koyu temaya geç',
     // Üst kısım
     urgeButton: 'Canım çekiyor',
     urgeA11y: 'Canım çekiyor: dürtüyü fark et',
@@ -617,23 +615,15 @@ export const tr = {
   },
   tabs: {
     today: 'Bugün',
-    character: 'Karakter',
-    halka: 'Halka',
     focus: 'Odak',
     tools: 'Araçlar',
     growth: 'Gelişim',
     guides: 'Rehberler',
-    stats: 'İstatistik',
   },
   screens: {
-    today: { title: 'Bugün', subtitle: 'Günün dopamin dengesi ve hızlı ekleme burada olacak.' },
     guides: {
       title: 'Rehberler',
       subtitle: 'Koşudan meditasyona, yeni bir alışkanlığa başlamak için adım adım planlar.',
-    },
-    stats: {
-      title: 'İstatistikler',
-      subtitle: 'Haftalık denge, ruh hali ilişkisi ve kazanılan zaman.',
     },
   },
   auth: {

@@ -21,7 +21,6 @@ export type RootStackParamList = {
   ResetPassword: { token?: string } | undefined;
   Main: NavigatorScreenParams<MainTabParamList>;
   WidgetFocus: { widgetId: WidgetId };
-  Catalog: undefined;
   Settings: undefined;
   Urge: undefined;
   Calm: undefined;
