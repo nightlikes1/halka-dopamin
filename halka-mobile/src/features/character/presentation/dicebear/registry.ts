@@ -2,7 +2,7 @@
 // Paket yalnızca burada (presentation) import edilir; domain stil adlarını ve seçimleri bilir.
 import * as collection from '@dicebear/collection';
 import { createAvatar, type Style } from '@dicebear/core';
-import { obsidian } from '@core/theme/tokens';
+import { halkaDark, halkaJewels } from '@core/theme/tokens';
 import type { DiceBearAvatar, DiceBearStyleId } from '@features/character/domain/dicebear';
 
 // Stil modülünün kullandığımız kısmı (paket tipleri stil başına farklı seçenek tipi taşır)
@@ -114,14 +114,14 @@ export function diceBearSvg(avatar: DiceBearAvatar, seed: string): string {
 
 // Arka plan seçenekleri: şeffaf (aura görünsün) + stilin önerdikleri + uygulama paletinin tonları
 const THEME_BACKGROUNDS = [
-  obsidian.raised,
-  obsidian.borderStrong,
-  obsidian.goldDark,
-  obsidian.sapphire,
-  obsidian.amethyst,
-  obsidian.emerald,
-  obsidian.ruby,
-  obsidian.amber,
+  halkaDark.raised,
+  halkaDark.borderStrong,
+  halkaDark.rewardDark,
+  halkaJewels.sapphire,
+  halkaJewels.amethyst,
+  halkaJewels.emerald,
+  halkaJewels.ruby,
+  halkaJewels.amber,
 ].map((hex) => hex.slice(1).toLowerCase());
 export const TRANSPARENT = 'transparent';
 

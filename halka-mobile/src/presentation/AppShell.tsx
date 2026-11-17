@@ -70,7 +70,6 @@ export function AppShell({ fontsReady }: AppShellProps) {
   const authStatus = useAuthStore((s) => s.status);
   // Tema değişince ekran ağacı yeniden kurulur (stiller yeni temayla okunur); veri ve oturum korunur
   const themeMode = usePreferencesStore((s) => s.themeMode);
-  const themeFamily = usePreferencesStore((s) => s.themeFamily);
 
   let content = <RootNavigator />;
   if (!fontsReady || status === 'loading' || authStatus === 'restoring') content = <SplashView />;
@@ -79,7 +78,7 @@ export function AppShell({ fontsReady }: AppShellProps) {
   return (
     <>
       <StatusBar style={themeMode === 'light' ? 'dark' : 'light'} />
-      <View key={`${themeFamily}-${themeMode}`} style={styles.root}>
+      <View key={themeMode} style={styles.root}>
         {content}
       </View>
     </>

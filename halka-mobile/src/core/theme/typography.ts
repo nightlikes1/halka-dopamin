@@ -1,10 +1,9 @@
 // Hazır yazı stilleri: aile + boyut + satır yüksekliği tek yerde.
 // Bileşenler fontFamily/fontSize'ı tek tek yazmak yerine bu stilleri (ya da AppText varyantlarını) kullanır.
-// Başlıklar aileye göre: Obsidyen'de serif (Cormorant Garamond 500), Halka'da kalın Inter (themeTraits.titleFont);
-// gövde, buton ve rakamlar Inter (rakamlar tabular).
+// Her şey Inter: başlıklar kalın, rakamlar tabular.
 import type { TextStyle } from 'react-native';
 import { themed } from '@core/theme/themed';
-import { colors, fonts, fontSizes, themeTraits } from '@core/theme/tokens';
+import { colors, fonts, fontSizes } from '@core/theme/tokens';
 
 // Renkler aktif temadan okunur (themed)
 export const typography = themed(
@@ -20,7 +19,7 @@ export const typography = themed(
       },
       // Ekran başlığı
       headline: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.xl,
         lineHeight: 30,
         color: colors.textMain,
@@ -81,14 +80,14 @@ export const typography = themed(
       },
       // Bugün ekranı selamı
       greeting: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.greeting,
         lineHeight: 34,
         color: colors.textMain,
       },
       // Sekme ekranlarının üst bar başlığı (Karakterim, Odak…)
       screenTitle: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.lg,
         lineHeight: 24,
         color: colors.textMain,
@@ -146,7 +145,7 @@ export const typography = themed(
         color: colors.textMain,
       },
       particleTitle: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.particleTitle,
         lineHeight: 43,
         color: colors.textMain,
@@ -182,14 +181,14 @@ export const typography = themed(
       // Yeni düzen ölçeği (iki ailede aynı boyutlar)
       // 34: sekme ekranı adı (Bugün, Odak, Araçlar, Gelişim)
       largeTitle: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.xxl,
         lineHeight: 41,
         color: colors.textPrimary,
       },
       // 28: tek görevli akış ekranı başlığı
       flowTitle: {
-        fontFamily: themeTraits.titleFont,
+        fontFamily: fonts.bold,
         fontSize: fontSizes.greeting,
         lineHeight: 34,
         color: colors.textPrimary,

@@ -1,64 +1,14 @@
-// Temel tasarım değerleri. Tüm renk, boşluk, köşe ve yazı boyutları buradan okunur; bileşenlerde sabit
-// değer yazılmaz. Üç eksen var:
-// - Tema ailesi: "obsidian" (Obsidyen ve Şampanya: sıcak koyu zemin, krem metin, altın yalnız ödülde,
-//   gradyan yok) ve "halka" (yeni tasarım: saf siyah / açık gri zemin, turuncu ödül, modül renkleri,
-//   turuncu→pembe→mor gradyanlar). iPhone'da varsayılan "halka".
-// - Mod: "dark" / "light" (tercih "system" ise telefonun ayarından çözülür).
-// - Görsel stil: "particles" (cam yüzeyler; Obsidyen'de parçacıklar, Halka'da Liquid Glass renk lekeleri)
-//   ve "classic" (opak kartlar). Stil açılışta bir kez seçilir (applyColorScheme).
-// Aile ve mod uygulama yeniden yüklenmeden değişir (applyTheme): nesneler yerinde güncellenir.
+// Temel tasarım değerleri (Halka tasarım sistemi). Tüm renk, boşluk, köşe ve yazı boyutları buradan
+// okunur; bileşenlerde sabit değer yazılmaz. İki eksen var:
+// - Mod: "dark" / "light" (tercih "system" ise telefonun ayarından çözülür). Koyu: saf siyah zemin, iOS
+//   sistem grisi yüzeyler; aydınlık: açık gri zemin, beyaz kart, lacivert metin. Ödül turuncu, modül
+//   renkleri ve turuncu→pembe→mor gradyanlar.
+// - Görsel stil: "particles" (Liquid Glass: cam yüzeyler + renk lekeleri) ve "classic" (düz, opak kartlar).
+//   Stil açılışta bir kez seçilir (applyColorScheme).
+// Mod uygulama yeniden yüklenmeden değişir (applyThemeMode): nesneler yerinde güncellenir.
 
 export type ColorScheme = 'particles' | 'classic';
 export type ThemeMode = 'dark' | 'light';
-export type ThemeFamily = 'obsidian' | 'halka';
-
-// Obsidyen ve Şampanya paleti (tasarım spesifikasyonundaki token'lar)
-export const obsidian = {
-  // Zemin ve yüzeyler (saf siyah kullanılmaz)
-  base: '#0B0B0D',
-  elevated: '#141416',
-  raised: '#1F1E1B',
-  borderSubtle: '#2A2824',
-  borderStrong: '#3A3732',
-  // Metin (saf beyaz kullanılmaz)
-  textPrimary: '#EDE8DF',
-  textSecondary: '#8A857C',
-  textDisabled: '#4A4740',
-  // Şampanya altını: yalnızca ödül anları ve ana buton kenarı
-  gold: '#C9A96E',
-  goldLight: '#E3CB9A',
-  goldDark: '#9C7F4C',
-  goldMuted: 'rgba(201, 169, 110, 0.12)',
-  // Mücevher tonları: kategori/istatistik dolguları (yazı rengi olarak kullanılmaz, kontrast yetersiz)
-  ruby: '#9B2C3A',
-  sapphire: '#2F4A7A',
-  emerald: '#1F5E4A',
-  amethyst: '#5B3E7A',
-  amber: '#A8743A',
-  // Durum
-  success: '#5E8C6A',
-  warning: '#B8955A',
-  error: '#A5524F',
-} as const;
-
-// Fildişi (açık tema): sıcak krem zemin, koyu mürekkep metin. Altın koyulaştırıldı (metin olarak
-// ≥ 4,7:1); mücevher tonları aynı (yalnızca dolgu). Zemin saf krem değil, hafif gri-bej (göz yormasın).
-export const ivory = {
-  base: '#D3CCC1',
-  elevated: '#DDD7CD',
-  raised: '#C8C0B3',
-  borderSubtle: '#BBB2A3',
-  borderStrong: '#A39888',
-  textPrimary: '#1D1B18',
-  textSecondary: '#4F493F',
-  textDisabled: '#8E8679',
-  gold: '#5F471C',
-  goldLight: '#7D5F2C',
-  goldDark: '#463410',
-  goldMuted: 'rgba(95, 71, 28, 0.12)',
-  error: '#B4544F',
-  danger: '#7F322D',
-} as const;
 
 // Halka (yeni tasarım) koyu: saf siyah zemin, iOS sistem grisi yüzeyler, beyaz metin, turuncu ödül
 export const halkaDark = {
@@ -112,23 +62,6 @@ interface BasePalette {
   readonly scrim: string; // halka üstündeki panel / çekirdek
 }
 
-const PALETTE: BasePalette = {
-  background: obsidian.base,
-  surface: obsidian.elevated,
-  surfaceAlt: obsidian.raised,
-  track: obsidian.borderSubtle,
-  border: obsidian.borderStrong,
-  navBackground: obsidian.elevated,
-  navBorder: obsidian.borderSubtle,
-  textPrimary: obsidian.textPrimary,
-  textSecondary: obsidian.textSecondary,
-  textOnAccent: obsidian.base,
-  accent: obsidian.gold,
-  hairline: obsidian.borderSubtle,
-  overlay: 'rgba(11, 11, 13, 0.86)',
-  scrim: 'rgba(11, 11, 13, 0.92)',
-};
-
 // Temaya göre değişen, ana palette olmayan değerler (altın, saydam dolgular, durum renkleri)
 interface ThemeExtras {
   readonly gold: string;
@@ -149,69 +82,6 @@ interface ThemeExtras {
   readonly dangerSoft: string;
   readonly iconOnTint: string; // renkli ikon kutusundaki ikon
 }
-
-const EXTRAS: ThemeExtras = {
-  gold: obsidian.gold,
-  goldLight: obsidian.goldLight,
-  goldDark: obsidian.goldDark,
-  goldMuted: obsidian.goldMuted,
-  // Saydam krem dolgular (koyu yüzey üstünde ince ayrım için)
-  fillSubtle: 'rgba(237, 232, 223, 0.04)',
-  fillMuted: 'rgba(237, 232, 223, 0.07)',
-  fillStrong: 'rgba(237, 232, 223, 0.11)',
-  // Cam yüzeyler (parçacık ekranları): saydam sıcak zemin + ince kenarlık
-  glass: 'rgba(237, 232, 223, 0.03)',
-  glassBorder: 'rgba(237, 232, 223, 0.08)',
-  glassStrong: 'rgba(237, 232, 223, 0.13)',
-  glassBar: 'rgba(20, 20, 22, 0.86)',
-  glassControl: 'rgba(11, 11, 13, 0.6)',
-  textDisabled: obsidian.textDisabled,
-  // error dolgu/nokta/kenarlık için; danger hata metni (error #A5524F metin olarak 3,1-3,7:1
-  // kalıyor, bu yüzden kremle karıştırılmış okunur tonu: ≥ 5,1:1)
-  error: obsidian.error,
-  danger: '#BB7F7A',
-  dangerSoft: 'rgba(165, 82, 79, 0.2)',
-  iconOnTint: obsidian.textPrimary,
-};
-
-const LIGHT_PALETTE: BasePalette = {
-  background: ivory.base,
-  surface: ivory.elevated,
-  surfaceAlt: ivory.raised,
-  track: ivory.borderSubtle,
-  border: ivory.borderStrong,
-  navBackground: ivory.elevated,
-  navBorder: ivory.borderSubtle,
-  textPrimary: ivory.textPrimary,
-  textSecondary: ivory.textSecondary,
-  textOnAccent: ivory.elevated,
-  accent: ivory.gold,
-  hairline: ivory.borderSubtle,
-  overlay: 'rgba(211, 204, 193, 0.86)',
-  scrim: 'rgba(211, 204, 193, 0.92)',
-};
-
-const LIGHT_EXTRAS: ThemeExtras = {
-  gold: ivory.gold,
-  goldLight: ivory.goldLight,
-  goldDark: ivory.goldDark,
-  goldMuted: ivory.goldMuted,
-  // Saydam mürekkep dolgular (açık yüzey üstünde ince ayrım için)
-  fillSubtle: 'rgba(29, 27, 24, 0.04)',
-  fillMuted: 'rgba(29, 27, 24, 0.07)',
-  fillStrong: 'rgba(29, 27, 24, 0.11)',
-  glass: 'rgba(29, 27, 24, 0.03)',
-  glassBorder: 'rgba(29, 27, 24, 0.09)',
-  glassStrong: 'rgba(29, 27, 24, 0.12)',
-  glassBar: 'rgba(221, 215, 205, 0.9)',
-  glassControl: 'rgba(211, 204, 193, 0.7)',
-  textDisabled: ivory.textDisabled,
-  // danger açık zeminlerde ≥ 4,7:1
-  error: ivory.error,
-  danger: ivory.danger,
-  dangerSoft: 'rgba(180, 84, 79, 0.14)',
-  iconOnTint: ivory.textPrimary,
-};
 
 const HALKA_DARK_PALETTE: BasePalette = {
   background: halkaDark.base,
@@ -299,16 +169,6 @@ interface JewelSet {
   readonly warning: string;
 }
 
-const OBSIDIAN_JEWELS: JewelSet = {
-  ruby: obsidian.ruby,
-  sapphire: obsidian.sapphire,
-  emerald: obsidian.emerald,
-  amethyst: obsidian.amethyst,
-  amber: obsidian.amber,
-  success: obsidian.success,
-  warning: obsidian.warning,
-};
-
 const HALKA_DARK_JEWELS: JewelSet = {
   ruby: '#FF375F',
   sapphire: '#5E5CE6',
@@ -329,11 +189,14 @@ const HALKA_LIGHT_JEWELS: JewelSet = {
   warning: '#A05A00',
 };
 
-function buildColors(p: BasePalette, x: ThemeExtras, j: JewelSet = OBSIDIAN_JEWELS) {
+// Sabit (temadan bağımsız) koyu kategori tonları: kayıtlı avatar arka planı gibi yerler için
+export const halkaJewels: Readonly<JewelSet> = HALKA_DARK_JEWELS;
+
+function buildColors(p: BasePalette, x: ThemeExtras, j: JewelSet) {
   return {
     ...p,
 
-    // Şampanya altını tonları
+    // Ödül tonları (eski "gold" adları turuncu ödül rengine bağlı)
     gold: x.gold,
     goldLight: x.goldLight,
     goldDark: x.goldDark,
@@ -392,12 +255,12 @@ function buildColors(p: BasePalette, x: ThemeExtras, j: JewelSet = OBSIDIAN_JEWE
 
 export type Colors = ReturnType<typeof buildColors>;
 
-export const colors: Colors = buildColors(PALETTE, EXTRAS);
+export const colors: Colors = buildColors(HALKA_DARK_PALETTE, HALKA_DARK_EXTRAS, HALKA_DARK_JEWELS);
 
 let activeScheme: ColorScheme = 'particles';
 
 // Ekran modülleri yüklenmeden önce çağrılmalı. İki stil aynı paleti kullanır; fark cam yüzeyler ve
-// parçacık efektlerindedir (activeColorScheme ile okunur).
+// arka plan efektlerindedir (activeColorScheme ile okunur).
 export function applyColorScheme(scheme: ColorScheme): void {
   activeScheme = scheme;
 }
@@ -406,7 +269,7 @@ export function activeColorScheme(): ColorScheme {
   return activeScheme;
 }
 
-// Kategori renkleri ve ikon kutusu zeminleri (ikon kutusu: koyu mücevher zemini + krem ikon)
+// Kategori renkleri ve ikon kutusu zeminleri (ikon kutusu: düz renk + beyaz ikon)
 export type AccentName = 'amber' | 'sapphire' | 'amethyst' | 'ruby' | 'emerald';
 
 const jewelAccents = (j: JewelSet): Record<AccentName, string> => ({
@@ -417,29 +280,11 @@ const jewelAccents = (j: JewelSet): Record<AccentName, string> => ({
   emerald: j.emerald,
 });
 
-// Aktif temanın kategori renkleri (applyTheme günceller)
-export const accentColors: Readonly<Record<AccentName, string>> = jewelAccents(OBSIDIAN_JEWELS);
+// Aktif temanın kategori renkleri (applyThemeMode günceller)
+export const accentColors: Readonly<Record<AccentName, string>> = jewelAccents(HALKA_DARK_JEWELS);
 
-// Koyu: elevated üzerine %35 mücevher tonu (krem ikon bu zeminde ≥ 9:1)
-const DARK_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
-  amber: '#483623',
-  sapphire: '#1D2739',
-  amethyst: '#2D2339',
-  ruby: '#431C23',
-  emerald: '#182E28',
-};
-
-// Açık: elevated üzerine %20 mücevher tonu (koyu ikon bu zeminde ≥ 8,9:1)
-const LIGHT_ACCENT_TINTS: Readonly<Record<AccentName, string>> = {
-  amber: '#D2C3B0',
-  sapphire: '#BABBBC',
-  amethyst: '#C3B8BC',
-  ruby: '#D0B5B0',
-  emerald: '#B7BFB3',
-};
-
-// Aktif temanın ikon kutusu zeminleri (applyTheme günceller; Halka'da düz mücevher rengi + beyaz ikon)
-export const accentTints: Readonly<Record<AccentName, string>> = { ...DARK_ACCENT_TINTS };
+// İkon kutusu zeminleri: kategori renginin aynısı (ikon colors.iconOnTint)
+export const accentTints: Readonly<Record<AccentName, string>> = jewelAccents(HALKA_DARK_JEWELS);
 
 // Sırayla renk dağıtmak için (alışkanlık kartı, özellik çubukları)
 export const ACCENT_CYCLE: readonly AccentName[] = [
@@ -458,13 +303,13 @@ export const dopamineColors: {
   readonly quality: string;
   readonly neutral: string;
 } = {
-  cheap: obsidian.ruby,
-  quality: obsidian.emerald,
-  neutral: obsidian.textSecondary,
+  cheap: '#FF6B8A',
+  quality: '#30D158',
+  neutral: halkaDark.textSecondary,
 };
 
 // Yeni tasarımın modül anlamları. `moduleColors` dolgu/halka/ikon kutusu, `moduleInk` metin olarak
-// okunur ton. Halka'da tasarımın renk psikolojisi; Obsidyen'de altın + mücevher karşılıkları.
+// okunur ton (Halka'da ikisi aynı; ayrı ad ileride okunurluk ayarı için).
 export type ModuleName =
   | 'reward'
   | 'focus'
@@ -511,45 +356,10 @@ const HALKA_LIGHT_MODULES: ModuleSet = {
   warning: '#D70015',
 };
 
-const obsidianModules = (gold: string, error: string): ModuleSet => ({
-  reward: gold,
-  focus: obsidian.sapphire,
-  shortBreak: obsidian.emerald,
-  rest: obsidian.amethyst,
-  water: obsidian.sapphire,
-  breath: obsidian.emerald,
-  mood: obsidian.ruby,
-  energy: obsidian.amber,
-  success: obsidian.emerald,
-  creativity: obsidian.amber,
-  character: obsidian.amethyst,
-  warning: error,
-});
+export const moduleColors: Readonly<ModuleSet> = { ...HALKA_DARK_MODULES };
+export const moduleInk: Readonly<ModuleSet> = { ...HALKA_DARK_MODULES };
 
-// Obsidyen'de mücevher tonları metin olamaz (kontrast < 3): metin krem, ödül/uyarı kendi okunur tonunda
-const obsidianInk = (text: string, gold: string, danger: string): ModuleSet => ({
-  reward: gold,
-  focus: text,
-  shortBreak: text,
-  rest: text,
-  water: text,
-  breath: text,
-  mood: text,
-  energy: text,
-  success: gold,
-  creativity: text,
-  character: text,
-  warning: danger,
-});
-
-export const moduleColors: Readonly<ModuleSet> = obsidianModules(obsidian.gold, EXTRAS.error);
-export const moduleInk: Readonly<ModuleSet> = obsidianInk(
-  obsidian.textPrimary,
-  obsidian.gold,
-  EXTRAS.danger,
-);
-
-// Gradyanlar (soldan sağa / yukarıdan aşağıya renk durakları). Obsidyen gradyan kullanmaz: düz çift.
+// Gradyanlar (soldan sağa / yukarıdan aşağıya renk durakları)
 export type GradientName = 'reward' | 'ring' | 'focus' | 'character' | 'breath';
 type GradientSet = Record<GradientName, readonly string[]>;
 
@@ -569,17 +379,9 @@ const HALKA_LIGHT_GRADIENTS: GradientSet = {
   breath: ['#0C817B', '#1E8A5A'],
 };
 
-const flatGradients = (m: ModuleSet): GradientSet => ({
-  reward: [m.reward, m.reward],
-  ring: [m.reward, m.reward],
-  focus: [m.focus, m.focus],
-  character: [m.character, m.character],
-  breath: [m.breath, m.breath],
-});
+export const gradients: Readonly<GradientSet> = { ...HALKA_DARK_GRADIENTS };
 
-export const gradients: Readonly<GradientSet> = flatGradients(moduleColors);
-
-// Liquid Glass arka plan lekeleri (yalnız Halka + particles stili): renk + konum (0–1) + yarıçap (genişliğe oran)
+// Liquid Glass arka plan lekeleri (yalnız particles stili): renk + konum (0–1) + yarıçap (genişliğe oran)
 export interface BackdropBlob {
   readonly color: string;
   readonly x: number;
@@ -601,102 +403,39 @@ const HALKA_LIGHT_BLOBS: readonly BackdropBlob[] = [
   { color: 'rgba(48, 209, 88, 0.16)', x: 0.9, y: 0.95, r: 0.6 },
 ];
 
-// Aktif temanın lekeleri; Obsidyen'de boş (orada parçacıklar var)
-export const backdropBlobs: BackdropBlob[] = [];
+// Aktif modun lekeleri
+export const backdropBlobs: BackdropBlob[] = [...HALKA_DARK_BLOBS];
 
-// Bileşenlerin aileye göre davranışı (renk dışı farklar)
-export interface ThemeTraits {
-  readonly buttonStyle: 'gradient' | 'outline'; // ana buton: dolu gradyan kapsül / çizgi
-  readonly titleFont: string; // büyük başlıklar
-  readonly gradients: boolean; // halka ve vurgu yüzeylerinde gradyan
-}
-
-const OBSIDIAN_TRAITS: ThemeTraits = {
-  buttonStyle: 'outline',
-  titleFont: 'CormorantGaramond_500Medium',
-  gradients: false,
-};
-
-const HALKA_TRAITS: ThemeTraits = {
-  buttonStyle: 'gradient',
-  titleFont: 'Inter_700Bold',
-  gradients: true,
-};
-
-export const themeTraits: ThemeTraits = { ...OBSIDIAN_TRAITS };
-
-let activeFamily: ThemeFamily = 'obsidian';
 let activeMode: ThemeMode = 'dark';
 
-// Aile + modu uygular. Ekran modülleri yüklenmeden önce çağrılmalı; sonradan değişirse nesneler
-// yerinde güncellenir (onları import eden modüller aynı nesneyi görür) ve AppShell ağacı yeniden kurar.
-export function applyTheme(family: ThemeFamily, mode: ThemeMode): void {
-  activeFamily = family;
+// Modu uygular. Ekran modülleri yüklenmeden önce çağrılmalı; sonradan değişirse nesneler yerinde
+// güncellenir (onları import eden modüller aynı nesneyi görür) ve AppShell ağacı yeniden kurar.
+export function applyThemeMode(mode: ThemeMode): void {
   activeMode = mode;
   const light = mode === 'light';
-
-  if (family === 'halka') {
-    const jewels = light ? HALKA_LIGHT_JEWELS : HALKA_DARK_JEWELS;
-    const modules = light ? HALKA_LIGHT_MODULES : HALKA_DARK_MODULES;
-    Object.assign(
-      colors,
-      light
-        ? buildColors(HALKA_LIGHT_PALETTE, HALKA_LIGHT_EXTRAS, jewels)
-        : buildColors(HALKA_DARK_PALETTE, HALKA_DARK_EXTRAS, jewels),
-    );
-    Object.assign(accentColors, jewelAccents(jewels));
-    Object.assign(accentTints, jewelAccents(jewels));
-    Object.assign(moduleColors, modules);
-    Object.assign(moduleInk, modules);
-    Object.assign(gradients, light ? HALKA_LIGHT_GRADIENTS : HALKA_DARK_GRADIENTS);
-    backdropBlobs.splice(
-      0,
-      backdropBlobs.length,
-      ...(light ? HALKA_LIGHT_BLOBS : HALKA_DARK_BLOBS),
-    );
-    Object.assign(themeTraits, HALKA_TRAITS);
-    Object.assign(dopamineColors, {
-      cheap: modules.mood,
-      quality: modules.success,
-      neutral: light ? halkaLight.textSecondary : halkaDark.textSecondary,
-    });
-    return;
-  }
-
-  const extras = light ? LIGHT_EXTRAS : EXTRAS;
-  const built = light ? buildColors(LIGHT_PALETTE, LIGHT_EXTRAS) : buildColors(PALETTE, EXTRAS);
-  Object.assign(colors, built);
-  Object.assign(accentColors, jewelAccents(OBSIDIAN_JEWELS));
-  Object.assign(accentTints, light ? LIGHT_ACCENT_TINTS : DARK_ACCENT_TINTS);
-  const modules = obsidianModules(extras.gold, extras.error);
+  const jewels = light ? HALKA_LIGHT_JEWELS : HALKA_DARK_JEWELS;
+  const modules = light ? HALKA_LIGHT_MODULES : HALKA_DARK_MODULES;
+  Object.assign(
+    colors,
+    light
+      ? buildColors(HALKA_LIGHT_PALETTE, HALKA_LIGHT_EXTRAS, jewels)
+      : buildColors(HALKA_DARK_PALETTE, HALKA_DARK_EXTRAS, jewels),
+  );
+  Object.assign(accentColors, jewelAccents(jewels));
+  Object.assign(accentTints, jewelAccents(jewels));
   Object.assign(moduleColors, modules);
-  Object.assign(moduleInk, obsidianInk(built.textPrimary, extras.gold, extras.danger));
-  Object.assign(gradients, flatGradients(modules));
-  backdropBlobs.splice(0, backdropBlobs.length);
-  Object.assign(themeTraits, OBSIDIAN_TRAITS);
+  Object.assign(moduleInk, modules);
+  Object.assign(gradients, light ? HALKA_LIGHT_GRADIENTS : HALKA_DARK_GRADIENTS);
+  backdropBlobs.splice(0, backdropBlobs.length, ...(light ? HALKA_LIGHT_BLOBS : HALKA_DARK_BLOBS));
   Object.assign(dopamineColors, {
-    cheap: obsidian.ruby,
-    quality: obsidian.emerald,
-    neutral: light ? ivory.textSecondary : obsidian.textSecondary,
+    cheap: modules.mood,
+    quality: modules.success,
+    neutral: light ? halkaLight.textSecondary : halkaDark.textSecondary,
   });
-}
-
-// Yalnız modu değiştirir (aile aynı kalır)
-export function applyThemeMode(mode: ThemeMode): void {
-  applyTheme(activeFamily, mode);
-}
-
-// Yalnız aileyi değiştirir (mod aynı kalır)
-export function applyThemeFamily(family: ThemeFamily): void {
-  applyTheme(family, activeMode);
 }
 
 export function activeThemeMode(): ThemeMode {
   return activeMode;
-}
-
-export function activeThemeFamily(): ThemeFamily {
-  return activeFamily;
 }
 
 // Mod tercihini (sistem / koyu / açık) uygulanacak moda çevirir; sistem bilgisi yoksa koyu
@@ -710,7 +449,7 @@ export function resolveThemeMode(
 
 // Temaya bağlı önbelleklerin anahtarı (themed.ts)
 export function activeThemeKey(): string {
-  return `${activeFamily}-${activeMode}`;
+  return activeMode;
 }
 
 // Çizgi karakter renkleri (sıra sunucuda saklanır; sona ekle, araya ekleme). Ten ve saç doğal kalır;
@@ -761,8 +500,8 @@ export const spacing = {
   xxxl: 48,
 } as const;
 
-// Fontlar: ekran başlıkları serif (Cormorant Garamond 500), geri kalan her şey Inter.
-// Eski ağırlık adları korunur; ince ağırlıklar (parçacık ekranları) Inter'in hafif kesimlerine bağlı.
+// Fontlar: her şey Inter (başlıklar kalın). Eski ağırlık adları korunur; ince ağırlıklar Inter'in
+// hafif kesimlerine bağlı.
 export const fonts = {
   regular: 'Inter_400Regular',
   medium: 'Inter_500Medium',
@@ -772,7 +511,6 @@ export const fonts = {
   light: 'Inter_300Light',
   // Rakamlar Inter + tabular-nums (ayrı eş aralıklı font yok)
   mono: 'Inter_500Medium',
-  serif: 'CormorantGaramond_500Medium',
 } as const;
 
 // Yazı boyutları (en küçük okunabilir boyut 11). Hazır stiller için typography.ts'i kullan.

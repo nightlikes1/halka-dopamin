@@ -15,41 +15,32 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
   (açılış sekmesi Bugün; Rehberler Faz 3'te Bugün/Karakter içinden açılacak).
 - Veri: **kendi API'miz + Supabase PostgreSQL** (Prisma 7 driver adapter ile bağlanır; Supabase doğrudan istemciye açılmaz, istekler Fastify API üzerinden geçer). Telefon API'ye bağlanır.
 - Giriş: e-posta + şifre, JWT (30 gün). Token mobilde `expo-secure-store`'da.
-- Görsel (2026-10-19, **"Obsidyen ve Şampanya"** premium tema): zemin `#0B0B0D` → kart `#141416` → ikincil yüzey
-  `#1F1E1B` (derinlik gölgeyle değil yüzey tonlarıyla), kenarlık `#2A2824`/`#3A3732` (≤ 1 px), metin krem `#EDE8DF` /
-  `#8A857C`. **Şampanya altını `#C9A96E` yalnızca ödül anlarında** (seri, yakınlık halkası/etiketi, rozet, tamamlanma
-  tiki, haftalık çubuk, seans tamamlandı) ve ana butonların çizgi stilinde. Sekme/link/seçili durum altın değil: krem
-  metin ya da `goldMuted` zemin. Mücevher tonları (yakut, safir, zümrüt, ametist, kehribar) yalnızca dolgu/çubuk/nokta;
-  yazı rengi olarak kullanılmaz (kontrast < 3). Gradient, gölge, ışıma yok.
-  Dopamin: ucuz = yakut, kaliteli = zümrüt. Kaçırılan gün/bozulan seri kırmızı değil `textSecondary`.
-- **Açık tema "Fildişi"** (2026-10-24): zemin `#D3CCC1` → kart `#DDD7CD` → `#C8C0B3`, metin `#1D1B18`/`#4F493F`,
-  altın koyulaştırılmış `#5F471C` (metin olarak ≥ 4,7:1), mücevher tonları aynı. Varsayılan koyu. Geçiş: Bugün üst
-  barındaki güneş/ay butonu (`ThemeToggleButton`) ve Ayarlar → Tema. Seçim cihazda (`halka.themeMode`); renkler
-  **yeniden yükleme olmadan** anında değişir: `applyThemeMode` (`colors`/`accentTints`/`dopamineColors` yerinde
-  güncellenir) → `AppShell` ekran ağacını `key={themeMode}` ile yeniden kurar (veri, oturum, fontlar korunur; navigasyon
-  durumu `RootNavigator`'da saklanır). Bu yüzden modül düzeyindeki renkli değerler `themedStyles`/`themed`
-  (`core/theme/themed.ts`, tema başına önbellekli Proxy) ile yazılır. Açık temada parçacıklar normal karışım +
-  koyulaştırılmış palet (`particleOnLight()`). Eklenti vurgusu domain'de anlam (`reward | neutral`), renk `widgetAccentColor`.
-- **Tema ailesi "Halka" (yeni tasarım, 2026-11-17)**: Obsidyen'in yanında ek, ücretsiz "VIP" tema. Üç eksen:
-  aile (`obsidian | halka`, `halka.themeFamily`), mod (`system | dark | light`, `halka.themeMode`; iki ailede de),
-  yüzey (`particles | classic`; Halka'da Liquid Glass renk lekeleri / düz). **iPhone'da varsayılan** Halka + Liquid Glass
-  + Sistem; diğer cihazlarda Obsidyen koyu. Uygulama: `applyTheme(family, mode)` (`applyThemeMode`/`applyThemeFamily`
-  sarmalar), `themed` önbelleği `activeThemeKey()` (`aile-mod`), AppShell `key={aile-mod}`, "Sistem" seçiliyse
-  `useSystemThemeSync` telefonun ayarını izler. Halka paleti: koyu `#000000`/`#1C1C1E`/`#2C2C2E`, aydınlık
-  `#F2F2F7`/`#FFFFFF`, metin beyaz / lacivert `#1B1F3B`; `gold*` adları Halka'da **turuncu ödül** (`#FF9F0A` / `#C93400`).
-  Modül anlamları `moduleColors` (dolgu) + `moduleInk` (metin), gradyanlar `gradients`, lekeler `backdropBlobs`,
-  davranış farkları `themeTraits` (ana buton gradyan/çizgi, başlık fontu: Halka kalın Inter, Obsidyen serif).
-  **Halka ailesinde "gradyan/ışıma yok" ve "altın yalnız ödülde" kuralları geçersiz**; Obsidyen'de geçerli.
-  Yeni ölçek iki ailede aynı: `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
-  `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40;
-  `radius.card` 24 / `field` 14, `iconBoxRadius`; `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
+- Görsel (2026-11-17, **tek tema: Halka tasarım sistemi**; Obsidyen/Fildişi kaldırıldı). Paletler `core/theme/tokens.ts`:
+  koyu `halkaDark` (zemin `#000000` → kart `#1C1C1E` → `#2C2C2E`, metin beyaz / `#8E8E93`), aydınlık `halkaLight`
+  (`#F2F2F7` → `#FFFFFF` → `#E5E5EA`, metin lacivert `#1B1F3B` / `#6C6C70`; tonlar AA için koyulaşır). **Ödül turuncu**
+  (`#FF9F0A` / `#C93400`); eski `gold*` adları bu turuncuya bağlı. Modül anlamları `moduleColors` (dolgu) + `moduleInk`
+  (metin): odak çivit, kısa mola nane, dinlenme lavanta, su camgöbeği, nefes deniz yeşili, ruh hali/dürtü gül pembesi,
+  enerji kehribar, başarı yeşil, yaratıcılık sarı, karakter mor, uyarı kırmızı (yalnız hata). Gradyanlar `gradients`
+  (imza: turuncu → pembe → mor; odak mavi → çivit) serbest; her ekranda tek vurgu rengi. Kategori renkleri
+  `accentColors`, ikon kutusu `accentTints` (aynı renk) + beyaz ikon `colors.iconOnTint`. Dopamin: ucuz = pembe,
+  kaliteli = yeşil. Eksik gün/bozulan seri asla kırmızı değil `textSecondary`.
+- Mod: **Sistem (varsayılan) / Koyu / Aydınlık** (`halka.themeMode`). Geçiş: Bugün üst barındaki güneş/ay
+  (`ThemeToggleButton`) ve Ayarlar → Tema. Renkler **yeniden yükleme olmadan** değişir: `applyThemeMode` (nesneler
+  yerinde güncellenir) → `AppShell` ağacı `key={themeMode}` ile yeniden kurar (veri, oturum, fontlar korunur; navigasyon
+  `RootNavigator`'da saklanır). "Sistem" seçiliyse `useSystemThemeSync` telefonun ayarını izler (`resolveThemeMode`).
+  Modül düzeyindeki renkli değerler `themedStyles`/`themed` (mod başına önbellekli Proxy, `activeThemeKey`) ile yazılır.
+  Açık modda parçacıklar normal karışım + koyulaştırılmış palet (`particleOnLight()`). Eklenti vurgusu domain'de anlam
+  (`reward | neutral`), renk `widgetAccentColor`.
+- Yazı ölçeği (iki modda aynı): `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
+  `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40. Ölçüler:
+  `radius.card` 24 / `field` 14, `iconBoxRadius` (%30); `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
   Sıradaki adımlar: tüm uygulama yeni düzene (4 sekme Bugün · Odak · Araçlar · Gelişim, Profil avatardan), önce Bugün.
-- Görsel stil (2026-10-17): **"particles" varsayılan** (cam yüzeyler, parçacık
-  karşılama/Bugün/Odak ekranları, yüzen cam sekme çubuğu) ve **"classic"** (opak kartlar); ikisi aynı paleti kullanır.
-  Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
+- Görsel stil: **"particles" = Liquid Glass, varsayılan** (cam yüzeyler + arka plan renk lekeleri `backdropBlobs`;
+  yeni ekranlar gelene kadar mevcut parçacık efektleri de bu stilde) ve **"classic" = Düz** (opak kartlar); ikisi aynı
+  paleti kullanır. Ayarlar → Görsel stil; seçim cihazda saklanır, uygulama yeniden yüklenince uygulanır.
 - Karşılama (onboarding): yalnızca parçacık stilinde, ilk açılışta, giriş yapılmamışken; 3 sayfa.
-- Fontlar (2026-10-19): sayfa/ekran başlıkları **Cormorant Garamond 500** (`fonts.serif`; varyantlar `greeting`,
-  `headline`, `screenTitle`, `particleTitle`), geri kalan her şey **Inter** (rakamlar `tabular-nums`). Outfit/JetBrains kaldırıldı.
+- Fontlar: her şey **Inter**; başlıklar kalın (`greeting`, `headline`, `screenTitle`, `particleTitle` dahil), rakamlar
+  `tabular-nums`. Cormorant Garamond (serif) 2026-11-17'de kaldırıldı.
 - Potansiyel Karakterim: XP/seviye modeli **iptal edildi**; yakınlık bağlı alışkanlıkların yapılma oranından hesaplanır (aşağıda).
   Yeniden tasarımdaki seviye halkası = yakınlık, "XP" çubuğu = bu hafta kayıtlı gün, rozetler mevcut veriden türetilir
   (`features/character/presentation/badges.ts`); "+XP" yazıları yerine "Tamamlandı".
@@ -187,21 +178,21 @@ Halka zincir paleti), `themed.ts` (temaya bağlı modül sabitleri). Ekran ve bi
 dosyalardan okunur. Stil dosyaları `StyleSheet.create` yerine **`themedStyles(() => ({ ... }))`** kullanır; modül
 düzeyinde renk okuyan sabitler (`const X = { c: colors.y }`) `themed(() => ...)` ile sarılır ya da render içinde okunur.
 
-- **Genel his:** koyu (varsayılan) ya da açık Fildişi, sade, premium. Sabit hex yazma. Sıcak obsidyen yüzeyler, krem metin; altın az görünür (yalnızca ödül).
-- **Renk:** yalnızca `colors.*` (`obsidian` token'larından türetilir), `accentColors`/`accentTints`
-  (`amber | sapphire | amethyst | ruby | emerald`; ikon kutusu = koyu mücevher zemini + **krem ikon**), `dopamineColors.*`.
+- **Genel his:** iOS benzeri sade yüzeyler, canlı modül renkleri, ekranda tek vurgu. Sabit hex yazma.
+- **Renk:** yalnızca `colors.*` (`halkaDark`/`halkaLight`'tan türetilir), `moduleColors`/`moduleInk`, `gradients`,
+  `accentColors`/`accentTints` (`amber | sapphire | amethyst | ruby | emerald`; ikon kutusu = düz renk + **beyaz ikon**
+  `iconOnTint`), `dopamineColors.*`.
   Hex/rgba yazma; saydamlık için `withAlpha`. Zemin `background` · kart `surface` · pill/input/bar `surfaceAlt` ·
   boş çubuk/halka `track` · güçlü kenarlık `border` · metin `textPrimary`/`textSecondary`/`textDisabled`.
-  Ödül `gold` (`goldLight`, basılı `goldDark`, seçili zemin `goldMuted`). Hata metni `danger` (`#BB7F7A`, okunur);
-  hata dolgu/nokta/kenarlığı `error` (`#A5524F`, metin olarak AA'yı geçmez). Butonlar çizgi stil (şeffaf zemin, 1 px
-  kenar, renkli yazı); dolu altın yalnızca ödül anında. Çizgi karakter renkleri yalnızca `avatarColors`; ton için `mixHex`.
+  Ödül `gold` (turuncu; `goldLight`, basılı `goldDark`, seçili zemin `goldMuted`). Hata `danger`/`error` (kırmızı, yalnız
+  form hatası ve bağlantı sorunu). Ana buton dolu turuncu→pembe gradyan kapsül (56 px), ikincil buton koyu kapsül. Çizgi karakter renkleri yalnızca `avatarColors`; ton için `mixHex`.
   Eski adlar (`bgPrimary`, `bgCard`, `textMain`…) yeni palete bağlıdır; yeni kodda spesifikasyon adlarını kullan.
 - **Ölçüler:** ekran yan boşluğu 24 (`layout.screenPadding`), bölümler arası 24, liste arası 10 (`spacing.smd`).
   Köşe: büyük kart 28 (`radius.xl`), liste kartı 20 (`lg`), küçük kart 18 (`tile`), ikon kutusu 14 (`md`), pill `full`.
   `spacing.xs + 2` gibi aritmetik yok; ara değer gerekiyorsa ölçeğe ekle.
 - **Tipografi:** metin her zaman `AppText` + `variant`. Selam `greeting` (28/700), bölüm `section` (18/600),
   kart `cardTitle` (16/600), alt metin `small`/`muted`, etiket `tag` (12), sayı `stat` (20, tabular), sayaç
-  `timer` (64/700, tabular, −1 harf aralığı). Ekran başlığı `screenTitle` (serif). En küçük boyut 11; `fontWeight` yok.
+  `timer` (64/700, tabular, −1 harf aralığı). Ekran başlığı `screenTitle` (kalın Inter); yeni ekranlarda yukarıdaki yeni ölçek. En küçük boyut 11; `fontWeight` yok.
 - **İkonlar:** yalnızca `Icon` (Feather, çizgi stili). Feather'da olmayanlar `Icon`'daki `EXTRA_ICONS` ile
   (ör. `flame` → Ionicons). Emoji ikon olarak kullanılmaz; yalnızca içerik (ruh hali, puan yüzleri).
   Domain emojilerinin karşılıkları `features/halka/presentation/components/iconMaps.ts`'te.
