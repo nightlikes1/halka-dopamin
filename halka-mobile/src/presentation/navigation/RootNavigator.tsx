@@ -23,6 +23,8 @@ import { OnboardingScreen } from '@features/onboarding/presentation/screens/Onbo
 import { HistoryScreen } from '@features/history/presentation/screens/HistoryScreen';
 import { SettingsScreen } from '@features/settings/presentation/screens/SettingsScreen';
 import { UrgeScreen } from '@features/today/presentation/screens/UrgeScreen';
+import { CalmScreen } from '@features/tools/presentation/screens/CalmScreen';
+import { CharacterScreen } from '@features/character/presentation/screens/CharacterScreen';
 import { MainTabs } from '@presentation/navigation/MainTabs';
 import type { RootStackParamList } from '@presentation/navigation/types';
 import { usePreferencesStore } from '@presentation/store/usePreferencesStore';
@@ -88,7 +90,7 @@ export function RootNavigator() {
             <Stack.Screen
               name="WidgetFocus"
               component={WidgetFocusScreen}
-              options={{ animation: 'fade_from_bottom' }}
+              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
             />
             <Stack.Screen
               name="Catalog"
@@ -100,6 +102,12 @@ export function RootNavigator() {
               component={UrgeScreen}
               options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
             />
+            <Stack.Screen
+              name="Calm"
+              component={CalmScreen}
+              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+            />
+            <Stack.Screen name="Character" component={CharacterScreen} />
             <Stack.Screen
               name="Settings"
               component={SettingsScreen}

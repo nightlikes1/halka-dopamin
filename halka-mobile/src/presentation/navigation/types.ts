@@ -8,9 +8,8 @@ import type { WidgetId } from '@features/halka/domain/entities/WidgetId';
 export type MainTabParamList = {
   Today: undefined;
   Focus: undefined;
-  Character: undefined;
-  Halka: undefined;
-  Stats: undefined;
+  Tools: undefined;
+  Growth: undefined;
 };
 
 // Kök yığın: oturum yokken Login/Register, varken Main + modal ekranlar
@@ -25,6 +24,8 @@ export type RootStackParamList = {
   Catalog: undefined;
   Settings: undefined;
   Urge: undefined;
+  Calm: undefined;
+  Character: undefined;
   Habits: undefined;
   CheckIn: { date: string };
   History: { date?: string } | undefined;

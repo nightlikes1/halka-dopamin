@@ -18,7 +18,7 @@ import { HabitSheet } from '@features/habits/presentation/components/HabitSheet'
 import { isCompleted, isEveningOpen } from '@features/today/domain/dayRules';
 import { CircleStrip } from '@features/today/presentation/components/CircleStrip';
 import { DayCompleteModal } from '@features/today/presentation/components/DayCompleteModal';
-import { LiveRing } from '@features/today/presentation/components/LiveRing';
+import { LiveRing } from '@presentation/components/common/LiveRing';
 import { TodayHabitRow } from '@features/today/presentation/components/TodayHabitRow';
 import { useToday } from '@features/today/presentation/useToday';
 import { ActionSheet, type ActionSheetOption } from '@presentation/components/common/ActionSheet';

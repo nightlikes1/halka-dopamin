@@ -1,22 +1,20 @@
-// Alt sekme çubuğu: Bugün · Odak · Karakter · Halka · İstatistik
-// (yeni düzende 4 sekme: Bugün · Odak · Araçlar · Gelişim; Halka sekmesi Araçlar'a dönüşecek).
-// Bugün iki stilde aynı ekran; parçacık stilinde yüzen cam çubuk ve parçacık Odak ekranı kullanılır.
+// Alt sekme çubuğu: Bugün · Odak · Araçlar · Gelişim (Profil avatardan, Karakter Gelişim'den açılır).
+// Parçacık stilinde yüzen cam çubuk ve parçacık Odak ekranı kullanılır.
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { colors, fonts, fontSizes, spacing } from '@core/theme/tokens';
-import { CharacterScreen } from '@features/character/presentation/screens/CharacterScreen';
 import { FocusScreen } from '@features/focus/presentation/screens/FocusScreen';
 import { ParticleFocusScreen } from '@features/focus/presentation/screens/ParticleFocusScreen';
-import { StatsScreen } from '@features/stats/presentation/screens/StatsScreen';
+import { GrowthScreen } from '@features/stats/presentation/screens/GrowthScreen';
 import { TodayScreen } from '@features/today/presentation/screens/TodayScreen';
 import { Icon, type IconName } from '@presentation/components/common/Icon';
 import { GlassTabBar } from '@presentation/navigation/GlassTabBar';
 import { TabScene } from '@presentation/navigation/TabScene';
 import type { MainTabParamList } from '@presentation/navigation/types';
-import { HomeScreen } from '@features/halka/presentation/screens/HomeScreen';
+import { ToolsScreen } from '@features/tools/presentation/screens/ToolsScreen';
 import { themedStyles } from '@core/theme/themed';
 import { useParticleStyle } from '@presentation/store/usePreferencesStore';
 
@@ -25,9 +23,8 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 const TAB_ICONS: Record<keyof MainTabParamList, IconName> = {
   Today: 'sun',
   Focus: 'target',
-  Character: 'user',
-  Halka: 'link',
-  Stats: 'bar-chart-2',
+  Tools: 'grid',
+  Growth: 'trending-up',
 };
 
 export function MainTabs() {
@@ -58,13 +55,8 @@ export function MainTabs() {
         component={particles ? ParticleFocusScreen : FocusScreen}
         options={{ title: strings.tabs.focus }}
       />
-      <Tab.Screen
-        name="Character"
-        component={CharacterScreen}
-        options={{ title: strings.tabs.character }}
-      />
-      <Tab.Screen name="Halka" component={HomeScreen} options={{ title: strings.tabs.halka }} />
-      <Tab.Screen name="Stats" component={StatsScreen} options={{ title: strings.tabs.stats }} />
+      <Tab.Screen name="Tools" component={ToolsScreen} options={{ title: strings.tabs.tools }} />
+      <Tab.Screen name="Growth" component={GrowthScreen} options={{ title: strings.tabs.growth }} />
     </Tab.Navigator>
   );
 }

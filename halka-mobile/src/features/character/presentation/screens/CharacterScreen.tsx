@@ -1,4 +1,4 @@
-// Karakter sekmesi: profil kartı (yakınlık halkası + kimlik), özellik çubukları, rozetler, bu hafta.
+// Karakter ekranı (Gelişim'den açılır): profil kartı (yakınlık halkası + kimlik), özellik çubukları, rozetler, bu hafta.
 // XP/seviye modeli yok: halka ve etiket yakınlığı, çubuk bu haftaki kayıtlı günleri gösterir.
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
@@ -205,7 +205,7 @@ export function CharacterScreen() {
           variant="surface"
           size={44}
           accessibilityLabel={t.back}
-          onPress={() => navigation.navigate('Main', { screen: 'Today' })}
+          onPress={() => navigation.goBack()}
         />
         <AppText variant="screenTitle" accessibilityRole="header" style={styles.title}>
           {t.screenTitle}

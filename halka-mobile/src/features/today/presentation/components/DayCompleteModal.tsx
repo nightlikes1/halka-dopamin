@@ -5,7 +5,7 @@ import { strings } from '@core/i18n/tr';
 import { layout } from '@core/theme/layout';
 import { themedStyles } from '@core/theme/themed';
 import { colors, radius, spacing } from '@core/theme/tokens';
-import { LiveRing } from '@features/today/presentation/components/LiveRing';
+import { LiveRing } from '@presentation/components/common/LiveRing';
 import { AppText } from '@presentation/components/common/AppText';
 import { CapsuleButton } from '@presentation/components/common/CapsuleButton';
 import { Icon } from '@presentation/components/common/Icon';

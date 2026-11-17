@@ -17,7 +17,7 @@ import {
   type UrgeOutcome,
 } from '@features/today/domain/entities';
 import { urgeStats } from '@features/today/domain/dayRules';
-import { LiveRing } from '@features/today/presentation/components/LiveRing';
+import { LiveRing } from '@presentation/components/common/LiveRing';
 import { AppText } from '@presentation/components/common/AppText';
 import { AppTextInput } from '@presentation/components/common/AppTextInput';
 import { CapsuleButton } from '@presentation/components/common/CapsuleButton';

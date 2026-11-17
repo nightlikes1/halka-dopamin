@@ -11,8 +11,9 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 
 ## Ürün kararları (kullanıcı onaylı)
 
-- Dopamin takip uygulaması **Halka'nın içinde** alt sekmelerle: Bugün · Odak · Karakter · Halka · İstatistik
-  (açılış sekmesi Bugün; Rehberler Faz 3'te Bugün/Karakter içinden açılacak).
+- Dopamin takip uygulaması **Halka'nın içinde** alt sekmelerle (2026-11-17): **Bugün · Odak · Araçlar · Gelişim**
+  (açılış sekmesi Bugün; Profil/Ayarlar her sekmedeki baş harf avatarından, Karakter Gelişim'deki karttan açılır;
+  Rehberler Faz 3'te Bugün/Karakter içinden açılacak).
 - Veri: **kendi API'miz + Supabase PostgreSQL** (Prisma 7 driver adapter ile bağlanır; Supabase doğrudan istemciye açılmaz, istekler Fastify API üzerinden geçer). Telefon API'ye bağlanır.
 - Giriş: e-posta + şifre, JWT (30 gün). Token mobilde `expo-secure-store`'da.
 - Görsel (2026-11-17, **tek tema: Halka tasarım sistemi**; Obsidyen/Fildişi kaldırıldı). Paletler `core/theme/tokens.ts`:
@@ -34,8 +35,13 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 - Yazı ölçeği (iki modda aynı): `largeTitle` 34 · `flowTitle` 28 · `sectionTitle` 22 · `panelTitle` 20 · `bodyL` 17 ·
   `secondary` 15 · `note`/`overline` 13 · `footnote` 12 · `tabLabel` 10 · `numeralXL` 54 / `numeralL` 40. Ölçüler:
   `radius.card` 24 / `field` 14, `iconBoxRadius` (%30); `layout.edge` 16 · `cardGap` 10 · `titleTop` 56 · `sectionToCard` 8.
-  Sıradaki adımlar: tüm uygulama yeni düzene (4 sekme Bugün · Odak · Araçlar · Gelişim, Profil avatardan). Bugün bitti;
-  Halka sekmesi kalkıp yerine **Araçlar** gelecek, su takibi oraya taşınacak.
+  Sıradaki adımlar: Odak ekranının yeni düzeni, 90 sn dürtü akışı, Gelişim'in ayrıntılı istatistikleri (Faz 4).
+- **Araçlar** (`features/tools`): Canım çekiyor, Sakin saat (`Calm` modalı, 15/30/60 dk, kayıt yok) ve Halka'nın 10
+  eklentisinin tümü **eşit kartlar** (2 sütun; modül rengi ikon kutusu + canlı özet). Kart eklentinin geniş görünümünü
+  açar (`WidgetFocus`, modal). Halka panosu (halka + eklenti ızgarası, `HomeScreen`) kaldırıldı; eklenti verisi cihazda aynı.
+- **Gelişim** (`features/stats`, `GrowthScreen`): hafta aralığı, ortalama cümlesi, karakter kartı (yakınlık %; dokununca
+  `Character` yığın ekranı), "Bu haftanın özeti" (7 gün çubuk = o gün yapılan / bugünkü aktif alışkanlık, tamamlanan,
+  seri, geçirilen dürtü; `domain/weekSummary.ts`), Geçmiş ve Alışkanlıklarım bağlantıları.
 - **Bugün ekranı (yeni düzen, 2026-11-17, `features/today`)**: iki stilde tek ekran. Üstte tarih + "Bugün", "Canım çekiyor"
   kapsülü (→ `Urge` modalı) ve baş harf avatarı (→ Ayarlar); odak ve tema düğmesi yok, su yok. Canlı halka kartı
   (`LiveRing`: gradyan halka, sakin/hareketli nefes; "hareketli" = "yaptım" denen dürtü > tamamlanan + geçirilen), seri
@@ -98,7 +104,7 @@ Bu dosya her oturumda bağlam olarak okunur. Kararlar değişirse burayı günce
 ```
 core/          DI container (composition root), Failure/Result, api/ (axios + toFailure), i18n/tr.ts, theme/, utils/ (date, clock, format, id)
 features/<ad>/{domain,data,presentation}   ← her özellik kendi klasöründe, içi katmanlı
-  auth/ activities/ today/ focus/ halka/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
+  auth/ activities/ today/ tools/ focus/ halka/ onboarding/ character/ habits/ checkin/ history/ guides/ stats/ settings/
 presentation/  yalnızca ortak olanlar: components/common, navigation, particles, providers, utils, useNow, useColorTransition, usePreferencesStore
 
 features/halka/   ← Halka panosu ve eklentileri (veri cihazda)

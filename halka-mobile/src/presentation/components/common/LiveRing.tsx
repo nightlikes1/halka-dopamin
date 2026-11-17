@@ -18,7 +18,8 @@ import { durations, easeOut } from '@core/theme/motion';
 import { colors, gradients } from '@core/theme/tokens';
 import { withAlpha } from '@core/theme/palettes';
 import { themedStyles } from '@core/theme/themed';
-import type { RingMood } from '@features/today/domain/dayRules';
+// Halka nefesi: sakin ya da hareketli
+export type LiveRingMood = 'calm' | 'lively';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const VIEWBOX = 200;
@@ -34,7 +35,7 @@ const SCALE = { calm: 1.025, lively: 1.04 } as const;
 interface LiveRingProps {
   readonly size: number;
   readonly progress: number; // 0-1
-  readonly mood: RingMood;
+  readonly mood: LiveRingMood;
   readonly children?: ReactNode;
   readonly accessibilityLabel?: string;
   // Kutlama gibi tek seferlik kullanımda nefes yok

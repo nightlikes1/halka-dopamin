@@ -74,3 +74,12 @@ export function formatDayMonth(iso: string): string {
 export function formatWeekdayDayMonth(date: Date): string {
   return `${TURKISH_DAYS[date.getDay()] ?? ''}, ${date.getDate()} ${TURKISH_MONTHS[date.getMonth()] ?? ''}`;
 }
+
+// "11 – 17 Kasım" ya da ay değişirse "28 Ekim – 3 Kasım"
+export function formatDayRange(fromIso: string, toIso: string): string {
+  const from = parseIsoDate(fromIso);
+  const to = parseIsoDate(toIso);
+  const toText = `${to.getDate()} ${TURKISH_MONTHS[to.getMonth()] ?? ''}`;
+  if (from.getMonth() === to.getMonth()) return `${from.getDate()} – ${toText}`;
+  return `${from.getDate()} ${TURKISH_MONTHS[from.getMonth()] ?? ''} – ${toText}`;
+}
